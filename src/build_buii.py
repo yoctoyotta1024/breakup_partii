@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: setup_buii.py
+File: build_buii.py
 Project: breakup_partii
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)

@@ -53,5 +53,5 @@ mkdir ${path2build}share
 
 ### --------------------- compile ---------------------- ###
 ### generate input files and compile 1-D rainshaft
-${python} setup_buii.py ${path2CLEO} ${path2build} ${configfile}
+${python} build_buii.py ${path2CLEO} ${path2build} ${configfile}
 ### ---------------------------------------------------- ###
