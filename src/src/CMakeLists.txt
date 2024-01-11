@@ -35,13 +35,14 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# executable for CLEO coupled model 2-D divergence free setup 
+# primary executable for CLEO sdm
 set(buii "buii")
-add_executable(${buii} EXCLUDE_FROM_ALL "main_buii.cpp")
+add_executable(${buii} "main_buii.cpp")
 target_link_libraries(${buii} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
 target_link_libraries(${buii} PUBLIC Kokkos::kokkos)
 target_include_directories(${buii} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${buii} PRIVATE ${compileops}) 
+# target_include_directories(${buii} PRIVATE ${PROJECT_SOURCE_DIR})
+target_compile_options(${buii} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
 set_target_properties(${buii} PROPERTIES
