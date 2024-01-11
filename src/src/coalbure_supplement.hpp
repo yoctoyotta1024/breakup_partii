@@ -24,8 +24,6 @@
 
 #include <concepts>
 
-#include <Kokkos_Core.hpp>
-
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
 
@@ -41,7 +39,6 @@
 inline MicrophysicalProcess auto
 config_collisions(const Config &config, const Timesteps &tsteps)
 {
-  const MicrophysicalProcess auto colls = config_collisions();
   const PairProbability auto collprob = LongHydroProb(1.0);
   const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
   const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
