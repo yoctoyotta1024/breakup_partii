@@ -79,16 +79,6 @@ else:
   Path(sharepath).mkdir(exist_ok=True) 
 os.system("rm "+initSDsfile)
 
-### ----- show (and save) plots of binary file data ----- ###
-if isfigures[0]:
-  if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
-  rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
-                              gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
-  
 ### ----- write initial superdroplets binary ----- ###
 nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim)
 coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
@@ -105,6 +95,16 @@ csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen,
                                       configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
+### ----- show (and save) plots of binary file data ----- ###
+if isfigures[0]:
+  if isfigures[1]:
+    Path(savefigpath).mkdir(exist_ok=True) 
+  rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
+                              gridfile, savefigpath, isfigures[1],
+                              SDgbxs2plt) 
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+  
 ### ---------------------------------------------------------------- ###
 ### ---------------------------- RUN CLEO -------------------------- ###
 ### ---------------------------------------------------------------- ###
