@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=rain1d
+#SBATCH --job-name=buii
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./rain1d_out.%j.out
-#SBATCH --error=./rain1d_err.%j.out
+#SBATCH --output=./buii_out.%j.out
+#SBATCH --error=./buii_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
@@ -21,8 +21,8 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build/
-configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.txt 
+path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
+configfile=${HOME}/breakup_partii/src/src/rain1d_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
