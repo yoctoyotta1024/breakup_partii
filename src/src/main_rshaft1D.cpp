@@ -112,9 +112,18 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
                                                       config.cond_SUBTSTEP,
                                                       &realtime2dimless);
 
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
-                                                  &step2realtime,
+  const PairProbability auto collprob = LongHydroProb(1.0);
+  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+                                                   &step2realtime,
+                                                   collprob,
+                                                   nfrags,
+                                                   coalbure_flag);
+  
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+  //                                                 &step2realtime,
                                                   coalprob);
   return cond >> colls;
 }
