@@ -21,7 +21,7 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-path2main=${HOME}/breakup_partii/src/
+path2src=${HOME}/breakup_partii/src/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
 configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
@@ -40,9 +40,9 @@ kokkosdevice="-DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON"           
 
 ### ------------------------ build --------------------- ###
 ### build CLEO using cmake (with openMP thread parallelism through Kokkos)
-buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2main} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
+buildcmd="CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2src} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}"
 echo ${buildcmd}
-CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2main} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}
+CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2src} -B ${path2build} ${kokkosflags} ${kokkoshost} ${kokkosdevice}
 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
