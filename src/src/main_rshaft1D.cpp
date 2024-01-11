@@ -55,6 +55,10 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
+#include "superdrops/breakup_nfrags.hpp"
+#include "superdrops/breakup.hpp"
+#include "superdrops/coalbure_flag.hpp"
+#include "superdrops/coalbure.hpp"
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisionprobs/longhydroprob.hpp"
 #include "superdrops/condensation.hpp"
