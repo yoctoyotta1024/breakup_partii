@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
 File: temp.py
-Project: rainshaft1d
+Project: breakup_partii
 Created Date: Tuesday 9th January 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -28,7 +28,7 @@ GRAVG = 9.8
 RGAS_DRY = 287.04 
 CP_DRY = 1004.64
 Mr_ratio = 0.01801528 / 0.028966216
-configfile = "./src/src/rain1d_config.txt"
+configfile = "./src/src/buii_config.txt"
 constsfile = "../CLEO/libs/cleoconstants.hpp"
 
 def supersaturation(press, temp, qvap, Mr_ratio):

@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
-File: rainshaft1d.py
-Project: rainshaft1d
+File: quickplot_buii.py
+Project: breakup_partii
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -15,9 +15,8 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO rain1D to create the
-data and plots precipitation example given constant 
-1-D rainshaft thermodynamics read from a file
+Script plots some raw data from 
+buii 1-D rainshaft output
 '''
 
 import os
@@ -42,12 +41,12 @@ from pySD.sdmout_src import *
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
-gridfile      = path2build+"/share/rain1d_dimlessGBxboundaries.dat"
+gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
 datapath       = path2build+"/bin/"
-setupfile     = datapath+"rain1d_setup.txt"
-dataset       = datapath+"rain1d_sol.zarr"
+setupfile     = datapath+"buiisetup.txt"
+dataset       = datapath+"buiisol.zarr"
 
 # directory for saving figures and animations
 savefigpath = path2build+"/bin/"
@@ -67,14 +66,14 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 ### ----- plot figures ----- ###
-savename = savefigpath + "rain1d_totnsupers.png"
+savename = savefigpath + "buii_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "rain1d_domainmassmoms.png"
+savename = savefigpath + "buii_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "rain1d_randomsample.png"
+savename = savefigpath + "buii_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
@@ -85,7 +84,7 @@ nframes = len(time.mins)
 mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number of super-droplets"
-savename=savefigpath+"rain1d_nsupers1d"
+savename=savefigpath+"buii_nsupers1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
@@ -96,7 +95,7 @@ norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
 mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number concentration /cm$^{-3}$"
-savename=savefigpath+"rain1d_numconc1d"
+savename=savefigpath+"buii_numconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
@@ -107,7 +106,7 @@ norm = gbxs["gbxvols"] # volume [m^3]
 mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"rain1d_massconc1d"
+savename=savefigpath+"buii_massconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,

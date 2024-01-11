@@ -5,7 +5,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and source directory of .cpp files
-project("rshaft1D")
+project("buii")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
@@ -36,15 +36,15 @@ if(NOT DEFINED compileops)
 endif()
 
 # executable for CLEO coupled model 2-D divergence free setup 
-set(rshaft1D "rshaft1D")
-add_executable(${rshaft1D} EXCLUDE_FROM_ALL "main_rshaft1D.cpp")
-target_link_libraries(${rshaft1D} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
-target_link_libraries(${rshaft1D} PUBLIC Kokkos::kokkos)
-target_include_directories(${rshaft1D} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
-target_compile_options(${rshaft1D} PRIVATE ${compileops}) 
+set(buii "buii")
+add_executable(${buii} EXCLUDE_FROM_ALL "main_buii.cpp")
+target_link_libraries(${buii} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
+target_link_libraries(${buii} PUBLIC Kokkos::kokkos)
+target_include_directories(${buii} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_compile_options(${buii} PRIVATE ${compileops}) 
 
 # set compiler properties for target(s)
-set_target_properties(${rshaft1D} PROPERTIES
+set_target_properties(${buii} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

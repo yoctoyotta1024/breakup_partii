@@ -44,8 +44,8 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 binpath       = path2build+"/bin/"
 sharepath     = path2build+"/share/"
-gridfile      = sharepath+"rain1d_dimlessGBxboundaries.dat"
-thermofile    = sharepath+"rain1d_dimlessthermo.dat"
+gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
+thermofile    = sharepath+"buii_dimlessthermo.dat"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures

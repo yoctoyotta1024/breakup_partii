@@ -1,7 +1,7 @@
 '''
 ----- CLEO -----
-File: rainshaft1d.py
-Project: rainshaft1d
+File: run_buii.py 
+Project: breakup_partii
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -15,9 +15,8 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script compiles and runs CLEO rain1D to create the
-data and plots precipitation example given constant 
-1-D rainshaft thermodynamics read from a file
+Script generated initial superdrop conditions 
+and runs CLEO buii exectuable for 1-D rainshaft
 '''
 
 import os
@@ -43,8 +42,8 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 # path and filenames for creating initial SD conditions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 sharepath     = path2build+"/share/"
-gridfile      = sharepath+"rain1d_dimlessGBxboundaries.dat"
-initSDsfile   = sharepath+"rain1d_dimlessSDsinit.dat"
+gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
+initSDsfile   = sharepath+"buii_dimlessSDsinit.dat"
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures

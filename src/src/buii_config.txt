@@ -1,7 +1,7 @@
 /*
  * ----- CLEO -----
- * File: rain1d_config.txt
- * Project: config
+ * File: buii_config.txt
+ * Project: breakup_partii
  * Created Date: Tuesday 9th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -15,19 +15,20 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * configuration input parameters for CLEO 1-D rainshaft example
+ * configuration input parameters for CLEO
+ * 1-D rainshaft breakup investigation 
  */
 
 
 ### Initialisation parameters ###
 constants_filename = /home/m/m300950/CLEO/libs/cleoconstants.hpp        # name of file for values of physical constants
-initsupers_filename = ./share/rain1d_dimlessSDsinit.dat                 # binary filename for initialisation of SDs
-grid_filename = ./share/rain1d_dimlessGBxboundaries.dat                 # binary filename for initialisation of GBxs / GbxMaps
+initsupers_filename = ./share/buii_dimlessSDsinit.dat                 # binary filename for initialisation of SDs
+grid_filename = ./share/buii_dimlessGBxboundaries.dat                 # binary filename for initialisation of GBxs / GbxMaps
 
 ### Output Data parameters ###
-setuptxt = ./bin/rain1d_setup.txt                # .txt filename to copy configuration to
-stats_filename = ./bin/rain1d_stats.txt          # .txt file to output runtime statistics to
-zarrbasedir = ./bin/rain1d_sol.zarr              # zarr store base directory
+setuptxt = ./bin/buiisetup.txt                # .txt filename to copy configuration to
+stats_filename = ./bin/buiistats.txt          # .txt file to output runtime statistics to
+zarrbasedir = ./bin/buiisol.zarr              # zarr store base directory
 maxchunk = 1250000                               # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
@@ -58,10 +59,10 @@ doAlterThermo = false                   # enable condensation to alter the therm
 thermosolver = fromfile                                   # dynamics solver to configure
 
 ### read in dynamics from file ###
-press_filename = ./share/rain1d_dimlessthermo_press.dat          # binary filename for pressure
-temp_filename = ./share/rain1d_dimlessthermo_temp.dat            # binary filename for temperature
-qvap_filename = ./share/rain1d_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
-qcond_filename = ./share/rain1d_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
-wvel_filename = ./share/rain1d_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
-uvel_filename = ./share/rain1d_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
-vvel_filename = ./share/rain1d_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity
+press_filename = ./share/buii_dimlessthermo_press.dat          # binary filename for pressure
+temp_filename = ./share/buii_dimlessthermo_temp.dat            # binary filename for temperature
+qvap_filename = ./share/buii_dimlessthermo_qvap.dat            # binary filename for vapour mixing ratio
+qcond_filename = ./share/buii_dimlessthermo_qcond.dat          # binary filename for liquid mixing ratio
+wvel_filename = ./share/buii_dimlessthermo_wvel.dat            # binary filename for vertical (z) velocity
+uvel_filename = ./share/buii_dimlessthermo_uvel.dat            # binary filename for horizontal x velocity
+vvel_filename = ./share/buii_dimlessthermo_vvel.dat            # binary filename for horizontal y velocity

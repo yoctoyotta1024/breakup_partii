@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: main_rshaft1D.cpp
+ * File: main_buii.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
@@ -15,9 +15,8 @@
  * Copyright (c) 2023 MPI-M, Clara Bayley
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM)
- * after make/compiling, execute for example via:
- * ./src/runCLEO ../src/config/config.txt
+ * CLEO super-droplet model (SDM) for 1-D
+ * rainshaft investigation of droplet breakup
  */
 
 #include <iostream>
