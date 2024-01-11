@@ -21,7 +21,8 @@ spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
+# path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
+path2build=${HOME}/breakup_partii/build/
 configfile=${HOME}/breakup_partii/src/src/rain1d_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
