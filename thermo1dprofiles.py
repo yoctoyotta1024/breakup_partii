@@ -21,15 +21,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import integrate
 
-sys.path.append("../..") # path to pySD (same as to CLEO)
+sys.path.append("../CLEO") # path to pySD (same as to CLEO)
 from pySD.thermobinary_src import thermogen
 
 GRAVG = 9.8
 RGAS_DRY = 287.04 
 CP_DRY = 1004.64
 Mr_ratio = 0.01801528 / 0.028966216
-configfile = "./src/config/rain1d_config.txt"
-constsfile = "../../libs/cleoconstants.hpp"
+configfile = "./src/src/rain1d_config.txt"
+constsfile = "../CLEO/libs/cleoconstants.hpp"
 
 def supersaturation(press, temp, qvap, Mr_ratio):
   
@@ -47,7 +47,6 @@ TEMP0 = 297.9           # [K]
 qvap0 = 0.016           # [Kg/Kg]
 Zbase = 800             # [m]
 TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
-# qvaplapses = [2.97, 4.52] # -dvap/dz [g/Kg km^-1]
 qvaplapses = [2.97, "saturated"] # -dvap/dz [g/Kg km^-1]
 qcond = 0.0             # [Kg/Kg]
 WVEL = 0.0              # [m/s]
@@ -65,7 +64,6 @@ supersat = supersaturation(press, temp, qvap, Mr_ratio)
 
 fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(8, 8))
 axs = axs.flatten()
-axs[-1].remove()
 
 axs[0].plot(temp, zfulls/1000)
 axs[0].set_xlabel("temp / K")
@@ -82,8 +80,12 @@ axs[3].set_xlabel("qvap / g/Kg")
 axs[4].plot(supersat, zfulls/1000)
 axs[4].set_xlabel("supersaturation")
 
+qcond = np.full(zfulls.shape, qcond)
+axs[5].plot(qcond, zfulls/1000)
+axs[5].set_xlabel("qcond / g/Kg")
+
 for ax in axs:
   ax.set_ylabel("z /km")
 
 fig.tight_layout()
-plt.savefig("./fig.png")
+plt.savefig("./initprofs.png")
