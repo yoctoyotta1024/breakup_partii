@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.18.0)
 
 project(project
   LANGUAGES CXX
-  DESCRIPTION "CLEO by Clara Bayley and other developers"
+  DESCRIPTION "Breakup Part II by Clara Bayley and other developers"
   VERSION 1.0
 )
 
@@ -17,5 +17,6 @@ set(defaultcompileops -Werror -Wall -pedantic -g -gdwarf-4)   # good for g++ com
 # set(defaultcompileops -Werror -Wall -pedantic -g)           # -gdwarf-4 flag not possible for nvc++ compiler 
 
 # subdirectories of CLEO libray and main program
-add_subdirectory(libs)
+message("CLEO LIBS SOURCE DIR: ${CLEOLIBS_SOURCE_DIR}")
+add_subdirectory(${CLEOLIBS_SOURCE_DIR} libs)
 add_subdirectory(src)

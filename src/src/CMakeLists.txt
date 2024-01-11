@@ -9,6 +9,7 @@ project("buii")
 
 # print where exactly project source dir is for this CMakeLists.txt
 message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message("CLEO LIBS SOURCE DIR: ${CLEOLIBS_SOURCE_DIR}")
 
 # Kokkos library stuff
 set(CMAKE_CXX_FLAGS_B4 "${CMAKE_CXX_FLAGS}")
@@ -40,7 +41,7 @@ set(buii "buii")
 add_executable(${buii} "main_buii.cpp")
 target_link_libraries(${buii} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
 target_link_libraries(${buii} PUBLIC Kokkos::kokkos)
-target_include_directories(${buii} PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(${buii} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 # target_include_directories(${buii} PRIVATE ${PROJECT_SOURCE_DIR})
 target_compile_options(${buii} PRIVATE ${compileops})
 
