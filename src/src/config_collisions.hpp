@@ -35,7 +35,7 @@
 #include "superdrops/collisionprobs/longhydroprob.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-struct ConfigCoalBuRe
+struct ConfigCollisions_CoalBuRe
 {
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
@@ -53,7 +53,7 @@ struct ConfigCoalBuRe
   }
 };
 
-struct ConfigCoalOnly
+struct ConfigCollisions_CoalOnly
 {
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const

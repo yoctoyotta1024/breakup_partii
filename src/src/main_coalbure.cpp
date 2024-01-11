@@ -24,5 +24,5 @@
 
 int main(int argc, char *argv[])
 {
-  return main_supplement(argc, argv, ConfigCoalBuRe{});
+  return main_supplement(argc, argv, ConfigCollisions_CoalBuRe{});
 }
