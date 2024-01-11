@@ -54,5 +54,4 @@ mkdir ${path2build}share
 ### ------------------- compile & run ------------------ ###
 ### generate input files and run 1-D rainshaft example
 ${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile}
-
 ### ---------------------------------------------------- ###

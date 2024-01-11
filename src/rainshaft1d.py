@@ -55,7 +55,7 @@ binpath       = path2build+"/bin/"
 sharepath     = path2build+"/share/"
 gridfile      = sharepath+"rain1d_dimlessGBxboundaries.dat"
 initSDsfile   = sharepath+"rain1d_dimlessSDsinit.dat"
-thermofile    =  sharepath+"rain1d_dimlessthermo.dat"
+thermofile    = sharepath+"rain1d_dimlessthermo.dat"
 
 # path and file names for plotting results
 setupfile     = binpath+"rain1d_setup.txt"
@@ -164,7 +164,7 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system('pwd')
 os.system('rm -rf '+dataset)
-os.system('make clean && make -j 64 rshaft1D')
+os.system('make -j 64 rshaft1D')
 executable = path2build+'/examples/rainshaft1d/src/rshaft1D'
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
