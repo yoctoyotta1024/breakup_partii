@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=buii
+#SBATCH --job-name=setupbuii
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./buii_out.%j.out
-#SBATCH --error=./buii_err.%j.out
+#SBATCH --output=./setupbuii_out.%j.out
+#SBATCH --error=./setupbuii_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
@@ -51,7 +51,7 @@ mkdir ${path2build}bin
 mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
-### ------------------- compile & run ------------------ ###
-### generate input files and run 1-D rainshaft example
-${python} rainshaft1d.py ${path2CLEO} ${path2build} ${configfile}
+### --------------------- compile ---------------------- ###
+### generate input files and compile 1-D rainshaft
+${python} setup_buii.py ${path2CLEO} ${path2build} ${configfile}
 ### ---------------------------------------------------- ###
