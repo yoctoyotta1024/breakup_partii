@@ -58,6 +58,8 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
+#include "superdrops/condensation.hpp"
+#include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
@@ -151,8 +153,10 @@ create_motion(const unsigned int motionstep)
                          terminalv);                                                                            
 }
 
+template <typename ConfigCollisions>
 inline MicrophysicalProcess auto
-create_microphysics(const Config &config, const Timesteps &tsteps)
+create_microphysics(const Config &config, const Timesteps &tsteps,
+                    const ConfigCollisions config_collisions)
 {
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
@@ -169,13 +173,17 @@ create_microphysics(const Config &config, const Timesteps &tsteps)
   return cond >> colls;
 }
 
+template <typename ConfigCollisions>
 inline auto create_sdm(const Config &config,
                        const Timesteps &tsteps,
-                       FSStore &store)
+                       FSStore &store,
+                       const ConfigCollisions config_collisions)
 {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
-  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
+  const MicrophysicalProcess auto microphys(create_microphysics(config,
+                                                                tsteps,
+                                                                config_collisions));
   const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
   const Observer auto obs(create_observer(config, tsteps, store));
 
@@ -183,7 +191,9 @@ inline auto create_sdm(const Config &config,
                     microphys, movesupers, obs);
 }
 
-int main_supplement(int argc, char *argv[])
+template <typename ConfigCollisions>
+int main_supplement(int argc, char *argv[],
+                    const ConfigCollisions config_collisions)
 {
   if (argc < 2)
   {
@@ -207,7 +217,7 @@ int main_supplement(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
+    const SDMMethods sdm(create_sdm(config, tsteps, fsstore, config_collisions));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(

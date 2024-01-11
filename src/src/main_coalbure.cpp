@@ -20,9 +20,9 @@
  */
 
 #include "main_supplement.hpp"
-#include "coalbure_supplement.hpp"
+#include "config_coalbure.hpp"
 
 int main(int argc, char *argv[])
 {
-  return main_supplement(argc, argv);
+  return main_supplement(argc, argv, ConfigCollisions{});
 }
