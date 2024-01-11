@@ -17,6 +17,8 @@
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
+executable=buii_${1}
+
 path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
@@ -36,5 +38,5 @@ mkdir ${path2build}share
 
 ### ----------------------- run ------------------------ ###
 ### run 1-D rainshaft 
-${python} run_buii.py ${path2CLEO} ${path2build} ${configfile}
+${python} run_buii.py ${path2CLEO} ${path2build} ${configfile} ${executable}
 ### ---------------------------------------------------- ###

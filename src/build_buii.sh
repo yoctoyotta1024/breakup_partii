@@ -53,6 +53,6 @@ mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
 ### --------------------- compile ---------------------- ###
-### generate input files and compile 1-D rainshaft
-${python} build_buii.py ${path2CLEO} ${path2build} ${configfile}
+### generate input files and compile 1-D rainshaft for buii_coalbure executable
+${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} buii_coalbure
 ### ---------------------------------------------------- ###

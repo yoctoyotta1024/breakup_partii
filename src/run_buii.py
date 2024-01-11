@@ -29,6 +29,7 @@ from matplotlib.colors import LogNorm, Normalize
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
+executable = sys.argv[4]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.initsuperdropsbinary_src import *
@@ -110,7 +111,7 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
 os.system('pwd')
-executable = path2build+'/src/buii'
+executable = path2build+'/src/'+executable
 os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

@@ -28,6 +28,7 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
+datapath = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -44,12 +45,11 @@ constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-datapath       = path2build+"/bin/"
-setupfile     = datapath+"buiisetup.txt"
-dataset       = datapath+"buiisol.zarr"
+setupfile     = datapath+"setup.txt"
+dataset       = datapath+"sol.zarr"
 
 # directory for saving figures and animations
-savefigpath = path2build+"/bin/"
+savefigpath = datapath
 
 ### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
@@ -66,14 +66,14 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 ### ----- plot figures ----- ###
-savename = savefigpath + "buii_totnsupers.png"
+savename = savefigpath + "totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "buii_domainmassmoms.png"
+savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "buii_randomsample.png"
+savename = savefigpath + "randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
@@ -84,7 +84,7 @@ nframes = len(time.mins)
 mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number of super-droplets"
-savename=savefigpath+"buii_nsupers1d"
+savename=savefigpath+"nsupers1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
@@ -95,7 +95,7 @@ norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
 mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number concentration /cm$^{-3}$"
-savename=savefigpath+"buii_numconc1d"
+savename=savefigpath+"numconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,
@@ -106,7 +106,7 @@ norm = gbxs["gbxvols"] # volume [m^3]
 mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"buii_massconc1d"
+savename=savefigpath+"massconc1d"
 animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
                             xlabel=xlabel, xlims=xlims,
                             color="green", saveani=True,

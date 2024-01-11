@@ -28,6 +28,7 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
+executable = sys.argv[4]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -112,6 +113,6 @@ if isfigures[0]:
 # 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
-os.system('make -j 64 buii')
+os.system('make -j 64 '+executable)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

@@ -36,9 +36,9 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
-# primary executable for CLEO sdm
-set(buii "buii")
-add_executable(${buii} "main_buii.cpp")
+# primary executable for CLEO sdm coalbure
+set(buii "buii_coalbure")
+add_executable(${buii} "main_coalbure.cpp")
 target_link_libraries(${buii} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
 target_link_libraries(${buii} PUBLIC Kokkos::kokkos)
 target_include_directories(${buii} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
