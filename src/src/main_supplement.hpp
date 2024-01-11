@@ -1,8 +1,8 @@
 /*
  * ----- CLEO -----
- * File: main_buii.cpp
+ * File: main_supplement.hpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Thursday 11th January 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
@@ -19,11 +19,15 @@
  * rainshaft investigation of droplet breakup
  */
 
+#ifndef MAIN_SUPPLEMENT_HPP
+#define MAIN_SUPPLEMENT_HPP
+
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
 #include <concepts>
 #include <cmath>
+#include <array>
 
 #include <Kokkos_Core.hpp>
 
@@ -54,15 +58,7 @@
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 
-#include "superdrops/breakup_nfrags.hpp"
-#include "superdrops/breakup.hpp"
-#include "superdrops/coalbure_flag.hpp"
-#include "superdrops/coalbure.hpp"
-#include "superdrops/coalescence.hpp"
-#include "superdrops/collisionprobs/longhydroprob.hpp"
-#include "superdrops/condensation.hpp"
 #include "superdrops/motion.hpp"
-#include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
 #include "zarr/fsstore.hpp"
@@ -101,35 +97,6 @@ create_gbxmaps(const Config &config)
                                              config.nspacedims,
                                              config.grid_filename);
   return gbxmaps;
-}
-
-inline MicrophysicalProcess auto
-create_microphysics(const Config &config, const Timesteps &tsteps)
-{
-  const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep(),
-                                                      config.doAlterThermo,
-                                                      config.cond_iters,
-                                                      &step2dimlesstime,
-                                                      config.cond_rtol,
-                                                      config.cond_atol,
-                                                      config.cond_SUBTSTEP,
-                                                      &realtime2dimless);
-
-  const PairProbability auto collprob = LongHydroProb(1.0);
-  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-                                                   &step2realtime,
-                                                   collprob,
-                                                   nfrags,
-                                                   coalbure_flag);
-  
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  // const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
-  //                                                 &step2realtime,
-  //                                                   coalprob);
-  
-  return cond >> colls;
 }
 
 inline Motion<CartesianMaps> auto
@@ -181,64 +148,4 @@ create_observer(const Config &config,
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
 }
 
-inline auto create_sdm(const Config &config,
-                       const Timesteps &tsteps,
-                       FSStore &store)
-{
-  const auto couplstep = (unsigned int)tsteps.get_couplstep();
-  const GridboxMaps auto gbxmaps(create_gbxmaps(config));
-  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
-  const Observer auto obs(create_observer(config, tsteps, store));
-
-  return SDMMethods(couplstep, gbxmaps,
-                    microphys, movesupers, obs);
-}
-
-int main(int argc, char *argv[])
-{
-  if (argc < 2)
-  {
-    throw std::invalid_argument("configuration file(s) not specified");
-  }
-
-  Kokkos::Timer kokkostimer;
-
-  /* Read input parameters from configuration file(s) */
-  const std::string_view config_filename(argv[1]); // path to configuration file
-  const Config config(config_filename);
-  const Timesteps tsteps(config); // timesteps for model (e.g. coupling and end time)
-
-  /* Create zarr store for writing output to storage */
-  FSStore fsstore(config.zarrbasedir);
-
-  /* Initial conditions for CLEO run */
-  const InitialConditions auto initconds = create_initconds(config);
-
-  /* Initialise Kokkos parallel environment */
-  Kokkos::initialize(argc, argv);
-  {
-    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, fsstore));
-
-    /* Solver of dynamics coupled to CLEO SDM */
-    CoupledDynamics auto coupldyn(
-        create_coupldyn(config, sdm.gbxmaps,
-                        tsteps.get_couplstep(),
-                        tsteps.get_t_end()));
-
-    /* coupling between coupldyn and SDM */
-    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
-    
-    /* Run CLEO (SDM coupled to dynamics solver) */
-    const RunCLEO runcleo(sdm, coupldyn, comms);
-    runcleo(initconds, tsteps.get_t_end());
-  }
-  Kokkos::finalize();
-
-  const auto ttot = double{kokkostimer.seconds()};
-  std::cout << "-----\n Total Program Duration: "
-            << ttot << "s \n-----\n";
-
-  return 0;
-}
+#endif // MAIN_SUPPLEMENT_HPP
