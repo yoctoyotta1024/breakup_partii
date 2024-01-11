@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: config_coalbure.hpp
+ * File: config_collisions.hpp
  * Project: src
  * Created Date: Thursday 11th January 2023
  * Author: Clara Bayley (CB)
@@ -35,7 +35,7 @@
 #include "superdrops/collisionprobs/longhydroprob.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-struct ConfigCollisions
+struct ConfigCoalBuRe
 {
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
@@ -49,10 +49,19 @@ struct ConfigCollisions
                                                      nfrags,
                                                      coalbure_flag);
 
-    // const PairProbability auto coalprob = LongHydroProb(1.0);
-    // const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
-    //                                                 &step2realtime,
-    //                                                   coalprob);
+    return colls;
+  }
+};
+
+struct ConfigCoalOnly
+{
+  inline MicrophysicalProcess auto
+  operator()(const Config &config, const Timesteps &tsteps) const
+  {
+    const PairProbability auto coalprob = LongHydroProb(1.0);
+    const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(),
+                                                    &step2realtime,
+                                                      coalprob);
 
     return colls;
   }
