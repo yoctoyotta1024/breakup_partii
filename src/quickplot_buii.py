@@ -46,8 +46,8 @@ constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile     = datapath+"setup_"+runstr+".txt"
-dataset       = datapath+"sol_"+runstr+".zarr"
+setupfile     = datapath+"/setup_"+runstr+".txt"
+dataset       = datapath+"/sol_"+runstr+".zarr"
 
 # directory for saving figures and animations
 savefigpath = datapath+"/plots/"+runstr+"/"
@@ -58,7 +58,7 @@ savefigpath = datapath+"/plots/"+runstr+"/"
 if path2CLEO == savefigpath:
   raise ValueError("plots directory cannot be CLEO")
 else:
-  Path(savefigpath).mkdir(exist_ok=True) 
+  Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
@@ -72,9 +72,6 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 ### ----- plot figures ----- ###
-savename = savefigpath + "totnsupers.png"
-pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
-
 savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
