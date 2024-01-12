@@ -47,7 +47,8 @@ runnums = {
 }
 
 # variables in datasets to create ensemble dataset for
-vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
+# vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
+vars4ensemb = ["nsupers"]
 
 # path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
