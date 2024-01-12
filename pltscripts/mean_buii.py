@@ -19,12 +19,8 @@ Script plots mean of ensemble of data
 from buii 1-D rainshaft output
 '''
 
-import os
 import sys
-import numpy as np
-import random 
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -32,16 +28,16 @@ path2build = sys.argv[2]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import pltsds, pltmoms, animations
-from pySD.sdmout_src import *
+import write_ensemble_dataset as wed
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
 labels = ["coalbure", "coalonly"]
-binpath = path2build+"/bin/" # path before directory called "label" containing zarr datasets
-meanzarr = "sol_ensemb.zarr" # name of ensemble dataset
+binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
+meanzarr = "sol_ensemb.zarr"      # name of ensemble dataset
+meansetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 
 # runs in each ensemble
 runs = [0, 1, 2, 3]
@@ -49,6 +45,9 @@ runnums = {
   "coalbure" : runs,
   "coalonly" : runs
 }
+
+# variables in datasets to create ensemble dataset for
+vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
 
 # path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
@@ -60,17 +59,25 @@ gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###                                
-def write_ensemble_dataset(meandataset, lab, datapath, runnums):
-  
+def create_ensemble_mean(meandataset,  vars4ensemb,
+                       lab, datapath, runnums):
+
+  datasets = [] 
   for n in runnums[lab]:
     # setup and zarr for run[n] of ensemble
     runstr = "run"+str(n)
-    setupfile     = datapath+"/setup_"+runstr+".txt"
-    dataset       = datapath+"/sol_"+runstr+".zarr"
-
-    print(dataset, setupfile)
-  print(meandataset)
+    dataset = datapath+"/sol_"+runstr+".zarr"
+    datasets.append(dataset)
   
+  setuprunstr = "run"+str(runnums[lab][0])
+  setupfile = datapath+"/setup_"+setuprunstr+".txt"
+
+  wed.write_ensemble_dataset(path2CLEO, meandataset, meansetuptxt,
+                             vars4ensemb, setupfile, datasets)
+  
+  print(dataset, setupfile)
+  print()
+
 ### ------------------------------------------------------------ ###
 ### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
@@ -80,10 +87,12 @@ for lab in labels:
   datapath = binpath+"/"+lab+"/runs/"   # directory of datasets
   meandatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
   meandataset = meandatapath+meanzarr
+  meansetuptxt = meandatapath+meanzarr
 
   if path2CLEO == meandatapath:
     raise ValueError("ensemble mean directory cannot be CLEO")
   else:
     Path(meandatapath).mkdir(exist_ok=True) 
 
-  write_ensemble_dataset(meandataset, lab, datapath, runnums) 
+  create_ensemble_mean(meandataset, meansetuptxt, vars4ensemb,
+                       lab, datapath, runnums)
