@@ -36,8 +36,8 @@ import write_ensemble_dataset as wed
 # label and path for each ensembles of datasets 
 labels = ["coalbure", "coalonly"]
 binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
-meanzarr = "sol_ensemb.zarr"      # name of ensemble dataset
-meansetuptxt = "setup_ensemb.txt" # name of ensemble dataset
+ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
+ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 
 # runs in each ensemble
 runs = [0, 1, 2, 3]
@@ -60,14 +60,12 @@ for lab in labels:
 
   # directories for making ensemble dataset
   datapath = binpath+"/"+lab+"/runs/"   # directory of datasets
-  meandatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
-  meandataset = meandatapath+meanzarr
-  meansetuptxt = meandatapath+meanzarr
+  ensembdatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
 
-  if path2CLEO == meandatapath:
+  if path2CLEO == ensembdatapath:
     raise ValueError("ensemble mean directory cannot be CLEO")
   else:
-    Path(meandatapath).mkdir(exist_ok=True) 
+    Path(ensembdatapath).mkdir(exist_ok=True) 
 
   datasets = [] 
   setupfile = datapath+"/setup_run"+str(runnums[lab][0])+".txt"
@@ -77,5 +75,7 @@ for lab in labels:
     dataset = datapath+"/sol_"+runstr+".zarr"
     datasets.append(dataset)
   
-  wed.write_ensemble_dataset(path2CLEO, meandataset, meansetuptxt,
+  ensembdataset = ensembdatapath+ensembzarr
+  ensembsetupfile = ensembdatapath+ensembsetuptxt
+  wed.write_ensemble_dataset(ensembdataset, ensembsetupfile,
                              vars4ensemb, setupfile, datasets)

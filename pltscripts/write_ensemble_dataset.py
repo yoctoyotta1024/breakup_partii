@@ -28,17 +28,35 @@ sys.path.append(path2pySD)  # for imports from pySD package
 from pySD.sdmout_src import pyzarr
 from pySD import editconfigfile
 
-def write_ensemb_setupfile(ensembsetuptxt, setupfile):
+def write_ensemble_info(ensembsetupfile, setupfile, datasets):
+  header = "// ----------------------------- //" +\
+            "\n// --------- ensembsetupfile --------- //" +\
+            "\n// ----------------------------- //\n"
+  footer = "// ----------------------------- //"
+
+  datasets_str = "\ndatasets in ensemble: \n     "+\
+                "\n     ".join(datasets) + "\n"
+        
+  setup_str = "\nsetup copied from: \n     "+setupfile+"\n"
+
+  with open(ensembsetupfile, "a") as file:
+    file.write(header)
+    file.write(setup_str)
+    file.write(datasets_str)
+    file.write(footer)
+
+def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
   
-  print(ensembsetuptxt, setupfile)
-  # os.system('cp '+setupfile+" "+ensembsetuptxt)
-  # params = {
-  #   "initsupers_filename" : "ensemble (see below)",
-  #   "setuptxt" : "ensemble (see below)",
-  #   "zarrbasedir" : "ensemble (see below)",
-  #   "stats_filename" "ensemble (see below)",
-  #   }
-  # editconfigfile.edit_config_params(ensembsetuptxt, params)
+  os.system('cp '+setupfile+" "+ensembsetupfile)
+  params = {
+    "initsupers_filename" : "[ensemble, see below]",
+    "setuptxt" : "[ensemble, see below]", 
+    "zarrbasedir" : "[ensemble, see below]",
+    "stats_filename" : "[ensemble, see below]"
+    }
+  editconfigfile.edit_config_params(ensembsetupfile, params)
+
+  write_ensemble_info(ensembsetupfile, setupfile, datasets)
 
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
@@ -46,9 +64,9 @@ def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
     ds = pyzarr.get_rawdataset(dataset)
     print(dataset)
 
-def write_ensemble_dataset(path2CLEO, ensembdataset, ensembsetuptxt,
+def write_ensemble_dataset(ensembdataset, ensembsetupfile,
                            vars4ensemb, setupfile, datasets):
 
-  write_ensemb_setupfile(ensembsetuptxt, setupfile)
+  write_ensemb_setupfile(ensembsetupfile, setupfile, datasets)
 
   write_ensemb_zarr(ensembdataset, vars4ensemb, datasets)
