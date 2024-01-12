@@ -28,9 +28,6 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-label = "coalbure"
-datapath = path2build+"/bin/"+label+"/"
-runs = [0, 1, 2, 3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -41,20 +38,24 @@ from pySD.sdmout_src import *
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
+# essential paths and filenames
+label = "coalbure"
+datasetspath = path2build+"/bin/"+label+"/"
+runs = [0, 1, 2, 3]
+
+# path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile     = datapath+"/setup_"+runstr+".txt"
-dataset       = datapath+"/sol_"+runstr+".zarr"
+setupfile     = datasetspath+"/setup_"+runstr+".txt"
+dataset       = datasetspath+"/sol_"+runstr+".zarr"
 
 # directory for saving figures and animations
-savefigpath = datapath+"/plots/"+runstr+"/"
+savefigpath = datasetspath+"/plots/ensemb/"
 
 ### ------------------------------------------------------------ ###
-### ----------------------- PLOT RESULTS ----------------------- ###
+### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
 
 ### ------------------------------------------------------------ ###
