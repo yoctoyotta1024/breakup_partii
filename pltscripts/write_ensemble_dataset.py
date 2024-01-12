@@ -65,7 +65,7 @@ def check_dataset_for_ensemb(dataset, refset):
   
   time = pyzarr.get_rawdataset(refset)["time"].values
   ds = pyzarr.get_rawdataset(dataset)
-  
+
   if np.any(ds["time"].values != time):
     raise ValueError("data for time in datasets must be the same")
 
@@ -77,6 +77,42 @@ def write_time_to_ensembzarr(ensembdataset, dataset):
   dest = zarr.open(ensembdataset)
   zarr.copy(src, dest, log=sys.stdout, if_exists='replace')
 
+def ensemble_data(func, datasets, var):
+  ''' call func on ensemble of var from datasets'''
+  
+  data4ensemb = []
+  for dataset in datasets:
+    v = pyzarr.get_rawdataset(dataset)[var].values
+    data4ensemb.append(v)
+  data4ensemb = np.asarray(data4ensemb)
+  
+  return func(data4ensemb)
+
+def  write_meanvar_to_array(arrayname, array, refvar):
+  ''' write array to zarr store under 'arrayname'
+  using same metadata as refvar '''
+  
+  z = zarr.open(arrayname, mode='w',
+                  shape=refvar.shape,
+                  chunks=refvar.chunks,
+                  compressor=refvar.compressor,
+                  dtype=refvar.dtype, 
+                  fill_value=refvar.fill_value,
+                  filters=refvar.filters,
+                  order=refvar.order)
+  z[:] = array
+
+def write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
+                                 datasets, refset):
+  ''' write mean over ensemble of datasets for
+    each var in vars4ensemb into ensembdataset zarr'''
+  
+  for var in vars4ensemb:
+    meanname = ensembdataset+"/"+var
+    meanvar = ensemble_data(lambda x : np.mean(x, axis=0),
+                            datasets, var)
+    write_meanvar_to_array(meanname, meanvar, zarr.open(refset)[var])
+
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
   refset = datasets[0] # reference dataset
@@ -84,14 +120,11 @@ def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
     check_dataset_for_ensemb(dataset, refset)
 
   write_time_to_ensembzarr(ensembdataset, refset)
-
-
-  
+  write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb,
+                               datasets, refset)
+      
 def write_ensemble_dataset(ensembdataset, ensembsetupfile,
                            vars4ensemb, setupfile, datasets):
 
   write_ensemb_setupfile(ensembsetupfile, setupfile, datasets)
-
   write_ensemb_zarr(ensembdataset, vars4ensemb, datasets)
-  time = pyzarr.get_rawdataset(ensembdataset)["time"].values
-  print("time: ", time)
