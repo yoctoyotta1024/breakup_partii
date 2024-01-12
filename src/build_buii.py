@@ -44,7 +44,7 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 executables = ["buii_coalbure", "buii_coalonly"]
 
 ### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
+# path and filenames for creating initial conditions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 binpath       = path2build+"/bin/"
 sharepath     = path2build+"/share/"

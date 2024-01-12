@@ -41,7 +41,7 @@ from pySD.sdmout_src import *
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
+# path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
