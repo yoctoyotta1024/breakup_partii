@@ -59,21 +59,17 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
 
   write_ensemble_info(ensembsetupfile, setupfile, datasets)
 
-def get_datasets_for_ensemb(datasets, refset):
-  '''returns opened datasets after checking that time
-  in each is consistent with the refset'''
+def open_dataset_for_ensemb(dataset, refset):
+  '''returns opened dataset after checking that
+  time is consistent with the refset'''
   
-  dss = []
   time = pyzarr.get_rawdataset(refset)["time"].values
-  for dataset in datasets:
-    d = pyzarr.get_rawdataset(dataset)
+  ds = pyzarr.get_rawdataset(dataset)
   
-    if np.any(d["time"].values != time):
-      raise ValueError("data for time in datasets must be the same")
+  if np.any(ds["time"].values != time):
+    raise ValueError("data for time in datasets must be the same")
 
-    dss.append(d)
-
-  return dss
+  return ds
 
 def write_time_to_ensembzarr(ensembdataset, dataset):
   ''' create or replace time group in ensembdataset
@@ -86,9 +82,12 @@ def write_time_to_ensembzarr(ensembdataset, dataset):
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
   refset = datasets[0] # reference dataset
-  dss = get_datasets_for_ensemb(datasets, refset)
-  
+
   write_time_to_ensembzarr(ensembdataset, refset)
+  
+  for dataset in datasets:
+    ds = open_dataset_for_ensemb(dataset, refset)
+  
   
 def write_ensemble_dataset(ensembdataset, ensembsetupfile,
                            vars4ensemb, setupfile, datasets):
