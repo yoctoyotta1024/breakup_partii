@@ -38,25 +38,39 @@ from pySD.sdmout_src import *
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
-# essential paths and filenames
-label = "coalbure"
-datasetspath = path2build+"/bin/"+label+"/"
+# label and path for each ensembles of datasets 
+labels = ["coalbure", "coalonly"]
+binpath = path2build+"/bin/" # path before directory called "label" containing zarr datasets
+meanzarr = "sol_ensemb.zarr" # name of ensemble dataset
+
+# runs in each ensemble
 runs = [0, 1, 2, 3]
+runnums = {
+  "coalbure" : runs,
+  "coalonly" : runs
+}
 
 # path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
-# path and file names for plotting results
-setupfile     = datasetspath+"/setup_"+runstr+".txt"
-dataset       = datasetspath+"/sol_"+runstr+".zarr"
-
-# directory for saving figures and animations
-savefigpath = datasetspath+"/plots/ensemb/"
-
 ### ------------------------------------------------------------ ###
 ### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
+for lab in labels:
+
+  # directories for making ensemble dataset
+  datapath = binpath+"/"+lab+"/runs/"   # directory of datasets
+  meandatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
+  meandataset = meandatapath+meanzarr
+
+  for n in runnums[lab]:
+
+    # setup and zarr for run[n] of ensemble
+    runstr = "run"+str(n)
+    setupfile     = datapath+"/setup_"+runstr+".txt"
+    dataset       = datapath+"/sol_"+runstr+".zarr"
+
 
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###                                
