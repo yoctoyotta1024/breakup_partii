@@ -45,6 +45,7 @@ gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
 datapath = path2build+"/bin/coalbure/ensemb/"
+# datapath = path2build+"/bin/coalonly/ensemb/"
 setupfile     = datapath+"/setup_ensemb.txt"
 dataset       = datapath+"/sol_ensemb.zarr"
 
@@ -66,7 +67,6 @@ gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
 ### ----- load data to plot ----- ###
 time = pyzarr.get_time(dataset)
-totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 ### ----- plot figures ----- ###
