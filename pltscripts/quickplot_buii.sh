@@ -20,7 +20,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
-datapath=${path2build}/bin/${1}
+datapath=${path2build}/bin/${1}/runs/
 runnum=${2}
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python

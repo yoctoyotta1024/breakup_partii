@@ -61,13 +61,12 @@ initSDspath   = sharepath+"/buii_dimlessSDsinits/"
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 
-
 for lab in labels:
 
   for n in runnums[lab]:
     runstr = "run"+str(n)
-    datapath = binpath+"/"+lab+"/"
-    Path(datapath).mkdir(exist_ok=True) 
+    datapath = binpath+"/"+lab+"/runs/"
+    Path(datapath).mkdir(parents=True, exist_ok=True) 
     
     ### ----- copy tmp_config to config then edit ----- ###
     configfile = tmppath+"/config_"+lab+"_"+runstr+".txt"
