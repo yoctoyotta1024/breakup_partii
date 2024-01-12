@@ -22,6 +22,7 @@ mean of an ensemble of datasets
 import os
 import sys
 import numpy as np
+import zarr
 
 path2pySD = "/home/m/m300950/CLEO/" # TODO: remove
 sys.path.append(path2pySD)  # for imports from pySD package
@@ -60,9 +61,13 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
 
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
+  time = pyzarr.get_rawdataset(datasets[0])["time"].values
   for dataset in datasets:
     ds = pyzarr.get_rawdataset(dataset)
-    print(dataset)
+    if np.any(ds["time"].values != time):
+      raise ValueError("data for time in datasets must be the same")
+  
+  print(ds.nsupers)
 
 def write_ensemble_dataset(ensembdataset, ensembsetupfile,
                            vars4ensemb, setupfile, datasets):
