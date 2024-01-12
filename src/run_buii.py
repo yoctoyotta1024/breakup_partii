@@ -25,27 +25,14 @@ import random
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
-executable = sys.argv[4]
+path2build = sys.argv[1]
+configfile = sys.argv[2]
+executable = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.initsuperdropsbinary_src import *
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers 
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
-
-### ---------------------------------------------------------------- ###
-### ----------------------- INPUT PARAMETERS ----------------------- ###
-### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
-constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
-sharepath     = path2build+"/share/"
-gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
-initSDsfile   = sharepath+"buii_dimlessSDsinit.dat"
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------- RUN CLEO -------------------------- ###

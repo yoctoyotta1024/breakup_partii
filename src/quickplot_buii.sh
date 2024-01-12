@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=runbuii
+#SBATCH --job-name=quickplot
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./runbuii_out.%j.out
-#SBATCH --error=./runbuii_err.%j.out
+#SBATCH --output=./quickplot_out.%j.out
+#SBATCH --error=./quickplot_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###

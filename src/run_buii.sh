@@ -19,7 +19,6 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 executable=buii_${1}
 
-path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
 configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
@@ -38,5 +37,5 @@ mkdir ${path2build}share
 
 ### ----------------------- run ------------------------ ###
 ### run 1-D rainshaft 
-${python} run_buii.py ${path2CLEO} ${path2build} ${configfile} ${executable}
+${python} run_buii.py ${path2build} ${configfile} ${executable}
 ### ---------------------------------------------------- ###
