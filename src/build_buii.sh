@@ -24,7 +24,7 @@ path2CLEO=${HOME}/CLEO/
 path2src=${HOME}/breakup_partii/src/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
-configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
+root_configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 gxx="g++"
@@ -50,5 +50,5 @@ export OMP_PLACES=threads
 
 ### --------------------- compile ---------------------- ###
 ### generate input files and compile 1-D rainshaft for list of executables
-${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} 
+${python} build_buii.py ${path2CLEO} ${path2build} ${root_configfile} 
 ### ---------------------------------------------------- ###

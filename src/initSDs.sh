@@ -20,12 +20,12 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
-configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
+root_configfile=${path2build}/tmp/buii_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 ### ---------------------------------------------------- ###
 
 ### --------------------- initSDs ---------------------- ###
 ### make initial SD conditions for 1-D rainshaft
-${python} initSDs.py ${path2CLEO} ${path2build} ${configfile}
+${python} initSDs.py ${path2CLEO} ${path2build} ${root_configfile}
 ### ---------------------------------------------------- ###

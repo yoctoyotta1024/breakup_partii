@@ -27,7 +27,8 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-configfile_draft = sys.argv[3]
+root_configfile = sys.argv[3]
+tmpdir = path2build+"/tmp/"
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.initsuperdropsbinary_src import *
@@ -53,15 +54,19 @@ executables = {
 ### ---------------------------------------------------------------- ###
 ### ---------------------------- RUN CLEO -------------------------- ###
 ### ---------------------------------------------------------------- ###
-os.chdir(path2build)
-os.system('pwd')
-for exec in executables:
-  executable = path2build+'/src/'+exec
+if path2CLEO == path2build:
+  raise ValueError("build directory cannot be CLEO")
+else:
 
-  for n in runnums:
-    runstr = "run"+str(n)
-    
-    configfile = 
-    os.system(executable + ' ' + configfile)
+  os.chdir(path2build)
+  os.system('pwd')
+  for exec in executables:
+    executable = path2build+'/src/'+exec
+
+    for n in runnums:
+      runstr = "run"+str(n)
+      
+      configfile = 
+      os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

@@ -28,7 +28,7 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-configfile = sys.argv[3]
+root_configfile = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.initsuperdropsbinary_src import *
@@ -101,14 +101,14 @@ for n in runnums:
 
   ### ----- write initial superdroplets binary ----- ###
   csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-                                      configfile, constsfile,
+                                      root_configfile, constsfile,
                                       gridfile, nsupers, numconc)
 
   ### ----- show (and save) plots of binary file data ----- ###
   if isfigures[0]:
     if isfigures[1]:
       Path(savefigpath).mkdir(exist_ok=True) 
-    rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
+    rsupers.plot_initGBxs_distribs(root_configfile, constsfile, initSDsfile,
                                    gridfile, savefigstem, isfigures[1],
                                    SDgbxs2plt) 
 ### ---------------------------------------------------------------- ###

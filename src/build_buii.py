@@ -27,7 +27,7 @@ from pathlib import Path
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-configfile = sys.argv[3]
+root_configfile = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -47,9 +47,9 @@ executables = ["buii_coalbure", "buii_coalonly"]
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 binpath       = path2build+"/bin/"
 sharepath     = path2build+"/share/"
+tmppath       = path2build+"/tmp/"
 gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
 thermofile    = sharepath+"buii_dimlessthermo.dat"
-
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/" # directory for saving init figures
@@ -82,7 +82,10 @@ else:
   Path(path2build).mkdir(exist_ok=True) 
   Path(sharepath).mkdir(exist_ok=True) 
   Path(binpath).mkdir(exist_ok=True)
-  
+  Path(tmppath).mkdir(exist_ok=True)
+
+os.system('pwd')
+
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
