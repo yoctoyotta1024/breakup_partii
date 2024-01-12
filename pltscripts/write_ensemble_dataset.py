@@ -59,7 +59,7 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
 
   write_ensemble_info(ensembsetupfile, setupfile, datasets)
 
-def open_dataset_for_ensemb(dataset, refset):
+def check_dataset_for_ensemb(dataset, refset):
   '''returns opened dataset after checking that
   time is consistent with the refset'''
   
@@ -68,8 +68,6 @@ def open_dataset_for_ensemb(dataset, refset):
   
   if np.any(ds["time"].values != time):
     raise ValueError("data for time in datasets must be the same")
-
-  return ds
 
 def write_time_to_ensembzarr(ensembdataset, dataset):
   ''' create or replace time group in ensembdataset
@@ -82,12 +80,12 @@ def write_time_to_ensembzarr(ensembdataset, dataset):
 def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
   refset = datasets[0] # reference dataset
+  for dataset in datasets:
+    check_dataset_for_ensemb(dataset, refset)
 
   write_time_to_ensembzarr(ensembdataset, refset)
-  
-  for dataset in datasets:
-    ds = open_dataset_for_ensemb(dataset, refset)
-  
+
+
   
 def write_ensemble_dataset(ensembdataset, ensembsetupfile,
                            vars4ensemb, setupfile, datasets):
