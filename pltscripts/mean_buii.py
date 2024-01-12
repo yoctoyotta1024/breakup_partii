@@ -57,6 +57,23 @@ gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 ### ------------------------------------------------------------ ###
 ### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
+
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###                                
+def write_ensemble_dataset(meandataset, lab, datapath, runnums):
+  
+  for n in runnums[lab]:
+    # setup and zarr for run[n] of ensemble
+    runstr = "run"+str(n)
+    setupfile     = datapath+"/setup_"+runstr+".txt"
+    dataset       = datapath+"/sol_"+runstr+".zarr"
+
+    print(dataset, setupfile)
+  print(meandataset)
+  
+### ------------------------------------------------------------ ###
+### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
+### ------------------------------------------------------------ ###
 for lab in labels:
 
   # directories for making ensemble dataset
@@ -64,78 +81,9 @@ for lab in labels:
   meandatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
   meandataset = meandatapath+meanzarr
 
-  for n in runnums[lab]:
+  if path2CLEO == meandatapath:
+    raise ValueError("ensemble mean directory cannot be CLEO")
+  else:
+    Path(meandatapath).mkdir(exist_ok=True) 
 
-    # setup and zarr for run[n] of ensemble
-    runstr = "run"+str(n)
-    setupfile     = datapath+"/setup_"+runstr+".txt"
-    dataset       = datapath+"/sol_"+runstr+".zarr"
-
-
-### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###                                
-
-### ------------------------------------------------------------ ###
-### ----------------------- PLOT RESULTS ----------------------- ###
-### ------------------------------------------------------------ ###
-if path2CLEO == savefigpath:
-  raise ValueError("plots directory cannot be CLEO")
-else:
-  Path(savefigpath).mkdir(parents=True, exist_ok=True) 
-  
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
-
-### ----- load data to plot ----- ###
-time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
-totnsupers = pyzarr.get_totnsupers(dataset)
-massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
-
-### ----- plot figures ----- ###
-savename = savefigpath + "domainmassmoms.png"
-pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
-
-nsample = 500
-savename = savefigpath + "randomsample.png"
-pltsds.plot_randomsample_superdrops(time, sddata,
-                                        config["totnsupers"],
-                                        nsample,
-                                        savename=savename)
-
-### ----- plot 1-D .gif animations ----- ###
-nframes = len(time.mins)
-mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number of super-droplets"
-savename=savefigpath+"nsupers1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)   
-
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
-mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number concentration /cm$^{-3}$"
-savename=savefigpath+"numconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)
-
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] # volume [m^3]
-mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"massconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)                        
-### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###                                
+  write_ensemble_dataset(meandataset, lab, datapath, runnums) 
