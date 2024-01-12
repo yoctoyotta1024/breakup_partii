@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: plotens_buii.py
+File: quickplotens_buii.py
 Project: breakup_partii
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
