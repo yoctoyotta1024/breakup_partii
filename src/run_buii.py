@@ -45,10 +45,10 @@ executables = {
 }
 
 # initSDs run numbers to use
-runnums = [0, 1, 2, 3]
-executables = {
-  "coalbure" : runnums,
-  "coalonly" : runnums
+runs = [0, 1, 2, 3]
+runnums = {
+  "coalbure" : runs,
+  "coalonly" : runs
 }
 
 binpath       = path2build+"/bin/"
@@ -61,11 +61,12 @@ initSDspath   = sharepath+"/buii_dimlessSDsinits/"
 if path2CLEO == path2build:
   raise ValueError("build directory cannot be CLEO")
 
-for n in runnums:
-  runstr = "run"+str(n)
 
-  for lab in labels:
-  
+for lab in labels:
+
+  for n in runnums[lab]:
+    runstr = "run"+str(n)
+
     ### ----- copy tmp_config to config then edit ----- ###
     configfile = tmppath+"/config_"+lab+"_"+runstr+".txt"
     os.system('cp '+tmp_configfile+" "+configfile)
