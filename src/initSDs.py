@@ -48,7 +48,7 @@ runnums       = [0, 1, 2, 3]
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
-savefigpaths = path2build+"/bin/" # directory for saving init figures
+savefigpath = path2build+"/bin/initSDs/" # directory for saving init figures
 SDgbxs2plt  = list(range(39, 99))
 SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
 
@@ -97,7 +97,7 @@ for n in runnums:
 
   runstr = "run"+str(n)
   initSDsfile = initSDspath+"/"+runstr+".dat"
-  savefigpath = savefigpaths+"/"+runstr+"_"
+  savefigstem = savefigpath+runstr+"_"
 
   ### ----- write initial superdroplets binary ----- ###
   csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
@@ -107,9 +107,9 @@ for n in runnums:
   ### ----- show (and save) plots of binary file data ----- ###
   if isfigures[0]:
     if isfigures[1]:
-      Path(savefigpaths).mkdir(exist_ok=True) 
+      Path(savefigpath).mkdir(exist_ok=True) 
     rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
-                                   gridfile, savefigpath, isfigures[1],
+                                   gridfile, savefigstem, isfigures[1],
                                    SDgbxs2plt) 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
