@@ -20,7 +20,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
-root_configfile=${path2build}/tmp/buii_config.txt 
+tmp_configfile=${path2build}/tmp/buii_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 ### ---------------------------------------------------- ###
@@ -29,5 +29,5 @@ python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 ### run 1-D rainshaft 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-${python} run_buii.py ${path2CLEO} ${path2build} ${root_configfile}
+${python} run_buii.py ${path2CLEO} ${path2build} ${tmp_configfile}
 ### ---------------------------------------------------- ###

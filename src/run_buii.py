@@ -27,7 +27,7 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-root_configfile = sys.argv[3]
+tmp_configfile = sys.argv[3]
 tmpdir = path2build+"/tmp/"
 
 sys.path.append(path2CLEO)  # for imports from pySD package

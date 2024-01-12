@@ -27,7 +27,8 @@ from pathlib import Path
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
-root_configfile = sys.argv[3]
+orig_configfile = sys.argv[3]
+tmp_configfile = sys.argv[4]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -84,6 +85,7 @@ else:
   Path(binpath).mkdir(exist_ok=True)
   Path(tmppath).mkdir(exist_ok=True)
 
+### ----- copy root config file to config file ----- ###
 os.system('pwd')
 
 ### ----- write gridbox boundaries binary ----- ###
