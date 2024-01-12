@@ -26,8 +26,7 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
-from pySD.sdmout import ensembzarr
-
+from pySD.sdmout_src.ensembzarr import write_ensemble
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -77,5 +76,5 @@ for lab in labels:
   
   ensembdataset = ensembdatapath+ensembzarr
   ensembsetupfile = ensembdatapath+ensembsetuptxt
-  ensembzarr.write_ensemble(ensembdataset, ensembsetupfile,
-                            vars4ensemb, setupfile, datasets)
+  write_ensemble(ensembdataset, ensembsetupfile,
+                vars4ensemb, setupfile, datasets)
