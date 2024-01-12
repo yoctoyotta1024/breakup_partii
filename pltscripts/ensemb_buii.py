@@ -15,8 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script plots mean of ensemble of data
-from buii 1-D rainshaft output
+Script writes mean and stddev of 
+ensemble of datasets from
+buii 1-D rainshaft output
 '''
 
 import sys
