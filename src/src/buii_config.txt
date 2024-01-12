@@ -22,14 +22,14 @@
 
 ### Initialisation parameters ###
 constants_filename = /home/m/m300950/CLEO/libs/cleoconstants.hpp        # name of file for values of physical constants
-initsupers_filename = ./share/buii_dimlessSDsinit.dat                 # binary filename for initialisation of SDs
-grid_filename = ./share/buii_dimlessGBxboundaries.dat                 # binary filename for initialisation of GBxs / GbxMaps
+grid_filename = ./share/buii_dimlessGBxboundaries.dat                   # binary filename for initialisation of GBxs / GbxMaps
+initsupers_filename = []                                                # binary filename for initialisation of SDs
 
 ### Output Data parameters ###
-setuptxt = ./bin/coalbure/setup.txt                # .txt filename to copy configuration to
-stats_filename = ./bin/coalbure/stats.txt          # .txt file to output runtime statistics to
-zarrbasedir = ./bin/coalbure/sol.zarr              # zarr store base directory
-maxchunk = 1250000                                 # maximum no. of elements in chunks of zarr store array
+setuptxt = []                                       # .txt filename to copy configuration to
+stats_filename = []                                 # .txt file to output runtime statistics to
+zarrbasedir = []                                    # zarr store base directory
+maxchunk = 1250000                                  # maximum no. of elements in chunks of zarr store array
 
 ### SDM Runtime parameters ###
 # domain setup #
