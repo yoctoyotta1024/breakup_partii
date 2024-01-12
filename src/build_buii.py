@@ -28,7 +28,7 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
-executable = sys.argv[4]
+executables = sys.argv[4:]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -79,10 +79,8 @@ if path2CLEO == path2build:
 else:
   Path(path2build).mkdir(exist_ok=True) 
   Path(sharepath).mkdir(exist_ok=True) 
-  Path(binpath).mkdir(exist_ok=True) 
-os.system("rm "+gridfile)
-os.system("rm "+thermofile[:-4]+"*")
-
+  Path(binpath).mkdir(exist_ok=True)
+  
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
@@ -113,6 +111,7 @@ if isfigures[0]:
 # 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
-os.system('make -j 64 '+executable)
+for executable in executables:
+  os.system('make -j 64 '+executable)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

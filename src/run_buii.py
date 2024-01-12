@@ -15,8 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generated initial superdrop conditions 
-and runs CLEO buii exectuable for 1-D rainshaft
+Script runs CLEO buii_[exectuable] for 1-D rainshaft
 '''
 
 import os
@@ -69,43 +68,6 @@ numconc = np.sum(scalefacs) * 100
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-  raise ValueError("build directory cannot be CLEO")
-else:
-  Path(path2build).mkdir(exist_ok=True) 
-  Path(sharepath).mkdir(exist_ok=True) 
-os.system("rm "+initSDsfile)
-
-### ----- write initial superdroplets binary ----- ###
-nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim)
-coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
-coord1gen = None                        # do not generate superdroplet coord2s
-coord2gen = None                        # do not generate superdroplet coord2s
-
-xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = rgens.SampleLog10RadiiGen(rspan)
-dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
-
-initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
-                                        coord3gen, coord1gen, coord2gen)
-csupers.write_initsuperdrops_binary(initSDsfile, initattrsgen, 
-                                      configfile, constsfile,
-                                      gridfile, nsupers, numconc)
-
-### ----- show (and save) plots of binary file data ----- ###
-if isfigures[0]:
-  if isfigures[1]:
-    Path(savefigpath).mkdir(exist_ok=True) 
-  rsupers.plot_initGBxs_distribs(configfile, constsfile, initSDsfile,
-                              gridfile, savefigpath, isfigures[1],
-                              SDgbxs2plt) 
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
-  
 ### ---------------------------------------------------------------- ###
 ### ---------------------------- RUN CLEO -------------------------- ###
 ### ---------------------------------------------------------------- ###

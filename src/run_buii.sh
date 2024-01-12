@@ -33,6 +33,7 @@ export OMP_PLACES=threads
 
 ### ensure these directories exist (it's a good idea for later use)
 mkdir ${path2build}bin
+mkdir ${path2build}bin/${1}
 mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 

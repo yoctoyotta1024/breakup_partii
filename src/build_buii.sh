@@ -46,13 +46,9 @@ CXX=${gxx} CC=${gcc} CUDA=${cuda} cmake -S ${path2src} -B ${path2build} ${kokkos
 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
-
-### ensure these directories exist (it's a good idea for later use)
-mkdir ${path2build}bin
-mkdir ${path2build}share
 ### ---------------------------------------------------- ###
 
 ### --------------------- compile ---------------------- ###
-### generate input files and compile 1-D rainshaft for buii_coalbure executable
-${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} buii_coalbure
+### generate input files and compile 1-D rainshaft for list of executables
+${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} buii_coalbure buii_coalonly
 ### ---------------------------------------------------- ###

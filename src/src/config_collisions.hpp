@@ -19,8 +19,8 @@
  * rainshaft investigation of droplet breakup
  */
 
-#ifndef CONFIG_COALBURE_HPP 
-#define CONFIG_COALBURE_HPP 
+#ifndef CONFIG_COLLISIONS_HPP 
+#define CONFIG_COLLISIONS_HPP 
 
 #include <concepts>
 
@@ -67,4 +67,4 @@ struct ConfigCollisions_CoalOnly
   }
 };
 
-#endif // CONFIG_COALBURE_HPP 
+#endif // CONFIG_COLLISIONS_HPP 
