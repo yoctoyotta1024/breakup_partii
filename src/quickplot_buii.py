@@ -29,6 +29,7 @@ from matplotlib.colors import LogNorm, Normalize
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 datapath = sys.argv[3]
+runstr = "run"+sys.argv[4]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
@@ -45,11 +46,11 @@ constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile     = datapath+"setup.txt"
-dataset       = datapath+"sol.zarr"
+setupfile     = datapath+"setup_"+runstr+".txt"
+dataset       = datapath+"sol_"+runstr+".zarr"
 
 # directory for saving figures and animations
-savefigpath = datapath+"/plots/"
+savefigpath = datapath+"/plots/"+runstr+"/"
 
 ### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
