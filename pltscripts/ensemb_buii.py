@@ -26,9 +26,8 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
-sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
+from pySD.sdmout import ensembzarr
 
-import write_ensemble_dataset as wed
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -78,5 +77,5 @@ for lab in labels:
   
   ensembdataset = ensembdatapath+ensembzarr
   ensembsetupfile = ensembdatapath+ensembsetuptxt
-  wed.write_ensemble_dataset(ensembdataset, ensembsetupfile,
-                             vars4ensemb, setupfile, datasets)
+  ensembzarr.write_ensemble(ensembdataset, ensembsetupfile,
+                            vars4ensemb, setupfile, datasets)
