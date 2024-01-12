@@ -50,5 +50,5 @@ export OMP_PLACES=threads
 
 ### --------------------- compile ---------------------- ###
 ### generate input files and compile 1-D rainshaft for list of executables
-${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} buii_coalbure buii_coalonly
+${python} build_buii.py ${path2CLEO} ${path2build} ${configfile} 
 ### ---------------------------------------------------- ###

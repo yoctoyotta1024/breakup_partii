@@ -25,9 +25,9 @@ import random
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
-path2build = sys.argv[1]
-configfile = sys.argv[2]
-executable = sys.argv[3]
+path2CLEO = sys.argv[1]
+path2build = sys.argv[2]
+configfile_draft = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.initsuperdropsbinary_src import *
@@ -35,11 +35,33 @@ from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers 
 
 ### ---------------------------------------------------------------- ###
+### ----------------------- INPUT PARAMETERS ----------------------- ###
+### ---------------------------------------------------------------- ###
+# name of executables and data output
+executables = {
+  "coalbure" : "buii_coalbure",
+  "coalonly" : "buii_coalonly"
+}
+
+# initSDs run numbers to use
+runnums = [0, 1, 2, 3]
+executables = {
+  "coalbure" : runnums,
+  "coalonly" : runnums
+}
+
+### ---------------------------------------------------------------- ###
 ### ---------------------------- RUN CLEO -------------------------- ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
 os.system('pwd')
-executable = path2build+'/src/'+executable
-os.system(executable + ' ' + configfile)
+for exec in executables:
+  executable = path2build+'/src/'+exec
+
+  for n in runnums:
+    runstr = "run"+str(n)
+    
+    configfile = 
+    os.system(executable + ' ' + configfile)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

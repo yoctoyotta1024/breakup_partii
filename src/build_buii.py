@@ -28,7 +28,6 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
-executables = sys.argv[4:]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -40,6 +39,9 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
+# list of names of executables to compile
+executables = ["buii_coalbure", "buii_coalonly"]
+
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
@@ -111,7 +113,7 @@ if isfigures[0]:
 # 2. compile and the run model
 os.chdir(path2build)
 os.system('pwd')
-for executable in executables:
-  os.system('make -j 64 '+executable)
+for exec in executables:
+  os.system('make -j 64 '+exec)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

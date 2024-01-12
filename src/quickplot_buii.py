@@ -49,11 +49,16 @@ setupfile     = datapath+"setup.txt"
 dataset       = datapath+"sol.zarr"
 
 # directory for saving figures and animations
-savefigpath = datapath
+savefigpath = datapath+"/plots/"
 
 ### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
 ### ------------------------------------------------------------ ###
+if path2CLEO == savefigpath:
+  raise ValueError("plots directory cannot be CLEO")
+else:
+  Path(savefigpath).mkdir(exist_ok=True) 
+  
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
