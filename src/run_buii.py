@@ -66,15 +66,17 @@ for lab in labels:
 
   for n in runnums[lab]:
     runstr = "run"+str(n)
-
+    datapath = binpath+"/"+lab+"/"
+    Path(datapath).mkdir(exist_ok=True) 
+    
     ### ----- copy tmp_config to config then edit ----- ###
     configfile = tmppath+"/config_"+lab+"_"+runstr+".txt"
     os.system('cp '+tmp_configfile+" "+configfile)
     params = {
       "initsupers_filename" : initSDspath+"/"+runstr+".dat",
-      "setuptxt" : binpath+"/"+lab+"/setup_"+runstr+".txt",
-      "zarrbasedir" : binpath+"/"+lab+"/sol_"+runstr+".zarr",
-      "stats_filename" : binpath+"/"+lab+"/stats_"+runstr+".txt",
+      "setuptxt" : datapath+"setup_"+runstr+".txt",
+      "zarrbasedir" : datapath+"sol_"+runstr+".zarr",
+      "stats_filename" : datapath+"stats_"+runstr+".txt",
       }
     editconfigfile.edit_config_params(configfile, params)
 
