@@ -23,14 +23,13 @@ import os
 import sys
 import numpy as np
 
-def import_pyzarr(path2CLEO):
-  
-  sys.path.append(path2CLEO)  # for imports from pySD package
-  from pySD import pyzarr, editconfigfile
+path2pySD = "/home/m/m300950/CLEO/" # TODO: remove
+sys.path.append(path2pySD)  # for imports from pySD package
+from pySD.sdmout_src import pyzarr
+from pySD import editconfigfile
 
 def write_ensemb_setupfile(ensembsetuptxt, setupfile):
   
-
   print(ensembsetuptxt, setupfile)
   # os.system('cp '+setupfile+" "+ensembsetuptxt)
   # params = {
@@ -49,8 +48,6 @@ def write_ensemb_zarr(ensembdataset, vars4ensemb, datasets):
 
 def write_ensemble_dataset(path2CLEO, ensembdataset, ensembsetuptxt,
                            vars4ensemb, setupfile, datasets):
-
-  import_pyzarr(path2CLEO) # TODO: move import away
 
   write_ensemb_setupfile(ensembsetuptxt, setupfile)
 

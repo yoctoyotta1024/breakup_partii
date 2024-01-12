@@ -56,31 +56,6 @@ gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 ### ------------------------------------------------------------ ###
 ### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
-
-### ------------------------------------------------------------ ###
-### ------------------------------------------------------------ ###                                
-def create_ensemble_mean(meandataset,  vars4ensemb,
-                       lab, datapath, runnums):
-
-  datasets = [] 
-  for n in runnums[lab]:
-    # setup and zarr for run[n] of ensemble
-    runstr = "run"+str(n)
-    dataset = datapath+"/sol_"+runstr+".zarr"
-    datasets.append(dataset)
-  
-  setuprunstr = "run"+str(runnums[lab][0])
-  setupfile = datapath+"/setup_"+setuprunstr+".txt"
-
-  wed.write_ensemble_dataset(path2CLEO, meandataset, meansetuptxt,
-                             vars4ensemb, setupfile, datasets)
-  
-  print(dataset, setupfile)
-  print()
-
-### ------------------------------------------------------------ ###
-### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
-### ------------------------------------------------------------ ###
 for lab in labels:
 
   # directories for making ensemble dataset
@@ -94,5 +69,13 @@ for lab in labels:
   else:
     Path(meandatapath).mkdir(exist_ok=True) 
 
-  create_ensemble_mean(meandataset, meansetuptxt, vars4ensemb,
-                       lab, datapath, runnums)
+  datasets = [] 
+  setupfile = datapath+"/setup_run"+str(runnums[lab][0])+".txt"
+  for n in runnums[lab]:
+    # setup and zarr for run[n] of ensemble
+    runstr = "run"+str(n)
+    dataset = datapath+"/sol_"+runstr+".zarr"
+    datasets.append(dataset)
+  
+  wed.write_ensemble_dataset(path2CLEO, meandataset, meansetuptxt,
+                             vars4ensemb, setupfile, datasets)
