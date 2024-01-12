@@ -85,21 +85,22 @@ else:
   Path(binpath).mkdir(exist_ok=True)
   Path(tmppath).mkdir(exist_ok=True)
 
-### ----- copy root config file to config file ----- ###
-os.system('pwd')
+### ----- copy root config file to tmp_config file ----- ###
+os.system('cp '+orig_configfile+" "+tmp_configfile)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
 rgrid.print_domain_info(constsfile, gridfile)
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticLapseRates(configfile, constsfile,
+thermodyngen = thermogen.ConstHydrostaticLapseRates(tmp_configfile, constsfile,
                                                     PRESS0, TEMP0, qvap0,
                                                     Zbase, TEMPlapses,
                                                     qvaplapses, qcond,
                                                     WVEL, None, None)
-cthermo.write_thermodynamics_binary(thermofile, thermodyngen, configfile,
-                                    constsfile, gridfile)
+cthermo.write_thermodynamics_binary(thermofile, thermodyngen, 
+                                    tmp_configfile, constsfile,
+                                    gridfile)
 
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
@@ -107,7 +108,7 @@ if isfigures[0]:
     Path(savefigpath).mkdir(exist_ok=True) 
   rgrid.plot_gridboxboundaries(constsfile, gridfile,
                                savefigpath, isfigures[1])
-  rthermo.plot_thermodynamics(constsfile, configfile, gridfile,
+  rthermo.plot_thermodynamics(constsfile, tmp_configfile, gridfile,
                               thermofile, savefigpath, isfigures[1])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
