@@ -10,4 +10,5 @@
 .DS_Store
 __pycache__
 build/*
+build_*/
 bin
