@@ -57,31 +57,32 @@ savefigpath = datapath+"/plots/"+runstr+"/"
 ### ------------------------------------------------------------ ###
 ### ------------------- EXTRA PLOT FUNCTIONS ------------------- ###
 ### ------------------------------------------------------------ ###
-def plot_radius_coord3(npopln, nsample, time, sddata, savename):
+
+def sample_data(npopln, nsample, sddata):
+
+  attrs = ["radius", "coord3", "xi"]
+  data = sdtracing.attrs_for_superdroplets_sample(sddata,
+                                                  attrs,
+                                                  ndrops2sample=nsample,
+                                                  minid=0,
+                                                  maxid=int(npopln))
+  return data
+
+def plot_radius_coord3(time, sample, savename):
   ''' takes random sample of 'nsample' superdroplets from total 
   'npopln' population and plots their radius and coord3 evolution'''
 
   fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12,6))    
 
   fig.suptitle("Random Sample of Superdroplets")
-
-  minid, maxid = 0, int(npopln) # largest value of ids to sample
-  ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
-    
-  data = {}
-  attrs = ["radius", "coord3"]
-  for attr in attrs:
-    data[attr] = sdtracing.attribute_for_superdroplets_sample(sddata,
-                                                              attr,
-                                                              ids=ids2plot) 
-
-  diam = data["radius"] * 2 / 1e4 #[cm]
+  
+  diam = sample["radius"] * 2 / 1e4 #[cm]
   axs[0].plot(time.mins, diam, linewidth=0.8)
   axs[0].set_xlabel("time /mins")
   axs[0].set_ylabel("diameter /cm")
   axs[0].set_yscale("log")
 
-  crd3 = data["coord3"] / 1000 # [km]
+  crd3 = sample["coord3"] / 1000 # [km]
   axs[1].plot(time.mins, crd3, linewidth=0.8)
   axs[1].set_xlabel("time /mins")
   axs[1].set_ylabel("z /km")
@@ -126,15 +127,17 @@ massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
-nsample = 500
+nsample = 250
 savename = savefigpath + "randomsample.png"
 pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
 
+nsample = 250
+sample = sample_data(totnsupers[0], nsample, sddata)
 savename = savefigpath + "randomsample_radiuscoord3.png"
-plot_radius_coord3(totnsupers[0], nsample, time, sddata, savename)
+plot_radius_coord3(time, sample, savename)
 
 ### ----- plot 1-D .gif animations ----- ###
 if pltgifs:
