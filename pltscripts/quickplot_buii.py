@@ -58,15 +58,55 @@ savefigpath = datapath+"/plots/"+runstr+"/"
 ### ------------------- EXTRA PLOT FUNCTIONS ------------------- ###
 ### ------------------------------------------------------------ ###
 
-def sample_data(npopln, nsample, sddata):
+def sample_data(npopln, nsample, sddata,
+                attrs=["xi", "radius", "coord3"]):
 
-  attrs = ["radius", "coord3", "xi"]
   data = sdtracing.attrs_for_superdroplets_sample(sddata,
                                                   attrs,
                                                   ndrops2sample=nsample,
                                                   minid=0,
                                                   maxid=int(npopln))
   return data
+
+def plot_sample(npopln, nsample, time, sddata, savename):
+  ''' takes random sample of 'nsample' superdroplets from total 
+  'npopln' population and plots their radius and coord3 evolution'''
+
+  attrs = ["xi", "radius", "msol", "coord3"]
+  sample = sample_data(npopln, nsample, sddata, attrs=attrs)
+
+  fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12,8))    
+  axs = axs.flatten()
+
+  fig.suptitle("Random Sample of Superdroplets")
+  
+  diam = sample["radius"] * 2 / 1e4 #[cm]
+  axs[0].plot(time.mins, diam, linewidth=0.8)
+  axs[0].set_ylabel("diameter /cm")
+  axs[0].set_yscale("log")
+
+  crd3 = sample["coord3"] / 1000 # [km]
+  axs[1].plot(time.mins, crd3, linewidth=0.8)
+  axs[1].set_ylabel("z /km")
+
+  axs[2].plot(time.mins, sample["msol"], linewidth=0.8)
+  axs[2].set_ylabel("solute mass / g")
+  axs[2].set_yscale("log")
+  axs[2].set_xlabel("time /mins")
+
+  axs[3].plot(time.mins, sample["xi"], linewidth=0.8)
+  axs[3].set_ylabel("multiplicity, xi")
+  axs[3].set_yscale("log")
+  axs[3].set_xlabel("time /mins")
+
+  fig.tight_layout()
+
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
+  plt.show()
+
+  return fig, axs
 
 def plot_radius_coord3(time, sample, savename):
   ''' takes random sample of 'nsample' superdroplets from total 
@@ -91,6 +131,42 @@ def plot_radius_coord3(time, sample, savename):
   axs[2].set_xlabel("diameter /cm")
   axs[2].set_xscale("log")
   axs[2].set_ylabel("z /km")
+
+  fig.tight_layout()
+
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
+  plt.show()
+
+  return fig, axs
+
+
+def plot_xi_radius_coord3(time, sample, savename):
+  ''' takes random sample of 'nsample' superdroplets from total 
+  'npopln' population and plots their radius and coord3 evolution'''
+
+  fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12,6))    
+
+  fig.suptitle("Random Sample of Superdroplets")
+  
+  xi = sample["xi"]
+  axs[0].plot(time.mins, xi, linewidth=0.8)
+  axs[0].set_xlabel("time /mins")
+  axs[0].set_ylabel("multiplicity")
+  axs[0].set_yscale("log")
+
+  crd3 = sample["coord3"] / 1000 # [km]
+  axs[1].plot(xi, crd3, linewidth=0.8)
+  axs[1].set_ylabel("z /km")
+  axs[1].set_xlabel("multiplicity")
+  axs[1].set_xscale("log")
+
+  diam = sample["radius"] * 2 / 1e4 #[cm]
+  axs[2].plot(diam, xi, linewidth=0.8)
+  axs[2].set_xlabel("diameter /cm")
+  axs[2].set_xscale("log")
+  axs[2].set_yscale("log")
 
   fig.tight_layout()
 
@@ -129,15 +205,15 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 250
 savename = savefigpath + "randomsample.png"
-pltsds.plot_randomsample_superdrops(time, sddata,
-                                        config["totnsupers"],
-                                        nsample,
-                                        savename=savename)
+plot_sample(totnsupers[0], nsample, time, sddata, savename)
 
 nsample = 250
 sample = sample_data(totnsupers[0], nsample, sddata)
 savename = savefigpath + "randomsample_radiuscoord3.png"
 plot_radius_coord3(time, sample, savename)
+
+savename = savefigpath + "randomsample_radiusxi.png"
+plot_xi_radius_coord3(time, sample, savename)
 
 ### ----- plot 1-D .gif animations ----- ###
 if pltgifs:
