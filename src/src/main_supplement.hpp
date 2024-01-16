@@ -124,9 +124,10 @@ create_observer(const Config &config,
                 FSStore &store)
 {
   const auto obsstep = (unsigned int)tsteps.get_obsstep();
+  const auto obsstep_print = (unsigned int)(tsteps.get_t_end() / 10);
   const auto maxchunk = int{config.maxchunk};
 
-  const Observer auto obs1 = PrintObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs1 = PrintObserver(obsstep_print, &step2realtime);
 
   const Observer auto obs2 = TimeObserver(obsstep, store, maxchunk,
                                           &step2dimlesstime);

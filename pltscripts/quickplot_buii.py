@@ -23,8 +23,8 @@ import os
 import sys
 import numpy as np
 import random 
+import matplotlib.pyplot as plt
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -36,6 +36,7 @@ sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from examp
 
 from plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import *
+from pySD.sdmout_src import sdtracing
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -52,6 +53,55 @@ dataset       = datapath+"/sol_"+runstr+".zarr"
 # directory for saving figures and animations
 pltgifs = False # plot gifs or not
 savefigpath = datapath+"/plots/"+runstr+"/"
+
+### ------------------------------------------------------------ ###
+### ------------------- EXTRA PLOT FUNCTIONS ------------------- ###
+### ------------------------------------------------------------ ###
+def plot_radius_coord3(npopln, nsample, time, sddata, savename):
+  ''' takes random sample of 'nsample' superdroplets from total 
+  'npopln' population and plots their radius and coord3 evolution'''
+
+  fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12,6))    
+
+  fig.suptitle("Random Sample of Superdroplets")
+
+  minid, maxid = 0, int(npopln) # largest value of ids to sample
+  ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+    
+  data = {}
+  attrs = ["radius", "coord3"]
+  for attr in attrs:
+    data[attr] = sdtracing.attribute_for_superdroplets_sample(sddata,
+                                                              attr,
+                                                              ids=ids2plot) 
+
+  diam = data["radius"] * 2 / 1e4 #[cm]
+  axs[0].plot(time.mins, diam, linewidth=0.8)
+  axs[0].set_xlabel("time /mins")
+  axs[0].set_ylabel("diameter /cm")
+  axs[0].set_yscale("log")
+
+  crd3 = data["coord3"] / 1000 # [km]
+  axs[1].plot(time.mins, crd3, linewidth=0.8)
+  axs[1].set_xlabel("time /mins")
+  axs[1].set_ylabel("z /km")
+
+  axs[2].plot(diam, crd3, linewidth=0.8)
+  axs[2].set_xlabel("diameter /cm")
+  axs[2].set_xscale("log")
+  axs[2].set_ylabel("z /km")
+
+  fig.tight_layout()
+
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
+  plt.show()
+
+  return fig, axs
+
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###
 
 ### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
@@ -82,6 +132,9 @@ pltsds.plot_randomsample_superdrops(time, sddata,
                                         config["totnsupers"],
                                         nsample,
                                         savename=savename)
+
+savename = savefigpath + "randomsample_radiuscoord3.png"
+plot_radius_coord3(totnsupers[0], nsample, time, sddata, savename)
 
 ### ----- plot 1-D .gif animations ----- ###
 if pltgifs:
