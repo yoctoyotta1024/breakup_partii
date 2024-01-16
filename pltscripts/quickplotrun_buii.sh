@@ -28,5 +28,5 @@ python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 
 ### ----------------------- plots ------------------------ ###
 ### run 1-D rainshaft quick plotting script
-${python} quickplot_buii.py ${path2CLEO} ${path2build} ${datapath} ${runnum}
+${python} quickplotrun_buii.py ${path2CLEO} ${path2build} ${datapath} ${runnum}
 ### ---------------------------------------------------- ###
