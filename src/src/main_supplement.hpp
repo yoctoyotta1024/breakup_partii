@@ -170,7 +170,7 @@ create_microphysics(const Config &config, const Timesteps &tsteps,
                                                       config.cond_SUBTSTEP,
                                                       &realtime2dimless);
 
-  return cond >> colls;
+  return colls >> cond;
 }
 
 template <typename ConfigCollisions>
