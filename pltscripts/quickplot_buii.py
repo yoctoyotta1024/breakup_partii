@@ -50,6 +50,7 @@ setupfile     = datapath+"/setup_"+runstr+".txt"
 dataset       = datapath+"/sol_"+runstr+".zarr"
 
 # directory for saving figures and animations
+pltgifs = False # plot gifs or not
 savefigpath = datapath+"/plots/"+runstr+"/"
 
 ### ------------------------------------------------------------ ###
@@ -83,36 +84,37 @@ pltsds.plot_randomsample_superdrops(time, sddata,
                                         savename=savename)
 
 ### ----- plot 1-D .gif animations ----- ###
-nframes = len(time.mins)
-mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number of super-droplets"
-savename=savefigpath+"nsupers1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)   
+if pltgifs:
+  nframes = len(time.mins)
+  mom2ani = np.sum(massmoms.nsupers, axis=(1,2))
+  xlims = [0, np.amax(mom2ani)]
+  xlabel = "number of super-droplets"
+  savename=savefigpath+"nsupers1d"
+  animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                              xlabel=xlabel, xlims=xlims,
+                              color="green", saveani=True,
+                              savename=savename, fps=5)   
 
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
-mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "number concentration /cm$^{-3}$"
-savename=savefigpath+"numconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)
+  nframes = len(time.mins)
+  norm = gbxs["gbxvols"] * 1e6 # volume [cm^3]
+  mom2ani = np.sum(massmoms.mom0 / norm[None,:], axis=(1,2))
+  xlims = [0, np.amax(mom2ani)]
+  xlabel = "number concentration /cm$^{-3}$"
+  savename=savefigpath+"numconc1d"
+  animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                              xlabel=xlabel, xlims=xlims,
+                              color="green", saveani=True,
+                              savename=savename, fps=5)
 
-nframes = len(time.mins)
-norm = gbxs["gbxvols"] # volume [m^3]
-mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
-xlims = [0, np.amax(mom2ani)]
-xlabel = "mass concentration /g m$^{-3}$"
-savename=savefigpath+"massconc1d"
-animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
-                            xlabel=xlabel, xlims=xlims,
-                            color="green", saveani=True,
-                            savename=savename, fps=5)                        
+  nframes = len(time.mins)
+  norm = gbxs["gbxvols"] # volume [m^3]
+  mom2ani = np.sum(massmoms.mom1/ norm[None,:], axis=(1,2))
+  xlims = [0, np.amax(mom2ani)]
+  xlabel = "mass concentration /g m$^{-3}$"
+  savename=savefigpath+"massconc1d"
+  animations.animate1dprofile(gbxs, mom2ani, time.mins, nframes,
+                              xlabel=xlabel, xlims=xlims,
+                              color="green", saveani=True,
+                              savename=savename, fps=5)                        
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###                                
