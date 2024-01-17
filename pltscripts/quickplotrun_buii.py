@@ -220,7 +220,7 @@ fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts,
                                      gbxs["domainvol"], rspan, nbins,
                                      smoothsig=smoothsig,
                                      perlogR=False,
-                                     ylog=False)
+                                     ylog=True)
 savefig(fig, savename)
 
 savename = savefigpath + "domainnsupersdist.png"
