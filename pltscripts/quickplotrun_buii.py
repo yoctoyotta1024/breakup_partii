@@ -34,7 +34,7 @@ runstr = "run"+sys.argv[4]
 sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
-from plotssrc import pltsds, pltmoms, animations
+from plotssrc import pltdist, pltmoms, animations
 from pySD.sdmout_src import *
 from pySD.sdmout_src import sdtracing
 
@@ -57,6 +57,11 @@ savefigpath = datapath+"/plots/"+runstr+"/"
 ### ------------------------------------------------------------ ###
 ### ------------------- EXTRA PLOT FUNCTIONS ------------------- ###
 ### ------------------------------------------------------------ ###
+
+def savefig(fig, savename):
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
 
 def sample_data(npopln, nsample, sddata,
                 attrs=["xi", "radius", "coord3"]):
@@ -101,9 +106,7 @@ def plot_sample(npopln, nsample, time, sddata, savename):
 
   fig.tight_layout()
 
-  fig.savefig(savename, dpi=400, bbox_inches="tight",
-              facecolor='w', format="png")
-  print("Figure .png saved as: "+savename)
+  savefig(fig, savename) 
   plt.show()
 
   return fig, axs
@@ -134,9 +137,7 @@ def plot_radius_coord3(time, sample, savename):
 
   fig.tight_layout()
 
-  fig.savefig(savename, dpi=400, bbox_inches="tight",
-              facecolor='w', format="png")
-  print("Figure .png saved as: "+savename)
+  savefig(fig, savename)
   plt.show()
 
   return fig, axs
@@ -170,9 +171,7 @@ def plot_xi_radius_coord3(time, sample, savename):
 
   fig.tight_layout()
 
-  fig.savefig(savename, dpi=400, bbox_inches="tight",
-              facecolor='w', format="png")
-  print("Figure .png saved as: "+savename)
+  savefig(fig, savename)
   plt.show()
 
   return fig, axs
@@ -199,10 +198,40 @@ sddata = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
-### ----- plot figures ----- ###
+### ----- plot domain figures ----- ###
 savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
+t2plts = np.arange(0, time.secs[-1], 600)
+rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
+nbins = 200
+smoothsig = False
+
+savename = savefigpath + "domainnconcdist.png"
+fig, ax = pltdist.plot_domainnumconc_distribs(time.secs, sddata, t2plts, 
+                                     gbxs["domainvol"], rspan, nbins,
+                                     smoothsig=smoothsig,
+                                     perlogR=False,
+                                     ylog=True) 
+savefig(fig, savename)
+
+savename = savefigpath + "domainmassdist.png"
+fig, ax = pltdist.plot_domainmass_distribs(time.secs, sddata, t2plts, 
+                                     gbxs["domainvol"], rspan, nbins,
+                                     smoothsig=smoothsig,
+                                     perlogR=False,
+                                     ylog=False)
+savefig(fig, savename)
+
+savename = savefigpath + "domainnsupersdist.png"
+fig, ax = pltdist.plot_domainnsupers_distribs(time.secs, sddata, t2plts, 
+                                     gbxs["domainvol"], rspan, nbins,
+                                     smoothsig=smoothsig,
+                                     perlogR=True,
+                                     ylog=False)
+savefig(fig, savename)
+
+### ----- plot random sample figures ----- ###
 nsample = 250
 savename = savefigpath + "randomsample.png"
 plot_sample(totnsupers[0], nsample, time, sddata, savename)
