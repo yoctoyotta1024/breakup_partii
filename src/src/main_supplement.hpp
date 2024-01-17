@@ -147,7 +147,7 @@ create_observer(const Config &config,
 inline Motion<CartesianMaps> auto
 create_motion(const unsigned int motionstep)
 {
-  const auto terminalv = SimmelTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
   
   return CartesianMotion(motionstep,
                          &step2dimlesstime,

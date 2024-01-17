@@ -54,7 +54,7 @@ SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
-zlim        = 800        # min z coord of superdroplets [m]
+# zlim        = 800        # min z coord of superdroplets [m]
 npergbx     = 1024       # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
@@ -64,8 +64,8 @@ dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 # settings for initial superdroplet multiplicies
 geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
 geosigs              = [1.55, 2.3, 2]                    
-scalefacs            = [1e6, 0.3e6, 0.025e6]   
-numconc = np.sum(scalefacs) * 500
+scalefacs            = [1, 0.3, 0.025]   
+numconc = np.sum(scalefacs) * 5e8
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -81,7 +81,8 @@ else:
   Path(initSDspath).mkdir(exist_ok=True) 
 
 ### ----- create initial superdroplets generator ----- ###
-nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim)
+# nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim)
+nsupers = npergbx
 coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = None                        # do not generate superdroplet coord2s
 coord2gen = None                        # do not generate superdroplet coord2s
@@ -93,7 +94,7 @@ dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
 initattrsgen = attrsgen.AttrsGenerator(radiigen, dryradiigen, xiprobdist,
                                         coord3gen, coord1gen, coord2gen)
 
-for n in runnums:
+for n in runs:
 
   runstr = "run"+str(n)
   initSDsfile = initSDspath+"/"+runstr+".dat"
