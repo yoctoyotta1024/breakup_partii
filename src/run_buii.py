@@ -45,7 +45,7 @@ executables = {
 }
 
 # initSDs run numbers to use
-runs = [0, 1, 2]
+runs = [0, 1, 2, 3]
 runnums = {
   "coalbure" : runs,
   "coalonly" : runs

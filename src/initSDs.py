@@ -44,20 +44,19 @@ constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 sharepath     = path2build+"/share/"
 gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
 initSDspath   = sharepath+"buii_dimlessSDsinits/"
-runnums       = [0, 1, 2]
+runs          = [0, 1, 2, 3]
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures
 savefigpath = path2build+"/bin/initSDs/" # directory for saving init figures
-SDgbxs2plt  = list(range(39, 99))
-SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot 
+SDgbxs2plt  = 0
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
 nsupers = 10000       # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan = [1e-8, 9e-5]                            # max and min range of radii to sample [m]
+rspan = [5e-7, 8e-5]                            # max and min range of radii to sample [m]
 dryr_sf = 1e-16                                 # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
