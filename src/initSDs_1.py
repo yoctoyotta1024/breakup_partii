@@ -54,16 +54,18 @@ SDgbxs2plt  = [random.choice(SDgbxs2plt)] # choose random gbx from list to plot
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
-nsupers = 10000       # number of superdroplets per gridbox 
+zlim        = 800        # min z coord of superdroplets [m]
+npergbx     = 1024       # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan = [1e-8, 9e-5]                            # max and min range of radii to sample [m]
-dryr_sf = 1e-16                                 # dryradii are 1/sf of radii [m]
+rspan       = [3e-9, 5e-5]                      # min and max range of radii to sample [m]
+dryr_sf     = 1.0                               # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-numconc              = 1e8                         # total no. conc of real droplets [m^-3]
-
+geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]               
+geosigs              = [1.55, 2.3, 2]                    
+scalefacs            = [1, 0.3, 0.025]   
+numconc = np.sum(scalefacs) * 5e8
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -79,11 +81,12 @@ else:
   Path(initSDspath).mkdir(exist_ok=True) 
 
 ### ----- create initial superdroplets generator ----- ###
-coord3gen = None                        # do not generate superdroplet coord3s
+nsupers = crdgens.nsupers_at_domain_top(gridfile, constsfile, npergbx, zlim)
+coord3gen = crdgens.SampleCoordGen(True) # sample coord3 randomly
 coord1gen = None                        # do not generate superdroplet coord1s
 coord2gen = None                        # do not generate superdroplet coord2s
 
-xiprobdist = probdists.VolExponential(volexpr0, rspan)
+xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 radiigen = rgens.SampleLog10RadiiGen(rspan)
 dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
 
