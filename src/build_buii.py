@@ -56,7 +56,7 @@ isfigures   = [True, True] # booleans for [making, saving] initialisation figure
 savefigpath = path2build+"/bin/" # directory for saving init figures
 
 ### --- settings for 1-D gridbox boundaries --- ###
-zgrid       = [0, 2000, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+zgrid       = [0, 2500, 20]      # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid       = np.array([0, 20])  # array of xhalf coords [m]
 ygrid       = np.array([0, 20])  # array of yhalf coords [m]
 
