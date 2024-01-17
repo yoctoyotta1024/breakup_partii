@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script runs CLEO buii_[exectuable] for 1-D rainshaft
+script to run CLEO buii_[exectuable] for 1-D rainshaft
 '''
 
 import os
