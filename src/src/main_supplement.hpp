@@ -33,6 +33,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
+#include "cartesiandomain/cartesianmotion_withreset.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -144,14 +145,30 @@ create_observer(const Config &config,
   return obs1 >> obs2 >> obs3 >> obs4 >> obs5;
 }
 
+// inline Motion<CartesianMaps> auto
+// create_motion(const Config &config,
+//               const unsigned int motionstep)
+// {
+//   const auto terminalv = RogersGKTerminalVelocity{};
+  
+//   return CartesianMotion(motionstep,
+//                          &step2dimlesstime,
+//                          terminalv);                                                                            
+// }
+
 inline Motion<CartesianMaps> auto
-create_motion(const unsigned int motionstep)
+create_motion(const Config &config,
+              const unsigned int motionstep)
 {
   const auto terminalv = RogersGKTerminalVelocity{};
-  
-  return CartesianMotion(motionstep,
-                         &step2dimlesstime,
-                         terminalv);                                                                            
+
+  const auto ngbxs = (unsigned int)config.ngbxs; // total number of gbxs
+  const auto ngbxs4reset = (unsigned int)85;     // number of gbxs to randomly select in reset
+  return CartesianMotionWithReset(motionstep,
+                                  &step2dimlesstime,
+                                  terminalv,
+                                  ngbxs,
+                                  ngbxs4reset);                                                                         
 }
 
 template <typename ConfigCollisions>
@@ -185,7 +202,8 @@ inline auto create_sdm(const Config &config,
   const MicrophysicalProcess auto microphys(create_microphysics(config,
                                                                 tsteps,
                                                                 config_collisions));
-  const Motion<CartesianMaps> auto movesupers(create_motion(tsteps.get_motionstep()));
+  const Motion<CartesianMaps> auto movesupers(create_motion(config,
+                                                            tsteps.get_motionstep()));
   const Observer auto obs(create_observer(config, tsteps, store));
 
   return SDMMethods(couplstep, gbxmaps,
