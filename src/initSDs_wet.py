@@ -56,7 +56,7 @@ SDgbxs2plt  = 0
 nsupers = 16384                                 # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan   = [3e-7, 2e-3]                          # max and min range of radii to sample [m]
+rspan   = [5e-7, 1e-3]                          # max and min range of radii to sample [m]
 dryr_sf = 1e3                                   # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
