@@ -74,6 +74,7 @@ for lab in labels:
     runstr = "run"+str(n)
     dataset = datapath+"/sol_"+runstr+".zarr"
     datasets.append(dataset)
+    print("dataset: ", dataset)
   
   ensembdataset = ensembdatapath+ensembzarr
   ensembsetupfile = ensembdatapath+ensembsetuptxt
