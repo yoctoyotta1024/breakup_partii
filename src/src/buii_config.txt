@@ -39,11 +39,11 @@ totnsupers = 16384                        # (initial) total no. of SDs
 
 # timestepping #
 CONDTSTEP = 1                             # time between SD condensation events [s]
-COLLTSTEP = 1                             # time between SD collision events [s]
+COLLTSTEP = 0.1                           # time between SD collision events [s]
 MOTIONTSTEP = 2                           # time between SDM motion [s]
-COUPLTSTEP = 10800                        # time between dynamic couplings [s]
-OBSTSTEP = 300                            # time between SDM observations [s]
-T_END = 10800                             # time span of integration from 0s to T_END [s]
+COUPLTSTEP = 1800                         # time between dynamic couplings [s]
+OBSTSTEP = 10                             # time between SDM observations [s]
+T_END = 1800                              # time span of integration from 0s to T_END [s]
 
 # microphysics #
 cond_iters = 2                            # no. iterations of Newton Raphson Method before testing for convergence
