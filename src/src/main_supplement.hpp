@@ -149,12 +149,19 @@ inline Motion<CartesianMaps> auto
 create_motion(const Config &config,
               const unsigned int motionstep)
 {
-  const auto terminalv = RogersGKTerminalVelocity{};
-  
-  return CartesianMotion(motionstep,
-                         &step2dimlesstime,
-                         terminalv);                                                                            
+  return NullMotion{};                                                                                                                         
 }
+
+// inline Motion<CartesianMaps> auto
+// create_motion(const Config &config,
+//               const unsigned int motionstep)
+// {
+//   const auto terminalv = RogersGKTerminalVelocity{};
+  
+//   return CartesianMotion(motionstep,
+//                          &step2dimlesstime,
+//                          terminalv);                                                                                                                         
+// }
 
 // inline Motion<CartesianMaps> auto
 // create_motion(const Config &config,
@@ -178,19 +185,28 @@ create_microphysics(const Config &config, const Timesteps &tsteps,
 {
   const MicrophysicalProcess auto colls = config_collisions(config,
                                                             tsteps);
-
-  // const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep(),
-  //                                                     config.doAlterThermo,
-  //                                                     config.cond_iters,
-  //                                                     &step2dimlesstime,
-  //                                                     config.cond_rtol,
-  //                                                     config.cond_atol,
-  //                                                     config.cond_SUBTSTEP,
-  //                                                     &realtime2dimless);
-
-  // return colls >> cond;
   return colls;
 }
+
+// template <typename ConfigCollisions>
+// inline MicrophysicalProcess auto
+// create_microphysics(const Config &config, const Timesteps &tsteps,
+//                     const ConfigCollisions config_collisions)
+// {
+//   const MicrophysicalProcess auto colls = config_collisions(config,
+//                                                             tsteps);
+
+//   const MicrophysicalProcess auto cond = Condensation(tsteps.get_condstep(),
+//                                                       config.doAlterThermo,
+//                                                       config.cond_iters,
+//                                                       &step2dimlesstime,
+//                                                       config.cond_rtol,
+//                                                       config.cond_atol,
+//                                                       config.cond_SUBTSTEP,
+//                                                       &realtime2dimless);
+
+//   return colls >> cond;
+// }
 
 template <typename ConfigCollisions>
 inline auto create_sdm(const Config &config,
