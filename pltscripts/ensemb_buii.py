@@ -39,7 +39,7 @@ ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 
 # runs in each ensemble
-runs = [0, 1, 2]
+runs = [0, 1, 2, 3, 4]
 runnums = {
   "coalbure" : runs,
   "coalonly" : runs,
