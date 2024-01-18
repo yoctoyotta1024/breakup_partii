@@ -53,15 +53,23 @@ SDgbxs2plt  = 0
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
-nsupers = 10000       # number of superdroplets per gridbox 
+nsupers = 16384                                 # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
-rspan = [5e-7, 8e-5]                            # max and min range of radii to sample [m]
-dryr_sf = 1e-16                                 # dryradii are 1/sf of radii [m]
+rspan   = [5e-7, 1e-3]                          # max and min range of radii to sample [m]
+dryr_sf = 1e3                                   # dryradii are 1/sf of radii [m]
 
 # settings for initial superdroplet multiplicies
-volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
-numconc              = 1e8                         # total no. conc of real droplets [m^-3]
+numconc               = 1e9                     # droplet number concentration [m^3]      
+scalefacs             = [10000, 1]              # Ratio [Cloud : Raindrop] disribution
+ 
+reff                 = 7e-6                     # effective radius [m] (Hansen Cloud droplet Gamma Distribution )
+nueff                = 0.08                     # effective variance (Hansen Cloud droplet Gamma Distribution )
+
+nrain                = 3000                     # raindrop concentration [m^-3] (Geoffroy Raindrop Gamma Distribution)
+qrain                = 0.9                      # rainwater content [g/m^3] (Geoffroy Raindrop Gamma Distribution)
+dvol                 = 8e-4                     # mean volume diameter [m] (Geoffroy Raindrop Gamma Distribution)
+
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -81,8 +89,10 @@ else:
 coord3gen = None                        # do not generate superdroplet coord3s
 coord1gen = None                        # do not generate superdroplet coord1s
 coord2gen = None                        # do not generate superdroplet coord2s
-
-xiprobdist = probdists.VolExponential(volexpr0, rspan)
+rdist1 = probdists.ClouddropsHansenGamma(reff, nueff)
+rdist2 = probdists.RaindropsGeoffroyGamma(nrain, qrain, dvol)
+distribs = [rdist1, rdist2]
+xiprobdist = probdists.CombinedRadiiProbDistribs(distribs, scalefacs)
 radiigen = rgens.SampleLog10RadiiGen(rspan)
 dryradiigen =  dryrgens.ScaledRadiiGen(dryr_sf)
 

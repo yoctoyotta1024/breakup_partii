@@ -1,6 +1,6 @@
 '''
 ----- CLEO -----
-File: initSDs.py 
+File: initSDs_dry.py 
 Project: breakup_partii
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
