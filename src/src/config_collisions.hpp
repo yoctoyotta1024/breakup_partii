@@ -25,6 +25,7 @@
 #include <concepts>
 
 #include "./coalbreakup.hpp"
+#include "./coalnobure.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
@@ -64,6 +65,24 @@ struct ConfigCollisions_CoalBreakup
     const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
     const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
     const MicrophysicalProcess auto colls = CoalBreakup(tsteps.get_collstep(),
+                                                        &step2realtime,
+                                                        collprob,
+                                                        nfrags,
+                                                        coalbure_flag);
+
+    return colls;
+  }
+};
+
+struct ConfigCollisions_CoalNoBuRe
+{
+  inline MicrophysicalProcess auto
+  operator()(const Config &config, const Timesteps &tsteps) const
+  {
+    const PairProbability auto collprob = LongHydroProb(1.0);
+    const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const MicrophysicalProcess auto colls = CoalNoBuRe(tsteps.get_collstep(),
                                                         &step2realtime,
                                                         collprob,
                                                         nfrags,
