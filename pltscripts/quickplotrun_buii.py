@@ -202,7 +202,7 @@ massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
-t2plts = np.arange(0, time.secs[-1], 600)
+t2plts = np.linspace(0, time.secs[-1], 15)
 rspan = [np.nanmin(sddata["radius"]), np.nanmax(sddata["radius"])]
 nbins = 200
 smoothsig = False
