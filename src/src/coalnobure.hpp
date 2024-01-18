@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: coal_nobure.hpp
+ * File: coalnobure.hpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -30,14 +30,14 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "./breakup.hpp"
-#include "./breakup_nfrags.hpp"
-#include "./coalbure_flag.hpp"
-#include "./coalescence.hpp"
-#include "./collisions.hpp"
-#include "./collisionkinetics.hpp"
-#include "./microphysicalprocess.hpp"
-#include "./superdrop.hpp"
+#include "superdrops/breakup.hpp"
+#include "superdrops/breakup_nfrags.hpp"
+#include "superdrops/coalbure_flag.hpp"
+#include "superdrops/coalescence.hpp"
+#include "superdrops/collisions.hpp"
+#include "superdrops/collisionkinetics.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
 template <NFragments NFrags, CoalBuReFlag Flag>
 struct DoCoalNoBuRe
