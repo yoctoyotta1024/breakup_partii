@@ -17,6 +17,8 @@
 module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
+wetdry=${1}
+
 path2CLEO=${HOME}/CLEO/
 # path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 path2build=${HOME}/breakup_partii/build/
@@ -27,5 +29,16 @@ python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 
 ### --------------------- initSDs ---------------------- ###
 ### make initial SD conditions for 1-D rainshaft
-${python} initSDs.py ${path2CLEO} ${path2build} ${tmp_configfile}
+if [ "${wetdry}" != "dry" ] && [ "${wetdry}" != "wet" ];
+then
+  echo "please specify 'wet' or 'dry' initial superdroplets"
+
+elif [ "${wetdry}" == "dry" ];
+then
+  ${python} initSDs_dry.py ${path2CLEO} ${path2build} ${tmp_configfile}
+
+elif [ "${wetdry}" == "wet" ];
+then
+  ${python} initSDs_wet.py ${path2CLEO} ${path2build} ${tmp_configfile}
+fi
 ### ---------------------------------------------------- ###
