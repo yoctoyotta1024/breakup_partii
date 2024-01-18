@@ -53,7 +53,7 @@ SDgbxs2plt  = 0
 
 ### --- settings for initial superdroplets --- ###
 # initial superdroplet coordinates
-nsupers = 16384                                 # number of superdroplets per gridbox 
+nsupers = 4096                                 # number of superdroplets per gridbox 
 
 # initial superdroplet radii (and implicitly solute masses)
 rspan   = [3e-7, 2e-3]                          # max and min range of radii to sample [m]
