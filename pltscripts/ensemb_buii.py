@@ -33,7 +33,7 @@ from pySD.sdmout_src.ensembzarr import write_ensemble
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
-labels = ["coalbure", "coalonly"]
+labels = ["coalbure", "coalonly", "coalbreakup"]
 binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
@@ -42,7 +42,8 @@ ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 runs = [0, 1, 2]
 runnums = {
   "coalbure" : runs,
-  "coalonly" : runs
+  "coalonly" : runs,
+  "coalbreakup" : runs,
 }
 
 # variables in datasets to create ensemble dataset for

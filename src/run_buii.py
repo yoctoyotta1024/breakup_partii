@@ -36,19 +36,21 @@ from pySD import editconfigfile
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # labels for model compilations
-labels = ["coalbure", "coalonly"]
+labels = ["coalbure", "coalonly", "coalbreakup"]
 
 # name of executables and data output
 executables = {
   "coalbure" : "buii_coalbure",
-  "coalonly" : "buii_coalonly"
+  "coalonly" : "buii_coalonly",
+  "coalbreakup" : "buii_coalbreakup",
 }
 
 # initSDs run numbers to use
 runs = [0, 1, 2, 3, 4]
 runnums = {
   "coalbure" : runs,
-  "coalonly" : runs
+  "coalonly" : runs,
+  "coalbreakup" : runs,
 }
 
 binpath       = path2build+"/bin/"
