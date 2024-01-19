@@ -19,13 +19,12 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
-
-datapath=${path2build}bin/${1}/ensemb/
+savefigpath="/home/m/m300950/breakup_partii/plots/"
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 ### ---------------------------------------------------- ###
 
 ### ----------------------- plots ------------------------ ###
 ### run 1-D rainshaft quick plotting script
-${python} quickplotens_buii.py ${path2CLEO} ${path2build} ${datapath}
+${python} pltens_buii.py ${path2CLEO} ${path2build} ${savefigpath}
 ### ---------------------------------------------------- ###
