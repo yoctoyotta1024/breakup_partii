@@ -38,6 +38,14 @@ def savefig(fig, savename, show=True):
   if show:
     plt.show()
 
+def get_gbxs(datapath, gridfile):
+
+  setupfile = datapath+"/setup_ensemb.txt"
+  consts = pysetuptxt.get_consts(setupfile, isprint=True) 
+  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+  
+  return gbxs
+
 def get_massmoms(datapath, gridfile):
   
   setupfile = datapath+"/setup_ensemb.txt"
@@ -109,15 +117,18 @@ def plot_gbxnumconc(ax, datapath, gridfile, color="k"):
 
   zgbx=0
   time, massmoms = get_massmoms(datapath, gridfile)
-
-  line = ax.plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
-  ax.set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
+  gbxs = get_gbxs(datapath, gridfile)
+  volcm3 = gbxs["gbxvols"][0,0,zgbx] * 1e6 # [cm^3]
+  numconc = massmoms.mom0[:,0,0,zgbx] / volcm3 # [cm^-3]
+  
+  line = ax.plot(time.mins, numconc, color=color)
+  ax.set_ylabel("number concentration /cm$^{-3}$")
   ax.set_yscale("log")
   ax.set_xlabel("time /min")
 
   return line[0]
 
-def plot_gbxreflectivity(ax, zgbx, datapath, gridfile, color="k"):
+def plot_gbxreflectivity(ax, datapath, gridfile, color="k"):
   ''' plot reflectivity proxy of 0th gridbox in domain '''
 
   zgbx=0
