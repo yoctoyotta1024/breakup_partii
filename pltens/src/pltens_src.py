@@ -37,7 +37,7 @@ def savefig(fig, savename, show=True):
 
   if show:
     plt.show()
-    
+
 def get_massmoms(datapath, gridfile):
   
   setupfile = datapath+"/setup_ensemb.txt"
@@ -53,6 +53,30 @@ def get_massmoms(datapath, gridfile):
 
   return time, massmoms
 
+def plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=""):
+  
+  handles, handlelabs = [], []
+  for datalab in datalabs:
+
+    ### ----- load data to plot ----- ###
+    # path and file names for plotting results
+    datapath = path2build+"/bin/"+datalab+"/ensemb/"
+    label = labels[datalab]
+    color = colors[datalab]
+
+    ### ----- plot data ----- ###
+    line0 = plotfunc(axs, zgbx, datapath, gridfile, color=color)
+    handles.append(line0)
+    handlelabs.append(label)
+  
+  try:
+    axs[0].legend(handles, handlelabs)
+  except:
+    axs.legend(handles, handlelabs)
+
+  if savename != "":
+    src.savefig(fig, savename, show=False)
+    
 def plot_gbxmassmoments(axs, zgbx, datapath, gridfile, color="k"):
 
   time, massmoms = get_massmoms(datapath, gridfile)

@@ -59,36 +59,12 @@ if path2CLEO == savefigpath:
 else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
-def plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=""):
-  
-  handles, handlelabs = [], []
-  for datalab in datalabs:
-
-    ### ----- load data to plot ----- ###
-    # path and file names for plotting results
-    datapath = path2build+"/bin/"+datalab+"/ensemb/"
-    label = labels[datalab]
-    color = colors[datalab]
-
-    ### ----- plot data ----- ###
-    line0 = plotfunc(axs, zgbx, datapath, gridfile, color=color)
-    handles.append(line0)
-    handlelabs.append(label)
-  
-  try:
-    axs[0].legend(handles, handlelabs)
-  except:
-    axs.legend(handles, handlelabs)
-
-  if savename != "":
-    src.savefig(fig, savename, show=False)
-  
 ### ----- plot domain mass moments ----- ###
 def plot_all_massmoments(datalabs, savename=""):
   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
   fig.suptitle("Total Mass Moments Over Domain")
   plotfunc = src.plot_gbxmassmoments
-  plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
   
 savename = savefigpath + "massmoments.png"
 plot_all_massmoments(datalabs, savename=savename)
@@ -97,7 +73,7 @@ plot_all_massmoments(datalabs, savename=savename)
 def plot_all_numconc(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxnumconc
-  plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
 
 savename = savefigpath + "numconc.png"
 plot_all_numconc(datalabs, savename=savename)
@@ -106,7 +82,7 @@ plot_all_numconc(datalabs, savename=savename)
 def plot_all_reflectivity(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxreflectivity
-  plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
   
 savename = savefigpath + "reflectivity.png"
 plot_all_reflectivity(datalabs, savename=savename)
