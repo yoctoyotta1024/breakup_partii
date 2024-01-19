@@ -22,8 +22,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
 path2src=${HOME}/breakup_partii/src/
-# path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
-path2build=${HOME}/breakup_partii/build/
+path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 orig_configfile=${HOME}/breakup_partii/src/src/buii_config.txt 
 tmp_configfile=${path2build}/tmp/buii_config.txt 
 

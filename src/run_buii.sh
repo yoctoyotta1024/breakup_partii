@@ -18,8 +18,7 @@ module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-# path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
-path2build=${HOME}/breakup_partii/build/
+path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 tmp_configfile=${path2build}/tmp/buii_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python

@@ -20,8 +20,7 @@ source activate /work/mh1126/m300950/condaenvs/superdropsenv
 wetdry=${1}
 
 path2CLEO=${HOME}/CLEO/
-# path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
-path2build=${HOME}/breakup_partii/build/
+path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 tmp_configfile=${path2build}/tmp/buii_config.txt 
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
