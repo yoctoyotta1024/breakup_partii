@@ -64,32 +64,36 @@ else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
 ### ----- plot domain mass moments ----- ###
-fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
-fig.suptitle("Total Mass Moments Over Domain")
-handles, handlelabs = [], []
-for datalab in datalabs:
-  label = labels[datalab]
-  color = colors[datalab]
+def plot_all_massmoments():
 
-  ### ----- load data to plot ----- ###
-  # path and file names for plotting results
-  datapath = path2build+"/bin/"+datalab+"/ensemb/"
-  setupfile = datapath+"/setup_ensemb.txt"
-  dataset = datapath+"/sol_ensemb.zarr"
+  fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+  fig.suptitle("Total Mass Moments Over Domain")
+  handles, handlelabs = [], []
+  for datalab in datalabs:
+    label = labels[datalab]
+    color = colors[datalab]
 
-  # read in constants and data
-  config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-  consts = pysetuptxt.get_consts(setupfile, isprint=True)
-  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+    ### ----- load data to plot ----- ###
+    # path and file names for plotting results
+    datapath = path2build+"/bin/"+datalab+"/ensemb/"
+    setupfile = datapath+"/setup_ensemb.txt"
+    dataset = datapath+"/sol_ensemb.zarr"
 
-  time = pyzarr.get_time(dataset)
-  massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+    # read in constants and data
+    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+    consts = pysetuptxt.get_consts(setupfile, isprint=True)
+    gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
-  ### ----- plot data ----- ###
-  zgbx = 0 # z gridbox to plot
-  line0 = plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
-  handles.append(line0)
-  handlelabs.append(label)
-axs[0].legend(handles, handlelabs)
-savename = savefigpath + "massmoments.png"
-savefig(fig, savename, show=False)
+    time = pyzarr.get_time(dataset)
+    massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+
+    ### ----- plot data ----- ###
+    zgbx = 0 # z gridbox to plot
+    line0 = plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
+    handles.append(line0)
+    handlelabs.append(label)
+  axs[0].legend(handles, handlelabs)
+  savename = savefigpath + "massmoments.png"
+  savefig(fig, savename, show=False)
+  
+plot_all_massmoments()
