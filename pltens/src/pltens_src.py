@@ -54,6 +54,7 @@ def savefig(fig, savename, show=True):
   if show:
     plt.show()
 
+
 def plot_gbxmassmoments(axs, zgbx, time, massmoms, color="k"):
 
   line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx], color=color)
@@ -74,3 +75,20 @@ def plot_gbxmassmoments(axs, zgbx, time, massmoms, color="k"):
   axs[-1].set_xlabel("time /min")
 
   return line0[0]
+
+def plot_numconc(ax, zgbx, time, massmoms, color="k"):
+
+  line = ax.plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
+  ax.set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
+  ax.set_yscale("log")
+  ax.set_xlabel("time /min")
+
+  return line[0]
+
+def plot_reflectivity(ax, zgbx, time, massmoms, color="k"):
+
+  line = ax.plot(time.mins, massmoms.mom2[:,0,0,zgbx], color=color)
+  ax.set_ylabel("$\u03BB^{m}_{2}$\n~reflectivity /g$^2$")
+  ax.set_xlabel("time /min")
+
+  return line[0]
