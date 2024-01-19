@@ -133,9 +133,10 @@ def plot_gbxreflectivity(ax, datapath, gridfile, color="k"):
 
   zgbx=0
   time, massmoms = get_massmoms(datapath, gridfile)
+  refproxy = massmoms.mom2[:,0,0,zgbx] * 1e25 # 10^25 g^2
 
-  line = ax.plot(time.mins, massmoms.mom2[:,0,0,zgbx], color=color)
-  ax.set_ylabel("$\u03BB^{m}_{2}$\n~reflectivity /g$^2$")
+  line = ax.plot(time.mins, refproxy, color=color)
+  ax.set_ylabel("reflectivity proxy /10$^{25}$ g$^2$")
   ax.set_xlabel("time /min")
 
   return line[0]
