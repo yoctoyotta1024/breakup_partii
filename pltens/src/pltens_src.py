@@ -53,7 +53,9 @@ def get_massmoms(datapath, gridfile):
 
   return time, massmoms
 
-def plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=""):
+def plot_all_on_axs(path2build, gridfile, zgbx,
+                    fig, axs, plotfunc, datalabs,
+                    labels, colors, savename=""):
   
   handles, handlelabs = [], []
   for datalab in datalabs:
@@ -75,7 +77,7 @@ def plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=""):
     axs.legend(handles, handlelabs)
 
   if savename != "":
-    src.savefig(fig, savename, show=False)
+    savefig(fig, savename, show=False)
     
 def plot_gbxmassmoments(axs, zgbx, datapath, gridfile, color="k"):
 

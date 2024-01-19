@@ -64,7 +64,9 @@ def plot_all_massmoments(datalabs, savename=""):
   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
   fig.suptitle("Total Mass Moments Over Domain")
   plotfunc = src.plot_gbxmassmoments
-  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(path2build, gridfile, zgbx,
+                      fig, axs, plotfunc, datalabs, labels, colors,
+                      savename=savename) 
   
 savename = savefigpath + "massmoments.png"
 plot_all_massmoments(datalabs, savename=savename)
@@ -73,7 +75,9 @@ plot_all_massmoments(datalabs, savename=savename)
 def plot_all_numconc(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxnumconc
-  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(path2build, gridfile, zgbx,
+                      fig, axs, plotfunc, datalabs, labels, colors,
+                      savename=savename) 
 
 savename = savefigpath + "numconc.png"
 plot_all_numconc(datalabs, savename=savename)
@@ -82,7 +86,9 @@ plot_all_numconc(datalabs, savename=savename)
 def plot_all_reflectivity(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxreflectivity
-  src.plot_all_on_axs(fig, axs, plotfunc, datalabs, savename=savename) 
+  src.plot_all_on_axs(path2build, gridfile, zgbx,
+                      fig, axs, plotfunc, datalabs, labels, colors,
+                      savename=savename) 
   
 savename = savefigpath + "reflectivity.png"
 plot_all_reflectivity(datalabs, savename=savename)
