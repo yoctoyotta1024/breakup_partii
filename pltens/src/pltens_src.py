@@ -26,6 +26,7 @@ from pathlib import Path
 
 sys.path.append(str(Path.home())+"/CLEO/")  # path2CLEO for imports from pySD package
 from pySD.sdmout_src import *
+from pySD.sdmout_src import massmoms
 
 def savefig(fig, savename, show=True):
   
@@ -46,20 +47,33 @@ def get_gbxs(datapath, gridfile):
   
   return gbxs
 
-def get_massmoms(datapath, gridfile):
+def get_ntime_ndims(setupfile, gridfile):
   
-  setupfile = datapath+"/setup_ensemb.txt"
-  dataset = datapath+"/sol_ensemb.zarr"
-
-  # read in constants and data
   config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
   consts = pysetuptxt.get_consts(setupfile, isprint=True)
   gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
+  return config["ntime"], gbxs["ndims"]
+
+def get_time_massmoms(datapath, gridfile):
+  
+  setupfile = datapath+"/setup_ensemb.txt"
+  dataset = datapath+"/sol_ensemb.zarr"
+
+  # read in data
+  ntime, ndims = get_ntime_ndims(setupfile, gridfile)
   time = pyzarr.get_time(dataset)
-  massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+  massmoms = pyzarr.get_massmoms(dataset, ntime, ndims)
 
   return time, massmoms
+
+def get_massmomstds(datapath, gridfile):
+  
+  setupfile = datapath+"/setup_ensemb.txt"
+  dataset = datapath+"/sol_ensemb.zarr"
+  ntime, ndims = get_ntime_ndims(setupfile, gridfile)
+
+  return massmoms.MassMoms(dataset, ntime, ndims, lab="_std")
 
 def plot_all_on_axs(path2build, gridfile,
                     fig, axs, plotfunc, datalabs,
@@ -91,7 +105,7 @@ def plot_gbxmassmoments(axs, datapath, gridfile, color="k"):
   ''' plot mass moments 0th gridbox in domain '''
 
   zgbx=0
-  time, massmoms = get_massmoms(datapath, gridfile)
+  time, massmoms = get_time_massmoms(datapath, gridfile)
 
   line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx], color=color)
   axs[1].plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
@@ -116,12 +130,19 @@ def plot_gbxnumconc(ax, datapath, gridfile, color="k"):
   ''' plot number concentration of 0th gridbox in domain '''
 
   zgbx=0
-  time, massmoms = get_massmoms(datapath, gridfile)
   gbxs = get_gbxs(datapath, gridfile)
   volcm3 = gbxs["gbxvols"][0,0,zgbx] * 1e6 # [cm^3]
+  
+  time, massmoms = get_time_massmoms(datapath, gridfile)
   numconc = massmoms.mom0[:,0,0,zgbx] / volcm3 # [cm^-3]
   
+  massmomstds = get_massmomstds(datapath, gridfile)
+  std = massmomstds.mom0[:,0,0,zgbx] / volcm3 # [cm^-3] 
+  
   line = ax.plot(time.mins, numconc, color=color)
+  ax.fill_between(time.mins, numconc-std, numconc+std,
+                  color=color, alpha=0.2)
+
   ax.set_ylabel("number concentration /cm$^{-3}$")
   ax.set_yscale("log")
   ax.set_xlabel("time /min")
@@ -132,10 +153,15 @@ def plot_gbxreflectivity(ax, datapath, gridfile, color="k"):
   ''' plot reflectivity proxy of 0th gridbox in domain '''
 
   zgbx=0
-  time, massmoms = get_massmoms(datapath, gridfile)
+  time, massmoms = get_time_massmoms(datapath, gridfile)
   refproxy = massmoms.mom2[:,0,0,zgbx] * 1e25 # 10^25 g^2
 
+  massmomstds = get_massmomstds(datapath, gridfile)
+  std = massmomstds.mom2[:,0,0,zgbx] * 1e25 # 10^25 g^2
+
   line = ax.plot(time.mins, refproxy, color=color)
+  ax.fill_between(time.mins, refproxy-std, refproxy+std,
+                  color=color, alpha=0.2)
   ax.set_ylabel("reflectivity proxy /10$^{25}$ g$^2$")
   ax.set_xlabel("time /min")
 
