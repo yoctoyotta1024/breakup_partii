@@ -44,7 +44,7 @@ constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 sharepath     = path2build+"/share/"
 gridfile      = sharepath+"buii_dimlessGBxboundaries.dat"
 initSDspath   = sharepath+"buii_dimlessSDsinits/"
-runs          = [0, 1, 2, 3, 4]
+runs          = list(range(0,15,1))
 
 ### --- plotting initialisation figures --- ###
 isfigures   = [True, True] # booleans for [making, saving] initialisation figures

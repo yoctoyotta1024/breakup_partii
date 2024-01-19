@@ -47,7 +47,7 @@ executables = {
 }
 
 # initSDs run numbers to use
-runs = [0, 1, 2, 3, 4]
+runs = list(range(0,15,1))
 runnums = {
   "coalbure" : runs,
   "coalonly" : runs,
