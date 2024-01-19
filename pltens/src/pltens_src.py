@@ -27,6 +27,17 @@ from pathlib import Path
 sys.path.append(str(Path.home())+"/CLEO/")  # path2CLEO for imports from pySD package
 from pySD.sdmout_src import *
 
+def savefig(fig, savename, show=True):
+  
+  fig.tight_layout()
+  
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
+
+  if show:
+    plt.show()
+    
 def get_massmoms(datapath, gridfile):
   
   setupfile = datapath+"/setup_ensemb.txt"
@@ -42,20 +53,9 @@ def get_massmoms(datapath, gridfile):
 
   return time, massmoms
 
+def plot_gbxmassmoments(axs, zgbx, datapath, gridfile, color="k"):
 
-def savefig(fig, savename, show=True):
-  
-  fig.tight_layout()
-  
-  fig.savefig(savename, dpi=400, bbox_inches="tight",
-              facecolor='w', format="png")
-  print("Figure .png saved as: "+savename)
-
-  if show:
-    plt.show()
-
-
-def plot_gbxmassmoments(axs, zgbx, time, massmoms, color="k"):
+  time, massmoms = get_massmoms(datapath, gridfile)
 
   line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx], color=color)
   axs[1].plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
@@ -76,7 +76,9 @@ def plot_gbxmassmoments(axs, zgbx, time, massmoms, color="k"):
 
   return line0[0]
 
-def plot_numconc(ax, zgbx, time, massmoms, color="k"):
+def plot_gbxnumconc(ax, zgbx, datapath, gridfile, color="k"):
+
+  time, massmoms = get_massmoms(datapath, gridfile)
 
   line = ax.plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
   ax.set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
@@ -85,7 +87,9 @@ def plot_numconc(ax, zgbx, time, massmoms, color="k"):
 
   return line[0]
 
-def plot_reflectivity(ax, zgbx, time, massmoms, color="k"):
+def plot_gbxreflectivity(ax, zgbx, datapath, gridfile, color="k"):
+
+  time, massmoms = get_massmoms(datapath, gridfile)
 
   line = ax.plot(time.mins, massmoms.mom2[:,0,0,zgbx], color=color)
   ax.set_ylabel("$\u03BB^{m}_{2}$\n~reflectivity /g$^2$")
