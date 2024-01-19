@@ -48,7 +48,6 @@ colors = {
   "coalnobure": "C3",
 }
 
-zgbx          = 0 # z index of gridbox to plot for mass moments
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 ### ------------------------------------------------------------ ###
@@ -64,7 +63,7 @@ def plot_all_massmoments(datalabs, savename=""):
   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
   fig.suptitle("Total Mass Moments Over Domain")
   plotfunc = src.plot_gbxmassmoments
-  src.plot_all_on_axs(path2build, gridfile, zgbx,
+  src.plot_all_on_axs(path2build, gridfile,
                       fig, axs, plotfunc, datalabs, labels, colors,
                       savename=savename) 
   
@@ -75,7 +74,7 @@ plot_all_massmoments(datalabs, savename=savename)
 def plot_all_numconc(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxnumconc
-  src.plot_all_on_axs(path2build, gridfile, zgbx,
+  src.plot_all_on_axs(path2build, gridfile,
                       fig, axs, plotfunc, datalabs, labels, colors,
                       savename=savename) 
 
@@ -86,7 +85,7 @@ plot_all_numconc(datalabs, savename=savename)
 def plot_all_reflectivity(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxreflectivity
-  src.plot_all_on_axs(path2build, gridfile, zgbx,
+  src.plot_all_on_axs(path2build, gridfile,
                       fig, axs, plotfunc, datalabs, labels, colors,
                       savename=savename) 
   

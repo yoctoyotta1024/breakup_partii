@@ -53,7 +53,7 @@ def get_massmoms(datapath, gridfile):
 
   return time, massmoms
 
-def plot_all_on_axs(path2build, gridfile, zgbx,
+def plot_all_on_axs(path2build, gridfile,
                     fig, axs, plotfunc, datalabs,
                     labels, colors, savename=""):
   
@@ -67,7 +67,7 @@ def plot_all_on_axs(path2build, gridfile, zgbx,
     color = colors[datalab]
 
     ### ----- plot data ----- ###
-    line0 = plotfunc(axs, zgbx, datapath, gridfile, color=color)
+    line0 = plotfunc(axs, datapath, gridfile, color=color)
     handles.append(line0)
     handlelabs.append(label)
   
@@ -79,8 +79,10 @@ def plot_all_on_axs(path2build, gridfile, zgbx,
   if savename != "":
     savefig(fig, savename, show=False)
     
-def plot_gbxmassmoments(axs, zgbx, datapath, gridfile, color="k"):
+def plot_gbxmassmoments(axs, datapath, gridfile, color="k"):
+  ''' plot mass moments 0th gridbox in domain '''
 
+  zgbx=0
   time, massmoms = get_massmoms(datapath, gridfile)
 
   line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx], color=color)
@@ -102,8 +104,10 @@ def plot_gbxmassmoments(axs, zgbx, datapath, gridfile, color="k"):
 
   return line0[0]
 
-def plot_gbxnumconc(ax, zgbx, datapath, gridfile, color="k"):
+def plot_gbxnumconc(ax, datapath, gridfile, color="k"):
+  ''' plot number concentration of 0th gridbox in domain '''
 
+  zgbx=0
   time, massmoms = get_massmoms(datapath, gridfile)
 
   line = ax.plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
@@ -114,7 +118,9 @@ def plot_gbxnumconc(ax, zgbx, datapath, gridfile, color="k"):
   return line[0]
 
 def plot_gbxreflectivity(ax, zgbx, datapath, gridfile, color="k"):
+  ''' plot reflectivity proxy of 0th gridbox in domain '''
 
+  zgbx=0
   time, massmoms = get_massmoms(datapath, gridfile)
 
   line = ax.plot(time.mins, massmoms.mom2[:,0,0,zgbx], color=color)
