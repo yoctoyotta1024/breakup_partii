@@ -28,11 +28,7 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 savefigpath = sys.argv[3]
 
-sys.path.append(path2CLEO)  # for imports from pySD package
-sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
-
-from src.pltens_src import *
-from pySD.sdmout_src import *
+import src.pltens_src as src
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -76,24 +72,15 @@ def plot_all_massmoments():
     ### ----- load data to plot ----- ###
     # path and file names for plotting results
     datapath = path2build+"/bin/"+datalab+"/ensemb/"
-    setupfile = datapath+"/setup_ensemb.txt"
-    dataset = datapath+"/sol_ensemb.zarr"
-
-    # read in constants and data
-    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-    consts = pysetuptxt.get_consts(setupfile, isprint=True)
-    gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
-
-    time = pyzarr.get_time(dataset)
-    massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+    time, massmoms = src.get_massmoms(datapath, gridfile)
 
     ### ----- plot data ----- ###
     zgbx = 0 # z gridbox to plot
-    line0 = plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
+    line0 = src.plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
     handles.append(line0)
     handlelabs.append(label)
   axs[0].legend(handles, handlelabs)
   savename = savefigpath + "massmoments.png"
-  savefig(fig, savename, show=False)
-  
+  src.savefig(fig, savename, show=False)
+
 plot_all_massmoments()

@@ -19,8 +19,29 @@ Script plots some data from ensemble
 dataset of buii 1-D rainshaft output
 '''
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+sys.path.append(str(Path.home())+"/CLEO/")  # path2CLEO for imports from pySD package
+from pySD.sdmout_src import *
+
+def get_massmoms(datapath, gridfile):
+  
+  setupfile = datapath+"/setup_ensemb.txt"
+  dataset = datapath+"/sol_ensemb.zarr"
+
+  # read in constants and data
+  config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+  consts = pysetuptxt.get_consts(setupfile, isprint=True)
+  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+
+  time = pyzarr.get_time(dataset)
+  massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
+
+  return time, massmoms
+
 
 def savefig(fig, savename, show=True):
   
