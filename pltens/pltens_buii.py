@@ -19,12 +19,10 @@ Script plots some data from ensemble
 dataset of buii 1-D rainshaft output
 '''
 
-import os
 import sys
 import numpy as np
-import random 
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
+import matplotlib.pyplot as plt
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -40,7 +38,19 @@ from pySD.sdmout_src import *
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-labels = ["coalbure", "coalonly", "coalbreakup", "coalnobure"]
+datalabs = ["coalbure", "coalonly", "coalbreakup", "coalnobure"]
+labels = {
+  "coalbure": "CoalBuRe", 
+  "coalonly": "Orig", 
+  "coalbreakup": "CoalBu",
+  "coalnobure": "Coal",
+}
+colors = {
+  "coalbure": "C0", 
+  "coalonly": "C1", 
+  "coalbreakup": "C2",
+  "coalnobure": "C3",
+}
 
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
@@ -53,12 +63,17 @@ if path2CLEO == savefigpath:
 else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
+### ----- plot domain mass moments ----- ###
+fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+fig.suptitle("Total Mass Moments Over Domain")
+handles, handlelabs = [], []
+for datalab in datalabs:
+  label = labels[datalab]
+  color = colors[datalab]
 
-for label in labels:
-  
   ### ----- load data to plot ----- ###
   # path and file names for plotting results
-  datapath = path2build+"/bin/"+label+"/ensemb/"
+  datapath = path2build+"/bin/"+datalab+"/ensemb/"
   setupfile = datapath+"/setup_ensemb.txt"
   dataset = datapath+"/sol_ensemb.zarr"
 
@@ -70,6 +85,11 @@ for label in labels:
   time = pyzarr.get_time(dataset)
   massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
-  ### ----- plot figures ----- ###
-  savename = savefigpath + "domainmassmoms_"+label+".png"
-  pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+  ### ----- plot data ----- ###
+  zgbx = 0 # z gridbox to plot
+  line0 = plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
+  handles.append(line0)
+  handlelabs.append(label)
+axs[0].legend(handles, handlelabs)
+savename = savefigpath + "massmoments.png"
+savefig(fig, savename, show=False)
