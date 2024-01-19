@@ -60,27 +60,31 @@ else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
 ### ----- plot domain mass moments ----- ###
-def plot_all_massmoments():
+def plot_all_massmoments(savename=""):
 
   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
   fig.suptitle("Total Mass Moments Over Domain")
+  
   handles, handlelabs = [], []
   for datalab in datalabs:
-    label = labels[datalab]
-    color = colors[datalab]
 
     ### ----- load data to plot ----- ###
     # path and file names for plotting results
     datapath = path2build+"/bin/"+datalab+"/ensemb/"
     time, massmoms = src.get_massmoms(datapath, gridfile)
+    label = labels[datalab]
+    color = colors[datalab]
 
     ### ----- plot data ----- ###
     zgbx = 0 # z gridbox to plot
     line0 = src.plot_gbxmassmoments(axs, zgbx, time, massmoms, color=color)
     handles.append(line0)
     handlelabs.append(label)
-  axs[0].legend(handles, handlelabs)
-  savename = savefigpath + "massmoments.png"
-  src.savefig(fig, savename, show=False)
 
-plot_all_massmoments()
+  axs[0].legend(handles, handlelabs)
+  
+  if savename != "":
+    src.savefig(fig, savename, show=False)
+
+savename = savefigpath + "massmioments.png"
+plot_all_massmoments(savename=savename)
