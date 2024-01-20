@@ -117,18 +117,17 @@ def numconc_distrib(dataset, vol, gbxidx, nbins, rspan):
 
   numconc = [] # array dims [time, nbins]
   if gbxidx == "domain":
+    
     radius = pyzarr.get_rawdata4raggedkey(dataset, "radius")
-    log10r = np.log10(radius)
     xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
 
+    log10r = np.log10(radius)
+    wghts = xi / vol / 1e6          # real droplets [/cm^3]
     for t in range(len(radius)): # for each timestep
-      wghts = xi[t] / vol / 1e6          # real droplets [/cm^3]
-      hist = log10r_histogram(log10redgs, log10r[t], wghts)
+      hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
       numconc.append(hist)
   
-  numconc = np.asarray(numconc) # array dims [time, nbins]
-  
-  return numconc
+  return np.asarray(numconc) # array dims [time, nbins]
 
 def ensemble_distrib():
 
