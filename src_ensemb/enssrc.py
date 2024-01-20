@@ -20,41 +20,69 @@ ensemble data in zarr format
 '''
 
 import numpy as np
+import awkward as ak
 
 import sys
 from pathlib import Path
 sys.path.append("/home/m/m300950/CLEO/")  # path2CLEO for imports from pySD package
+from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 import pySD.sdmout_src.ensembzarr as enszarr
 
-def write_ensemble_distributions(ensembdataset,
-                                 ensembsetupfile,
-                                 setupfile,
-                                 datasets):
-  
+def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
+                               setupfile, gridfile, datasets):
+  ''' write number, mass and mass^2 droplet 
+  distributions for entire domain to ensemble
+  zarr '''
   refset = datasets[0] # reference dataset
   for dataset in datasets:
     enszarr.check_dataset_for_ensemb(dataset, refset)
   
-  ensemble_numconc_distrib(ensembdataset, ensembsetupfile,
-                           setupfile, datasets)
+  ensemble_domainnumconc_distrib(ensembdataset, ensembsetupfile,
+                                 setupfile, gridfile, datasets)
   
-  write_distrib_to_zarr()
+  write_domaindistrib_to_zarr()
 
-def ensemble_numconc_distrib(ensembdataset, ensembsetupfile,
-                             setupfile, datasets):
-  
+def get_domainvol(setupfile, gridfile):
+
+  consts = pysetuptxt.get_consts(setupfile, isprint=True) 
+  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+    
+  return gbxs["domainvol"]
+
+def ensemble_domainnumconc_distrib(ensembdataset,
+                                   ensembsetupfile,
+                                   setupfile,
+                                   gridfile,
+                                   datasets):
+  ''' take mean of real droplet number
+  concentration distributions '''
+
   for dataset in datasets:
-    numconc_distrib()
+    domainvol = get_domainvol(setupfile, gridfile) 
+    numconc_distrib(dataset, domainvol, "domain")
   
   ensemble_distrib()
 
-def numconc_distrib():
-  print("now calc numconc distrib for run")
+def numconc_distrib(dataset, vol, gbxidx=None):
+  '''calculate the real droplet number concentration
+  for a gridbox with volume 'vol' and index 'gbxidx'.
+  If gbxidx=="domain", all superdroplets in dataset
+  are used, so 'vol' should be domain volume) '''
+
+  print("---- WIP -----")
+  if gbxidx == "domain":
+    xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
+
+  print(xi, len(xi), len(xi[0]))
+  # print(ak.shape(xi))
+  
+  
+  print("---- WIP -----")
 
 def ensemble_distrib():
 
   print("now take mean and std distrib for ensemb")
 
-def write_distrib_to_zarr():
+def write_domaindistrib_to_zarr():
 
   print("now write to zarr")

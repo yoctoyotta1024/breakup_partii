@@ -81,5 +81,8 @@ for lab in labels:
   
   ensembdataset = ensembdatapath+ensembzarr
   ensembsetupfile = ensembdatapath+ensembsetuptxt
-  write_ensemble(ensembdataset, ensembsetupfile,
-                vars4ensemb, setupfile, datasets)
+  # write_ensemble(ensembdataset, ensembsetupfile,
+  #               vars4ensemb, setupfile, datasets)
+  
+  enssrc.write_ensemble_domaindists(ensembdataset, ensembsetupfile,
+                                    setupfile, gridfile, datasets)
