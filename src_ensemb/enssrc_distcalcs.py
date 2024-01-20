@@ -58,8 +58,10 @@ def get_redges_rcens(log10redgs):
 def get_domainvol(setupfile, gridfile):
   ''' reads and returns domain volume [m^3] '''
 
-  consts = pysetuptxt.get_consts(setupfile, isprint=True) 
-  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+  isprint=False
+  consts = pysetuptxt.get_consts(setupfile, isprint=isprint) 
+  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"],
+                                 isprint=isprint)
     
   return gbxs["domainvol"] #[m^3]
 
@@ -146,7 +148,7 @@ def reflectproxy_distrib(dataset, log10redgs, gbxidx):
     
     radius = pyzarr.get_rawdata4raggedkey(dataset, "radius") # [microns]
     xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
-    wghts = xi * ak.pow(radius, 6.0) / 1e36 # 6th moment radius of distrib [m^6]
+    wghts = xi * (radius**6.0) / 1e36 # 6th moment radius of distrib [m^6]
 
     log10r = np.log10(radius)
     for t in range(len(radius)): # for each timestep

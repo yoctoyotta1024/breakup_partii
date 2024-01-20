@@ -59,9 +59,8 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                        log10redgs)  
   
   write_ensemble_domainreflectivity_distrib(ensembdataset,
-                                           gridfile,
-                                           datasets,
-                                           log10redgs) 
+                                            datasets,
+                                            log10redgs) 
 
 def write_domaindistrib_to_zarr(ensembdataset, name, meandist, stddist):
 
@@ -155,7 +154,8 @@ def write_ensemble_domainreflectivity_distrib(ensembdataset,
   where bins of distribution are defined by log10redges [microns] '''
 
   refproxy_dists = calc_dists_for_ensemb(distcalcs.reflectproxy_distrib,
-                                          datasets, log10redgs)
+                                          datasets, log10redgs,
+                                          ["domain"])
   
   meandist, stddist = ensemble_distrib_mean_std(refproxy_dists)
   
