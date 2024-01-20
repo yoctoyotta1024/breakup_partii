@@ -78,13 +78,19 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
   distributions for entire domain to ensemble
   zarr. parametrs for distirubtions given by
   distparams={nbins, rspan} dictionary'''
+  
   refset = datasets[0] # reference dataset
   for dataset in datasets:
     enszarr.check_dataset_for_ensemb(dataset, refset)
   
-  ensemble_domainnumconc_distrib(ensembdataset, ensembsetupfile,
-                                 setupfile, gridfile, datasets,
-                                 distparams)
+  log10redgs = get_log10redgs(distparams["rspan"], distparams["nbins"])
+  redges, rcens = get_redges_rcens(log10redgs)
+  
+  mean, std = ensemble_domainnumconc_distrib(ensembdataset,
+                                             ensembsetupfile,
+                                             setupfile, gridfile,
+                                             datasets, log10redgs) 
+  write_domaindistrib_to_zarr("numconc", mean, std)
   
   write_domaindistrib_to_zarr()
 
@@ -100,28 +106,23 @@ def ensemble_domainnumconc_distrib(ensembdataset,
                                    setupfile,
                                    gridfile,
                                    datasets,
-                                   distparams):
+                                   log10redgs):
   ''' take mean of real droplet number
   concentration distributions.
   parametrs for distirubtions given by
   distparams={nbins, rspan} dictionary'''
-
-  log10redgs = get_log10redgs(distparams["rspan"], distparams["nbins"])
-  redges, rcens = get_redges_rcens(log10redgs)
-
+  
   numconc_dists = []
   for dataset in datasets:
     domainvol = get_domainvol(setupfile, gridfile) 
-    numconc = numconc_distrib(dataset, domainvol, "domain", log10redgs)
-  
-  import matplotlib.pyplot as plt
-  plt.step(redges[:-1], numconc.T, where='pre')
-  plt.yscale("log")
-  plt.xscale("log")
-  # plt.xlim([1e-1,1000])
-  plt.savefig("histt_test.png")
+    numconc = numconc_distrib(dataset, domainvol,
+                              "domain", log10redgs)
+    numconc_dists.append(numconc)
+  numconc_dists = np.asarray(numconc_dists)
 
-  ensemble_distrib()
+  meandist, stddist = ensemble_distrib(numconc_dists)
+
+  return meandist, stddist
 
 def numconc_distrib(dataset, vol, gbxidx, log10redgs):
   '''calculate the real droplet number concentration
@@ -145,10 +146,17 @@ def numconc_distrib(dataset, vol, gbxidx, log10redgs):
   
   return numconc
 
-def ensemble_distrib():
+def ensemble_distrib(ensemb_dists):
+  ''' returns mean of ensemble, and its standard 
+   deviation for 'nruns' of distributions
+  with dims [nruns, time, nbins] '''
 
-  print("now take mean and std distrib for ensemb")
+  nruns = ensemb_dists.shape[0]
+  meandist = np.mean(ensemb_dists, axis=0)
+  stddist = np.std(ensemb_dists, axis=0) / np.sqrt(nruns) # sigma/sqrt(N) 
 
-def write_domaindistrib_to_zarr():
+  return meandist, stddist
 
-  print("now write to zarr")
+def write_domaindistrib_to_zarr(name, meandist, stddist):
+
+  print("now write to zarr: "+name)
