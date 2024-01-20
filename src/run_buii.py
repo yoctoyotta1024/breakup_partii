@@ -36,12 +36,11 @@ from pySD import editconfigfile
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # labels for model compilations
-labels = ["coalbure", "coalonly", "coalbreakup", "coalnobure"]
+labels = ["coalbure", "coalbreakup", "coalnobure"]
 
 # name of executables and data output
 executables = {
   "coalbure" : "buii_coalbure",
-  "coalonly" : "buii_coalonly",
   "coalbreakup" : "buii_coalbreakup",
   "coalnobure" : "buii_coalnobure",
 }
@@ -50,7 +49,6 @@ executables = {
 runs = list(range(0,15,1))
 runnums = {
   "coalbure" : runs,
-  "coalonly" : runs,
   "coalbreakup" : runs,
   "coalnobure" : runs,
 }

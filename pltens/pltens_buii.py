@@ -34,16 +34,14 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalbure", "coalonly", "coalbreakup", "coalnobure"]
+datalabs = ["coalbure", "coalbreakup", "coalnobure"]
 labels = {
   "coalbure": "CoalBuRe", 
-  "coalonly": "Orig", 
   "coalbreakup": "CoalBu",
   "coalnobure": "Coal",
 }
 colors = {
   "coalbure": "C0", 
-  "coalonly": "C1", 
   "coalbreakup": "C2",
   "coalnobure": "C3",
 }
