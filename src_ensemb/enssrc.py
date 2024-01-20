@@ -46,6 +46,13 @@ def log10r_histogram(log10redgs, log10radius, wghts):
   return np.histogram(log10radius, bins=log10redgs,
                       weights=wghts, density=None)[0]
 
+def get_redges_rcens(log10redgs):
+
+  redges = 10**log10redgs                                             # radius edges of bins
+  rcens = (10**(log10redgs[1:]) + 10**(log10redgs[:-1])) / 2        # radius centres of bins
+
+  return redges, rcens
+
 def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
   ''' get distribution of data with weights 'wghts' against
   log10(r). Uses np.histogram to get frequency of a particular
@@ -54,14 +61,13 @@ def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
   # create edges of log10(r) histogram bins (evenly spaced in log10(r))
   log10redgs = get_log10redgs(rspan, nbins) 
   log10r = np.log10(radius)
+  
   hist = log10r_histogram(log10redgs, log10r, wghts)
-
   if perlog10r == True: # histogram frequency / delta_log10(r)
     log10rwdths = log10redgs[1:]- log10redgs[:-1]                 # ln10(r) histogram bin widths
     hist = hist/log10rwdths 
  
-  redges = 10**log10redgs                                             # radius edges of bins
-  rcens = (10**(log10redgs[1:]) + 10**(log10redgs[:-1])) / 2        # radius centres of bins
+  redges, rcens = get_redges_rcens(log10redgs)
 
   return hist, redges, rcens # units of hedgs and hcens = units of rspan (usually [microns])
 
@@ -100,20 +106,28 @@ def ensemble_domainnumconc_distrib(ensembdataset,
   parametrs for distirubtions given by
   distparams={nbins, rspan} dictionary'''
 
+  log10redgs = get_log10redgs(distparams["rspan"], distparams["nbins"])
+  redges, rcens = get_redges_rcens(log10redgs)
+
+  numconc_dists = []
   for dataset in datasets:
     domainvol = get_domainvol(setupfile, gridfile) 
-    numconc_distrib(dataset, domainvol, "domain",
-                    distparams["nbins"], distparams["rspan"])
+    numconc = numconc_distrib(dataset, domainvol, "domain", log10redgs)
   
+  import matplotlib.pyplot as plt
+  plt.step(redges[:-1], numconc.T, where='pre')
+  plt.yscale("log")
+  plt.xscale("log")
+  # plt.xlim([1e-1,1000])
+  plt.savefig("histt_test.png")
+
   ensemble_distrib()
 
-def numconc_distrib(dataset, vol, gbxidx, nbins, rspan):
+def numconc_distrib(dataset, vol, gbxidx, log10redgs):
   '''calculate the real droplet number concentration
   for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
   are used, so 'vol' should be domain volume) '''
-
-  log10redgs = get_log10redgs(rspan, nbins)
 
   numconc = [] # array dims [time, nbins]
   if gbxidx == "domain":
@@ -127,7 +141,9 @@ def numconc_distrib(dataset, vol, gbxidx, nbins, rspan):
       hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
       numconc.append(hist)
   
-  return np.asarray(numconc) # array dims [time, nbins]
+  numconc = np.asarray(numconc) # array dims [time, nbins]
+  
+  return numconc
 
 def ensemble_distrib():
 
