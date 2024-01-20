@@ -56,17 +56,20 @@ gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
 ### ------------------------------------------------------------ ###
 ### ------------ CREATE ENSEMBLE OF DATASETS RESULTS ----------- ###
 ### ------------------------------------------------------------ ###
-for lab in labels:
-
-  # directories for making ensemble dataset
-  datapath = binpath+"/"+lab+"/runs/"   # directory of datasets
-  ensembdatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
+def check_path(path2CLEO, ensembdatapath):
 
   if path2CLEO == ensembdatapath:
     raise ValueError("ensemble mean directory cannot be CLEO")
   else:
     Path(ensembdatapath).mkdir(exist_ok=True) 
 
+for lab in labels:
+
+  # directories for making ensemble dataset
+  datapath = binpath+"/"+lab+"/runs/"   # directory of datasets
+  ensembdatapath = binpath+"/"+lab+"/ensemb/" # directory to write ensem dataset to
+  check_path(path2CLEO, ensembdatapath)
+  
   datasets = [] 
   setupfile = datapath+"/setup_run"+str(runnums[lab][0])+".txt"
   for n in runnums[lab]:
