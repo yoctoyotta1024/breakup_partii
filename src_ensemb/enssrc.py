@@ -52,7 +52,7 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                        datasets,
                                        log10redgs) 
 
-  write_ensemble_domainmassconc_distrib(ensembdataset,
+  write_ensemble_domainwatermass_distrib(ensembdataset,
                                        ensembsetupfile,
                                        gridfile,
                                        datasets,
@@ -115,6 +115,22 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
   
   write_domaindistrib_to_zarr(ensembdataset, "dist_num", meandist, stddist)
 
+def write_ensemble_domainwatermass_distrib(ensembdataset,
+                                       ensembsetupfile,
+                                       gridfile,
+                                       datasets,
+                                       log10redgs): 
+  
+  domainvol = distcalcs.get_domainvol(ensembsetupfile, gridfile) # [m^3]
+  watermass_dists = calc_dists_for_ensemb(distcalcs.watermass_distrib,
+                                        datasets, log10redgs,
+                                        ["domain", domainvol])
+  
+  meandist, stddist = ensemble_distrib_mean_std(watermass_dists)
+  
+  write_domaindistrib_to_zarr(ensembdataset, "dist_watermass",
+                              meandist, stddist)
+  
   import matplotlib.pyplot as plt
   redges, rcens = distcalcs.get_redges_rcens(log10redgs)
   plt.step(redges[:-1], meandist.T[:,::30], where='pre')
@@ -125,18 +141,3 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
   plt.yscale("log")
   plt.xscale("log")
   plt.savefig("histt_test.png")
-
-def write_ensemble_domainmassconc_distrib(ensembdataset,
-                                       ensembsetupfile,
-                                       gridfile,
-                                       datasets,
-                                       log10redgs): 
-  
-  domainvol = distcalcs.get_domainvol(ensembsetupfile, gridfile) # [m^3]
-  mass_dists = calc_dists_for_ensemb(distcalcs.massconc_distrib,
-                                        datasets, log10redgs,
-                                        ["domain", domainvol])
-  
-  meandist, stddist = ensemble_distrib_mean_std(mass_dists)
-  
-  write_domaindistrib_to_zarr(ensembdataset, "dist_mass", meandist, stddist)

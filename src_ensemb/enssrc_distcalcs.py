@@ -109,7 +109,7 @@ def numconc_distrib(dataset, log10redgs, gbxidx, vol):
   
   return numconc # units: [cm^-3]
 
-def watermassconc_distrib(dataset, log10redgs, gbxidx, vol):
+def watermass_distrib(dataset, log10redgs, gbxidx, vol):
   '''calculate the real droplet mass concentration
   for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
