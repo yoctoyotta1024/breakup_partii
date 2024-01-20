@@ -53,6 +53,45 @@ def get_redges_rcens(log10redgs):
 
   return redges, rcens
 
+def get_domainvol(setupfile, gridfile):
+
+  consts = pysetuptxt.get_consts(setupfile, isprint=True) 
+  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+    
+  return gbxs["domainvol"]
+
+def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
+                               setupfile, gridfile, datasets,
+                               distparams):
+  ''' write number, mass and mass^2 droplet 
+  distributions for entire domain to ensemble
+  zarr. parametrs for distirubtions given by
+  distparams={nbins, rspan} dictionary'''
+  
+  refset = datasets[0] # reference dataset
+  for dataset in datasets:
+    enszarr.check_dataset_for_ensemb(dataset, refset)
+  
+  log10redgs = get_log10redgs(distparams["rspan"],
+                              distparams["nbins"])
+  redges, rcens = get_redges_rcens(log10redgs)
+
+  write_ensemble_domainnumconc_distrib(ensembdataset,
+                                             ensembsetupfile,
+                                             setupfile, gridfile,
+                                             datasets, log10redgs) 
+  
+  # ensemble_domainmass_distribs(ensembdataset, ensembsetupfile,
+  #                             setupfile, gridfile, datasets,
+  #                             distparams) 
+  # write_domaindistrib_to_zarr("massdistribs")
+
+  write_redges_rcens()
+
+def write_redges_rcens():
+
+  print("now write redges rcens")
+
 def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
   ''' get distribution of data with weights 'wghts' against
   log10(r). Uses np.histogram to get frequency of a particular
@@ -71,37 +110,22 @@ def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
 
   return hist, redges, rcens # units of hedgs and hcens = units of rspan (usually [microns])
 
-def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
-                               setupfile, gridfile, datasets,
-                               distparams):
-  ''' write number, mass and mass^2 droplet 
-  distributions for entire domain to ensemble
-  zarr. parametrs for distirubtions given by
+def calc_dists_for_ensemb(calc_distrib_func, datasets,
+                          log10redgs, args):
+  ''' take mean of real droplet number
+  concentration distributions.
+  parametrs for distirubtions given by
   distparams={nbins, rspan} dictionary'''
   
-  refset = datasets[0] # reference dataset
+  dists = []
   for dataset in datasets:
-    enszarr.check_dataset_for_ensemb(dataset, refset)
-  
-  log10redgs = get_log10redgs(distparams["rspan"], distparams["nbins"])
-  redges, rcens = get_redges_rcens(log10redgs)
-  
-  mean, std = ensemble_domainnumconc_distrib(ensembdataset,
-                                             ensembsetupfile,
-                                             setupfile, gridfile,
-                                             datasets, log10redgs) 
-  write_domaindistrib_to_zarr("numconc", mean, std)
-  
-  write_domaindistrib_to_zarr()
+    dist = calc_distrib_func(dataset, log10redgs, *args)
+    dists.append(dist)
+  dists = np.asarray(dists)
 
-def get_domainvol(setupfile, gridfile):
+  return dists
 
-  consts = pysetuptxt.get_consts(setupfile, isprint=True) 
-  gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
-    
-  return gbxs["domainvol"]
-
-def ensemble_domainnumconc_distrib(ensembdataset,
+def write_ensemble_domainnumconc_distrib(ensembdataset,
                                    ensembsetupfile,
                                    setupfile,
                                    gridfile,
@@ -112,19 +136,27 @@ def ensemble_domainnumconc_distrib(ensembdataset,
   parametrs for distirubtions given by
   distparams={nbins, rspan} dictionary'''
   
-  numconc_dists = []
-  for dataset in datasets:
-    domainvol = get_domainvol(setupfile, gridfile) 
-    numconc = numconc_distrib(dataset, domainvol,
-                              "domain", log10redgs)
-    numconc_dists.append(numconc)
-  numconc_dists = np.asarray(numconc_dists)
-
+  domainvol = get_domainvol(setupfile, gridfile) 
+  numconc_dists = calc_dists_for_ensemb(numconc_distrib,
+                                        datasets, log10redgs,
+                                        ["domain", domainvol])
+  
   meandist, stddist = ensemble_distrib(numconc_dists)
 
-  return meandist, stddist
+  import matplotlib.pyplot as plt
+  redges, rcens = get_redges_rcens(log10redgs)
+  plt.step(redges[:-1], meandist.T[:,::30], where='pre')
+  plt.step(redges[:-1], (meandist+stddist).T[:,::30],
+           where='pre', linestyle="--")
+  plt.step(redges[:-1], (meandist-stddist).T[:,::30],
+           where='pre', linestyle="--")
+  plt.yscale("log")
+  plt.xscale("log")
+  plt.savefig("histt_test.png")
 
-def numconc_distrib(dataset, vol, gbxidx, log10redgs):
+  write_domaindistrib_to_zarr("numconc", meandist, stddist)
+
+def numconc_distrib(dataset, log10redgs, gbxidx, vol):
   '''calculate the real droplet number concentration
   for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
