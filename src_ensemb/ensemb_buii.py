@@ -28,12 +28,14 @@ path2build = sys.argv[2]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.sdmout_src.ensembzarr import write_ensemble
+import enssrc
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
 labels = ["coalbure", "coalbreakup", "coalnobure"]
+
 binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
@@ -51,7 +53,7 @@ vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
 
 distparams = {
   "nbins" : 100,          # number of bins in droplet distirbutions (evenly spaced in log space)
-  "rspan" : [1e-1, 1e5],  # range of droplet distirbutions [microns]
+  "rspan" : [2.5e-1, 1e5],  # range of droplet distirbutions [microns]
 }
 
 # path and filenames for plotting functions
