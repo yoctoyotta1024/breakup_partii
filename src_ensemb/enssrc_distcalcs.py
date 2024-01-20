@@ -65,7 +65,7 @@ def watermass(radius):
   given radius in microns '''
   
   RHO_L = 998.203 #[Kg/m^3]
-  rcubed = radius * radius * radius * 1e18 # [m]
+  rcubed = radius * radius * radius / 1e18 # [m]
 
   return 4.0 / 3.0 * np.pi * RHO_L * rcubed * 1000 #[g]
 
