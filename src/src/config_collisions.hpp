@@ -45,7 +45,7 @@ struct ConfigCollisions_CoalBuRe
   {
     const PairProbability auto collprob = LongHydroProb(1.0);
     const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{}
     const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
                                                      &step2realtime,
                                                      collprob,
@@ -63,7 +63,7 @@ struct ConfigCollisions_CoalBreakup
   {
     const PairProbability auto collprob = LongHydroProb(1.0);
     const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{}
     const MicrophysicalProcess auto colls = CoalBreakup(tsteps.get_collstep(),
                                                         &step2realtime,
                                                         collprob,
@@ -81,7 +81,7 @@ struct ConfigCollisions_CoalNoBuRe
   {
     const PairProbability auto collprob = LongHydroProb(1.0);
     const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{}
     const MicrophysicalProcess auto colls = CoalNoBuRe(tsteps.get_collstep(),
                                                         &step2realtime,
                                                         collprob,
