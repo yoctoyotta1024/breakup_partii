@@ -35,7 +35,7 @@ sys.path.append(path2CLEO)  # for imports from pySD package
 sys.path.append(path2CLEO+"/examples/exampleplotting/") # for imports from example plotting package
 
 from plotssrc import pltdist, pltmoms, animations
-from pySD.sdmout_src import *
+from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 from pySD.sdmout_src import sdtracing
 
 ### ---------------------------------------------------------------- ###
