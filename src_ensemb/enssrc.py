@@ -29,16 +29,19 @@ from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 import pySD.sdmout_src.ensembzarr as enszarr
 
 def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
-                               setupfile, gridfile, datasets):
+                               setupfile, gridfile, datasets,
+                               distparams):
   ''' write number, mass and mass^2 droplet 
   distributions for entire domain to ensemble
-  zarr '''
+  zarr. parametrs for distirubtions given by
+  distparams={nbins, rspan} dictionary'''
   refset = datasets[0] # reference dataset
   for dataset in datasets:
     enszarr.check_dataset_for_ensemb(dataset, refset)
   
   ensemble_domainnumconc_distrib(ensembdataset, ensembsetupfile,
-                                 setupfile, gridfile, datasets)
+                                 setupfile, gridfile, datasets,
+                                 distparams)
   
   write_domaindistrib_to_zarr()
 
@@ -53,26 +56,55 @@ def ensemble_domainnumconc_distrib(ensembdataset,
                                    ensembsetupfile,
                                    setupfile,
                                    gridfile,
-                                   datasets):
+                                   datasets,
+                                   distparams):
   ''' take mean of real droplet number
-  concentration distributions '''
+  concentration distributions.
+  parametrs for distirubtions given by
+  distparams={nbins, rspan} dictionary'''
 
   for dataset in datasets:
     domainvol = get_domainvol(setupfile, gridfile) 
-    numconc_distrib(dataset, domainvol, "domain")
+    numconc_distrib(dataset, domainvol, "domain",
+                    distparams["nbins"], distparams["rspan"])
   
   ensemble_distrib()
 
-def numconc_distrib(dataset, vol, gbxidx=None):
+def log10r_distribution(rspan, nbins, radius, wghts, perlog10r=False):
+  ''' get distribution of data with weights 'wghts' against
+  log10(r). Uses np.histogram to get frequency of a particular
+  value of data that falls into bins evenly spaced in log10(r) '''
+
+  # create edges of log10(r) histogram bins (evenly spaced in log10(r))
+  log10r_hedgs = np.linspace(np.log10(rspan[0]), np.log10(rspan[1]), nbins+1)  
+  
+  # get (weighted) number frequency in each bin
+  hist = np.histogram(np.log10(radius), bins=log10r_hedgs,
+                      weights=wghts, density=None)[0]
+
+  if perlog10r == True: # histogram frequency / delta_log10(r)
+    log10r_hwdths = log10r_hedgs[1:]- log10r_hedgs[:-1]                 # ln10(r) histogram bin widths
+    hist = hist/log10r_hwdths
+
+  redges = 10**log10r_hedgs                                             # radius edges of bins
+  rcens = (10**(log10r_hedgs[1:]) + 10**(log10r_hedgs[:-1])) / 2        # radius centres of bins
+
+  return hist, redges, rcens # units of hedgs and hcens = units of rspan (usually [microns])
+
+def numconc_distrib(dataset, vol, gbxidx, nbins, rspan):
   '''calculate the real droplet number concentration
   for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
   are used, so 'vol' should be domain volume) '''
 
+  
+
   print("---- WIP -----")
+  numconc = [] # array dims [time, nbins]
   if gbxidx == "domain":
     xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
 
+    for 
   print(xi, len(xi), len(xi[0]))
   # print(ak.shape(xi))
   

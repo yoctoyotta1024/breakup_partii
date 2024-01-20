@@ -49,6 +49,11 @@ runnums = {
 # variables in datasets to create ensemble dataset for
 vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
 
+distparams = {
+  "nbins" : 100,          # number of bins in droplet distirbutions (evenly spaced in log space)
+  "rspan" : [1e-1, 1e4],  # range of droplet distirbutions [microns]
+}
+
 # path and filenames for plotting functions
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
@@ -85,4 +90,5 @@ for lab in labels:
   #               vars4ensemb, setupfile, datasets)
   
   enssrc.write_ensemble_domaindists(ensembdataset, ensembsetupfile,
-                                    setupfile, gridfile, datasets)
+                                    setupfile, gridfile, datasets,
+                                    distparams)
