@@ -58,7 +58,7 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                        datasets,
                                        log10redgs)  
   
-  write_ensemble_domainreflecivity_distrib(ensembdataset,
+  write_ensemble_domainreflectivity_distrib(ensembdataset,
                                            gridfile,
                                            datasets,
                                            log10redgs) 
@@ -101,10 +101,10 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
                                          ensembsetupfile,
                                          gridfile, datasets,
                                          log10redgs):
-  ''' take mean of real droplet number
-  concentration distributions.
-  parametrs for distirubtions given by
-  distparams={nbins, rspan} dictionary'''
+  ''' write mean and standard deviation real droplet number
+  concentration distributions for domain over datasets
+  of ensemble to zarr 'ensembdataset' where bins of
+  distribution are defined by log10redges [microns] '''
   
   domainvol = distcalcs.get_domainvol(ensembsetupfile, gridfile) # [m^3]
   numconc_dists = calc_dists_for_ensemb(distcalcs.numconc_distrib,
@@ -116,11 +116,15 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
   write_domaindistrib_to_zarr(ensembdataset, "dist_num", meandist, stddist)
 
 def write_ensemble_domainwatermass_distrib(ensembdataset,
-                                       ensembsetupfile,
-                                       gridfile,
-                                       datasets,
-                                       log10redgs): 
-  
+                                           ensembsetupfile,
+                                           gridfile,
+                                           datasets,
+                                           log10redgs): 
+  ''' write mean and standard deviation of real droplet
+  mass (as if water) distribution for domain over
+  datasets of ensemble to zarr 'ensembdataset' where bins
+  of distribution are defined by log10redges [microns]'''
+    
   domainvol = distcalcs.get_domainvol(ensembsetupfile, gridfile) # [m^3]
   watermass_dists = calc_dists_for_ensemb(distcalcs.watermass_distrib,
                                         datasets, log10redgs,
@@ -141,3 +145,19 @@ def write_ensemble_domainwatermass_distrib(ensembdataset,
   plt.yscale("log")
   plt.xscale("log")
   plt.savefig("histt_test.png")
+
+def write_ensemble_domainreflectivity_distrib(ensembdataset,
+                                              datasets,
+                                              log10redgs):
+  ''' write mean and standard deviation of real droplet
+  reflectivity proxy (6th moment of radius) distribution
+  for domain over datasets of ensemble to zarr 'ensembdataset'
+  where bins of distribution are defined by log10redges [microns] '''
+
+  refproxy_dists = calc_dists_for_ensemb(distcalcs.reflectproxy_distrib,
+                                          datasets, log10redgs)
+  
+  meandist, stddist = ensemble_distrib_mean_std(refproxy_dists)
+  
+  write_domaindistrib_to_zarr(ensembdataset, "dist_refproxy",
+                              meandist, stddist)

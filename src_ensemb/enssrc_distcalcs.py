@@ -20,6 +20,7 @@ ensemble data in zarr format
 '''
 
 import numpy as np
+import awkward as ak
 
 import sys
 from pathlib import Path
@@ -37,14 +38,17 @@ def get_log10redgs(rspan, nbins):
   return log10redgs # log10(r /microns)
 
 def log10r_histogram(log10redgs, log10radius, wghts):
-  ''' returns (weighted) frequency in each log(r) bin
-  with edges given by log10r_hedges'''
+  ''' returns (weighted) frequency in each log(r)
+  bin with edges given by log10redges'''
 
    # get (weighted) number frequency in each bin
   return np.histogram(log10radius, bins=log10redgs,
                       weights=wghts, density=None)[0]
 
 def get_redges_rcens(log10redgs):
+  ''' returns edges and centres of radius bins
+  [microns], given edges of bins in 
+  log10(r / micron) space '''
 
   redges = 10**log10redgs                                             # radius edges of bins
   rcens = (10**(log10redgs[1:]) + 10**(log10redgs[:-1])) / 2        # radius centres of bins
@@ -52,6 +56,7 @@ def get_redges_rcens(log10redgs):
   return redges, rcens # [microns]
 
 def get_domainvol(setupfile, gridfile):
+  ''' reads and returns domain volume [m^3] '''
 
   consts = pysetuptxt.get_consts(setupfile, isprint=True) 
   gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
@@ -96,7 +101,7 @@ def numconc_distrib(dataset, log10redgs, gbxidx, vol):
   numconc = [] # array dims [time, nbins]
   if gbxidx == "domain":
     
-    radius = pyzarr.get_rawdata4raggedkey(dataset, "radius")
+    radius = pyzarr.get_rawdata4raggedkey(dataset, "radius") # [microns]
     xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
 
     log10r = np.log10(radius)
@@ -111,14 +116,15 @@ def numconc_distrib(dataset, log10redgs, gbxidx, vol):
 
 def watermass_distrib(dataset, log10redgs, gbxidx, vol):
   '''calculate the real droplet mass concentration
-  for a gridbox with volume 'vol' and index 'gbxidx'.
-  If gbxidx=="domain", all superdroplets in dataset
-  are used, so 'vol' should be domain volume) '''
+  as if droplets are pure water for a gridbox with
+  volume 'vol' and index 'gbxidx'. If gbxidx=="domain",
+  all superdroplets in dataset are used, so 'vol'
+  should be domain volume) '''
 
   massconc = [] # array dims [time, nbins]
   if gbxidx == "domain":
     
-    radius = pyzarr.get_rawdata4raggedkey(dataset, "radius")
+    radius = pyzarr.get_rawdata4raggedkey(dataset, "radius") # [microns]
     xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
     wghts = xi * watermass(radius) / vol # real droplets mass [g/m^3]
 
@@ -130,3 +136,23 @@ def watermass_distrib(dataset, log10redgs, gbxidx, vol):
   massconc = np.asarray(massconc) # array dims [time, nbins]
   
   return massconc # units: [g/m^3]
+
+def reflectproxy_distrib(dataset, log10redgs, gbxidx):
+  '''calculate the 6th moment of the radius
+  distribution [m^6] as proxy for reflectivity '''
+  
+  refproxy = [] # array dims [time, nbins]
+  if gbxidx == "domain":
+    
+    radius = pyzarr.get_rawdata4raggedkey(dataset, "radius") # [microns]
+    xi = pyzarr.get_rawdata4raggedkey(dataset, "xi")
+    wghts = xi * ak.pow(radius, 6.0) / 1e36 # 6th moment radius of distrib [m^6]
+
+    log10r = np.log10(radius)
+    for t in range(len(radius)): # for each timestep
+      hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
+      refproxy.append(hist)
+  
+  refproxy = np.asarray(refproxy) # array dims [time, nbins]
+  
+  return refproxy # units: [m^6]
