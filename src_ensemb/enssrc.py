@@ -30,3 +30,27 @@ def write_ensemble_distributions(ensembdataset,
                                  ensembsetupfile,
                                  setupfile,
                                  datasets):
+  
+  refset = datasets[0] # reference dataset
+  for dataset in datasets:
+    enszarr.check_dataset_for_ensemb(dataset, refset)
+  
+  ensemble_numconc_distrib(ensembdataset, ensembsetupfile,
+                  setupfile, datasets)
+  write_distrib_to_zarr()
+
+def ensemble_numconc_distrib(ensembdataset, ensembsetupfile,
+                             setupfile, datasets):
+  
+  for dataset in datasets:
+    numconc_distrib("now calc numconc distrib for run")
+  
+  ensemble_distrib()
+
+def ensemble_distrib():
+
+  print("now take mean and std distrib for ensemb")
+
+def write_distrib_to_zarr():
+
+  print("now write to zarr")
