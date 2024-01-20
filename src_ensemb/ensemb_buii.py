@@ -51,7 +51,7 @@ vars4ensemb = ["nsupers", "massmom0", "massmom1", "massmom2"]
 
 distparams = {
   "nbins" : 100,          # number of bins in droplet distirbutions (evenly spaced in log space)
-  "rspan" : [1e-1, 1e4],  # range of droplet distirbutions [microns]
+  "rspan" : [1e-1, 1e5],  # range of droplet distirbutions [microns]
 }
 
 # path and filenames for plotting functions
