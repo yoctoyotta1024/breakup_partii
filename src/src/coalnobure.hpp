@@ -124,7 +124,7 @@ that satistfies the PairEnactX concept */
   of superdroplets if gamma is not zero */
   if (gamma != 0)
   {
-    return coalesce_breakup_or_rebound(gamma, phi, drop1, drop2);
+    return if_coalesce(gamma, phi, drop1, drop2);
   }
 
   return 0;
