@@ -93,9 +93,18 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                             datasets,
                                             log10redges) 
 
-def write_domaindistrib_to_zarr(ensembdataset, name, meandist, stddist):
+def write_domaindistrib_to_zarr(ensembdataset, distname,
+                                meandist, stddist, units,
+                                dims=["time", "rcens"],
+                                sf=1.0):
 
-  print("TODO: write mean and std of "+name+" to zarr: "+ensembdataset)
+  zarrayname = ensembdataset+"/h_"+distname
+  write_array_to_zarr(meandist, zarrayname, meandist.shape,
+                      dims, units=units, sf=sf)
+  
+  zarrayname = ensembdataset+"/h_"+distname+"std"
+  write_array_to_zarr(stddist, zarrayname, meandist.shape,
+                      dims, units=units, sf=sf)
 
 def write_redges_rcens(ensembdataset, redges, rcens):
   
