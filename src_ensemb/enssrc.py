@@ -93,12 +93,12 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                             datasets,
                                             log10redges) 
 
-def write_domaindistrib_to_zarr(ensembdataset, distname,
-                                meandist, stddist, units,
-                                dims=["time", "rcens"],
-                                chunks=(1250000),
-                                dtype='<f8', 
-                                sf=1.0):
+def write_domaindistribs_to_zarr(ensembdataset, distname,
+                                 meandist, stddist, units,
+                                 dims=["time", "rcens"],
+                                 chunks=(1250000, 1),
+                                 dtype='<f8', 
+                                 sf=1.0):
   
   zarrayname = ensembdataset+"/h_"+distname
   write_array_to_zarr(meandist, zarrayname, meandist.shape,
@@ -164,11 +164,11 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
                                         ["domain", domainvol]) #[cm^-3]
   
   meandist, stddist = ensemble_distrib_mean_std(numconc_dists)
-  
+ 
   distname = "numconc"
   units = "cm^-3"
-  write_domaindistrib_to_zarr(ensembdataset, distname,
-                              meandist, stddist, units)
+  write_domaindistribs_to_zarr(ensembdataset, distname,
+                               meandist, stddist, units)
   
 def write_ensemble_domainwatermass_distrib(ensembdataset,
                                            ensembsetupfile,
@@ -189,12 +189,9 @@ def write_ensemble_domainwatermass_distrib(ensembdataset,
 
   distname = "watermass"
   units = "g m^-3"
-  write_domaindistrib_to_zarr(ensembdataset, distname,
-                              meandist, stddist, units)
-   
-  write_domaindistrib_to_zarr(ensembdataset, "dist_watermass",
-                              meandist, stddist)
-  
+  write_domaindistribs_to_zarr(ensembdataset, distname,
+                               meandist, stddist, units)
+
 def write_ensemble_domainreflectivity_distrib(ensembdataset,
                                               datasets,
                                               log10redges):
