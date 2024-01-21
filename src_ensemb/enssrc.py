@@ -29,6 +29,28 @@ from pathlib import Path
 sys.path.append("/home/m/m300950/CLEO/")  # path2CLEO for imports from pySD package
 import pySD.sdmout_src.ensembzarr as enszarr
 
+def write_zarrarray(array, zarrarrayname, shape, dims,
+                    chunks=(1250000), dtype='<f8',
+                    units=" ", sf=1.0):
+  
+  z1 = zarr.open(zarrarrayname, mode='w', shape=shape,
+                 chunks=chunks, dtype=dtype, order='C',
+                 compressor=None, fill_value=None, 
+                 filters=None, zarr_version=2)
+
+  z1[:] = array
+
+  write_zattrs_metadata(dims, units=units, sf=sf)
+  
+def write_zattrs_metadata(dims, units=" ", sf=1.0):
+
+  dims = '["'+'", "'.join(dims)+'"]'
+  metadata = '{\n"_ARRAY_DIMENSIONS": '+dims+',\n'+\
+    '"units": "'+units+'",\n'+\
+      '"scale_factor": '+str(sf)+\
+        '\n}'
+  print(metadata)
+
 def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                setupfile, gridfile, datasets,
                                distparams):
