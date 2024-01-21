@@ -35,7 +35,6 @@ import enssrc
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
 labels = ["coalbure", "coalbreakup", "coalnobure"]
-
 binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
@@ -88,8 +87,8 @@ for lab in labels:
   
   ensembdataset = ensembdatapath+ensembzarr
   ensembsetupfile = ensembdatapath+ensembsetuptxt
-  # write_ensemble(ensembdataset, ensembsetupfile,
-  #               vars4ensemb, setupfile, datasets)
+  write_ensemble(ensembdataset, ensembsetupfile,
+                vars4ensemb, setupfile, datasets)
   
   enssrc.write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                     setupfile, gridfile, datasets,
