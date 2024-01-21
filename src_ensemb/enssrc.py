@@ -209,6 +209,10 @@ def write_ensemble_domainreflectivity_distrib(ensembdataset,
                                           ["domain"])
   
   meandist, stddist = ensemble_distrib_mean_std(refproxy_dists)
-  
-  write_domaindistrib_to_zarr(ensembdataset, "dist_refproxy",
-                              meandist, stddist)
+
+  distname = "refproxy"
+  units = "m^6"
+  chunks=(1250000//meandist.shape[1], meandist.shape[1])
+  write_domaindistribs_to_zarr(ensembdataset, distname,
+                               meandist, stddist, units,
+                               chunks=chunks)

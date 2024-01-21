@@ -19,12 +19,10 @@ Script plots some data from ensemble
 dataset of buii 1-D rainshaft output
 '''
 
-import os
 import sys
 import numpy as np
-import random 
 from pathlib import Path
-from matplotlib.colors import LogNorm, Normalize
+import matplotlib.pyplot as plt
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -53,6 +51,62 @@ pltgifs = False # plot gifs or not
 savefigpath = datapath+"/plots/"
 
 ### ------------------------------------------------------------ ###
+### --------------------- EXTRA PLOT FUNCS --------------------- ###
+### ------------------------------------------------------------ ###
+def savefig(fig, savename):
+  fig.savefig(savename, dpi=400, bbox_inches="tight",
+              facecolor='w', format="png")
+  print("Figure .png saved as: "+savename)
+
+def plot_distrib(ax, redges, mean, std, logy=False):
+
+  ntime = mean.shape[0] # number of timesthat distribution has
+  n2plt = 10 # number of distirbutiosn to plot
+  ts2plt = list(range(0, ntime, ntime//n2plt)) # index of times to plot
+  colors = plt.cm.plasma(np.linspace(0.2, 0.8, n2plt))
+  
+  for i, c in zip(ts2plt, colors):
+    ax.step(redges[:-1], mean[i, :], where='pre', color=c)
+
+    ax.step(redges[:-1], (mean-std)[i, :],
+            where='pre', color=c, linestyle="--")
+    ax.step(redges[:-1], (mean+std)[i, :],
+            where='pre', color=c, linestyle="--") 
+  
+  if logy:
+    ax.set_yscale("log")
+  ax.set_xscale("log")
+
+def plot_domaindistribs(dataset, savename=""):
+  
+  fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(8,12),
+                          sharex=True)
+
+  ds = pyzarr.get_rawdataset(dataset)
+  redges = ds["h_redges"]
+
+  mean, std = ds["h_numconc"], ds["h_numconcstd"]
+  plot_distrib(axs[0], redges, mean, std, logy=True)
+  axs[0].set_ylabel("droplet number concentration /cm$^{-3}$")
+
+  mean, std = ds["h_watermass"], ds["h_watermassstd"]
+  plot_distrib(axs[1], redges, mean, std, logy=True)
+  axs[1].set_ylabel("droplet mass concentration /g m$^{-3}$")
+
+  mean, std = ds["h_refproxy"], ds["h_refproxystd"]
+  plot_distrib(axs[2], redges, mean, std, logy=True)
+  axs[2].set_ylabel("reflectivity proxy /m$^{6}$")
+
+  axs[-1].set_xlabel("radius /\u03BCm")
+
+  fig.tight_layout()
+  if savename != "":
+    savefig(fig, savename)
+
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###                                
+
+### ------------------------------------------------------------ ###
 ### ----------------------- PLOT RESULTS ----------------------- ###
 ### ------------------------------------------------------------ ###
 if path2CLEO == savefigpath:
@@ -72,6 +126,9 @@ massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 ### ----- plot figures ----- ###
 savename = savefigpath + "domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+
+savename = savefigpath + "domaindistribs.png"
+plot_domaindistribs(dataset, savename=savename)
 
 ### ----- plot 1-D .gif animations ----- ###
 if pltgifs:
