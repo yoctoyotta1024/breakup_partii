@@ -53,12 +53,12 @@ target_include_directories(${coalbreakup} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalbreakup} PRIVATE ${compileops})
 
 # primary executable for CLEO sdm coalbure
-set(coalnobure "buii_coalnobure")
-add_executable(${coalnobure} "main_coalnobure.cpp")
-target_link_libraries(${coalnobure} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
-target_link_libraries(${coalnobure} PUBLIC Kokkos::kokkos)
-target_include_directories(${coalnobure} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
-target_compile_options(${coalnobure} PRIVATE ${compileops})
+set(coalre "buii_coalre")
+add_executable(${coalre} "main_coalre.cpp")
+target_link_libraries(${coalre} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
+target_link_libraries(${coalre} PUBLIC Kokkos::kokkos)
+target_include_directories(${coalre} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
+target_compile_options(${coalre} PRIVATE ${compileops})
 
 
 set(coalonly "buii_coalonly")
@@ -69,7 +69,7 @@ target_include_directories(${coalonly} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalonly} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
-set_target_properties(${coalbure} ${coalonly} ${coalnobure} ${coalbreakup} PROPERTIES
+set_target_properties(${coalbure} ${coalonly} ${coalre} ${coalbreakup} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

@@ -34,16 +34,16 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalnobure", "coalbreakup", "coalbure"]
+datalabs = ["coalre", "coalbreakup", "coalbure"]
 labels = {
   "coalbure": "CoalBuRe", 
   "coalbreakup": "CoalBu",
-  "coalnobure": "Coal",
+  "coalre": "CoalRe",
 }
 colors = {
   "coalbure": "C0", 
   "coalbreakup": "C2",
-  "coalnobure": "C3",
+  "coalre": "C3",
 }
 
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
