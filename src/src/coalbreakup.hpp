@@ -100,9 +100,9 @@ of collision determined by 'collprob' */
   const auto DELT = double{int2realtime(interval)};
 
   const DoCoalBreakup<NFrags, Flag>
-      coalbu(nfrags, coalbure_flag);
+      coalbreakup(nfrags, coalbure_flag);
   const DoCollisions<Probability, DoCoalBreakup<NFrags, Flag>>
-      colls(DELT, collprob, coalbu);
+      colls(DELT, collprob, coalbreakup);
 
   return ConstTstepMicrophysics(interval, colls);
 }
