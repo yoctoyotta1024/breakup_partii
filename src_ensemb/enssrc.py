@@ -161,12 +161,15 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
   domainvol = distcalcs.get_domainvol(ensembsetupfile, gridfile) # [m^3]
   numconc_dists = calc_dists_for_ensemb(distcalcs.numconc_distrib,
                                         datasets, log10redges,
-                                        ["domain", domainvol])
+                                        ["domain", domainvol]) #[cm^-3]
   
   meandist, stddist = ensemble_distrib_mean_std(numconc_dists)
   
-  write_domaindistrib_to_zarr(ensembdataset, "dist_num", meandist, stddist)
-
+  distname = "numconc"
+  units = "cm^-3"
+  write_domaindistrib_to_zarr(ensembdataset, distname,
+                              meandist, stddist, units)
+  
 def write_ensemble_domainwatermass_distrib(ensembdataset,
                                            ensembsetupfile,
                                            gridfile,
@@ -183,7 +186,12 @@ def write_ensemble_domainwatermass_distrib(ensembdataset,
                                         ["domain", domainvol])
   
   meandist, stddist = ensemble_distrib_mean_std(watermass_dists)
-  
+
+  distname = "watermass"
+  units = "g m^-3"
+  write_domaindistrib_to_zarr(ensembdataset, distname,
+                              meandist, stddist, units)
+   
   write_domaindistrib_to_zarr(ensembdataset, "dist_watermass",
                               meandist, stddist)
   

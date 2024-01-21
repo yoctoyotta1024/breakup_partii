@@ -95,8 +95,8 @@ def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
   return hist, redges, rcens # units of redges and rcens = units of rspan (usually [microns])
 
 def numconc_distrib(dataset, log10redges, gbxidx, vol):
-  '''calculate the real droplet number concentration
-  for a gridbox with volume 'vol' and index 'gbxidx'.
+  '''calculate the real droplet number concentration [cm^-3]
+  distribution for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
   are used, so 'vol' should be domain volume) '''
 
@@ -117,9 +117,9 @@ def numconc_distrib(dataset, log10redges, gbxidx, vol):
   return numconc # units: [cm^-3]
 
 def watermass_distrib(dataset, log10redges, gbxidx, vol):
-  '''calculate the real droplet mass concentration
-  as if droplets are pure water for a gridbox with
-  volume 'vol' and index 'gbxidx'. If gbxidx=="domain",
+  '''calculate the real droplet mass concentration [g/m^3]
+  distribution as if droplets are pure water for a gridbox
+  with volume 'vol' and index 'gbxidx'. If gbxidx=="domain",
   all superdroplets in dataset are used, so 'vol'
   should be domain volume) '''
 
