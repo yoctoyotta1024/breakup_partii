@@ -96,15 +96,19 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
 def write_domaindistrib_to_zarr(ensembdataset, distname,
                                 meandist, stddist, units,
                                 dims=["time", "rcens"],
+                                chunks=(1250000),
+                                dtype='<f8', 
                                 sf=1.0):
-
+  
   zarrayname = ensembdataset+"/h_"+distname
   write_array_to_zarr(meandist, zarrayname, meandist.shape,
-                      dims, units=units, sf=sf)
+                      dims, chunks=chunks, dtype=dtype,
+                      units=units, sf=sf)
   
   zarrayname = ensembdataset+"/h_"+distname+"std"
   write_array_to_zarr(stddist, zarrayname, meandist.shape,
-                      dims, units=units, sf=sf)
+                      dims, chunks=chunks, dtype=dtype,
+                      units=units, sf=sf)
 
 def write_redges_rcens(ensembdataset, redges, rcens):
   
