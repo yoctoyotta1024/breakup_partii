@@ -29,20 +29,25 @@ from pathlib import Path
 sys.path.append("/home/m/m300950/CLEO/")  # path2CLEO for imports from pySD package
 import pySD.sdmout_src.ensembzarr as enszarr
 
-def write_zarrarray(array, zarrarrayname, shape, dims,
-                    chunks=(1250000), dtype='<f8',
-                    units=" ", sf=1.0):
+def write_array_to_zarr(array, zarrayname, shape, dims,
+                        chunks=(1250000), dtype='<f8',
+                        units=" ", sf=1.0):
+  ''' write an array to an existing zarr store in 'zarrayname'
+  in main memory with metadata in .zarray and additional xarray
+  metadata in .zattrs'''
   
-  z1 = zarr.open(zarrarrayname, mode='w', shape=shape,
+  z1 = zarr.open(zarrayname, mode='w', shape=shape,
                  chunks=chunks, dtype=dtype, order='C',
                  compressor=None, fill_value=None, 
                  filters=None, zarr_version=2)
 
   z1[:] = array
 
-  write_zattrs_metadata(zarrarrayname, dims, units=units, sf=sf)
+  write_zattrs_metadata(zarrayname, dims, units=units, sf=sf)
   
-def write_zattrs_metadata(zarrarrayname, dims, units=" ", sf=1.0):
+def write_zattrs_metadata(zarrayname, dims, units=" ", sf=1.0):
+  ''' write additional xarray metadata in .zattrs
+  for array under 'zarrayname' '''
 
   dims = '["'+'", "'.join(dims)+'"]'
   attrsmetadata = '{\n"_ARRAY_DIMENSIONS": '+dims+',\n'+\
@@ -50,7 +55,7 @@ def write_zattrs_metadata(zarrarrayname, dims, units=" ", sf=1.0):
       '"scale_factor": '+str(sf)+\
         '\n}'
   
-  file = open(zarrarrayname+"/.zattrs", "w")
+  file = open(zarrayname+"/.zattrs", "w")
   file.write(attrsmetadata)
   file.close()
 
@@ -98,11 +103,11 @@ def write_redges_rcens(ensembdataset, redges, rcens):
   units='micro m'
 
   arrayname = ensembdataset+"/h_redges"
-  write_zarrarray(redges/sf, arrayname, redges.shape, ["redges"],
+  write_array_to_zarr(redges/sf, arrayname, redges.shape, ["redges"],
                   units=units, sf=sf)
 
   arrayname = ensembdataset+"/h_rcens"
-  write_zarrarray(rcens/sf, arrayname, rcens.shape, ["rcens"],
+  write_array_to_zarr(rcens/sf, arrayname, rcens.shape, ["rcens"],
                   units=units, sf=sf)
 
 def calc_dists_for_ensemb(calc_distrib_func, datasets,
