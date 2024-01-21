@@ -40,16 +40,19 @@ def write_zarrarray(array, zarrarrayname, shape, dims,
 
   z1[:] = array
 
-  write_zattrs_metadata(dims, units=units, sf=sf)
+  write_zattrs_metadata(zarrarrayname, dims, units=units, sf=sf)
   
-def write_zattrs_metadata(dims, units=" ", sf=1.0):
+def write_zattrs_metadata(zarrarrayname, dims, units=" ", sf=1.0):
 
   dims = '["'+'", "'.join(dims)+'"]'
-  metadata = '{\n"_ARRAY_DIMENSIONS": '+dims+',\n'+\
+  attrsmetadata = '{\n"_ARRAY_DIMENSIONS": '+dims+',\n'+\
     '"units": "'+units+'",\n'+\
       '"scale_factor": '+str(sf)+\
         '\n}'
-  print(metadata)
+  
+  file = open(zarrarrayname+"/.zattrs", "w")
+  file.write(attrsmetadata)
+  file.close()
 
 def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
                                setupfile, gridfile, datasets,

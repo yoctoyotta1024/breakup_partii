@@ -27,31 +27,31 @@ from pathlib import Path
 sys.path.append("/home/m/m300950/CLEO/")  # path2CLEO for imports from pySD package
 from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 
-def get_log10redgs(rspan, nbins):
+def get_log10redges(rspan, nbins):
   ''' returns edges of log10(r) bins for 'nbins'
   evenly spaced from rspan[0] to rspan[1]'''
 
-  log10redgs = np.linspace(np.log10(rspan[0]),
+  log10redges = np.linspace(np.log10(rspan[0]),
                              np.log10(rspan[1]),
                              nbins+1)  
   
-  return log10redgs # log10(r /microns)
+  return log10redges # log10(r /microns)
 
-def log10r_histogram(log10redgs, log10radius, wghts):
+def log10r_histogram(log10redges, log10radius, wghts):
   ''' returns (weighted) frequency in each log(r)
   bin with edges given by log10redges'''
 
    # get (weighted) number frequency in each bin
-  return np.histogram(log10radius, bins=log10redgs,
+  return np.histogram(log10radius, bins=log10redges,
                       weights=wghts, density=None)[0]
 
-def get_redges_rcens(log10redgs):
+def get_redges_rcens(log10redges):
   ''' returns edges and centres of radius bins
   [microns], given edges of bins in 
   log10(r / micron) space '''
 
-  redges = 10**log10redgs                                             # radius edges of bins
-  rcens = (10**(log10redgs[1:]) + 10**(log10redgs[:-1])) / 2        # radius centres of bins
+  redges = 10**log10redges                                             # radius edges of bins
+  rcens = (10**(log10redges[1:]) + 10**(log10redges[:-1])) / 2        # radius centres of bins
 
   return redges, rcens # [microns]
 
@@ -82,19 +82,19 @@ def log10r_distrib(rspan, nbins, radius, wghts, perlog10r=False):
   value of data that falls into bins evenly spaced in log10(r) '''
 
   # create edges of log10(r) histogram bins (evenly spaced in log10(r))
-  log10redgs = get_log10redgs(rspan, nbins) 
+  log10redges = get_log10redges(rspan, nbins) 
   log10r = np.log10(radius)
   
-  hist = log10r_histogram(log10redgs, log10r, wghts)
+  hist = log10r_histogram(log10redges, log10r, wghts)
   if perlog10r == True: # histogram frequency / delta_log10(r)
-    log10rwdths = log10redgs[1:]- log10redgs[:-1]                 # ln10(r) histogram bin widths
+    log10rwdths = log10redges[1:]- log10redges[:-1]                 # ln10(r) histogram bin widths
     hist = hist/log10rwdths 
  
-  redges, rcens = get_redges_rcens(log10redgs)
+  redges, rcens = get_redges_rcens(log10redges)
 
-  return hist, redges, rcens # units of hedgs and hcens = units of rspan (usually [microns])
+  return hist, redges, rcens # units of redges and rcens = units of rspan (usually [microns])
 
-def numconc_distrib(dataset, log10redgs, gbxidx, vol):
+def numconc_distrib(dataset, log10redges, gbxidx, vol):
   '''calculate the real droplet number concentration
   for a gridbox with volume 'vol' and index 'gbxidx'.
   If gbxidx=="domain", all superdroplets in dataset
@@ -109,14 +109,14 @@ def numconc_distrib(dataset, log10redgs, gbxidx, vol):
     log10r = np.log10(radius)
     wghts = xi / vol / 1e6          # real droplets [/cm^3]
     for t in range(len(radius)): # for each timestep
-      hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
+      hist = log10r_histogram(log10redges, log10r[t], wghts[t])
       numconc.append(hist)
   
   numconc = np.asarray(numconc) # array dims [time, nbins]
   
   return numconc # units: [cm^-3]
 
-def watermass_distrib(dataset, log10redgs, gbxidx, vol):
+def watermass_distrib(dataset, log10redges, gbxidx, vol):
   '''calculate the real droplet mass concentration
   as if droplets are pure water for a gridbox with
   volume 'vol' and index 'gbxidx'. If gbxidx=="domain",
@@ -132,14 +132,14 @@ def watermass_distrib(dataset, log10redgs, gbxidx, vol):
 
     log10r = np.log10(radius)
     for t in range(len(radius)): # for each timestep
-      hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
+      hist = log10r_histogram(log10redges, log10r[t], wghts[t])
       massconc.append(hist)
   
   massconc = np.asarray(massconc) # array dims [time, nbins]
   
   return massconc # units: [g/m^3]
 
-def reflectproxy_distrib(dataset, log10redgs, gbxidx):
+def reflectproxy_distrib(dataset, log10redges, gbxidx):
   '''calculate the 6th moment of the radius
   distribution [m^6] as proxy for reflectivity '''
   
@@ -152,7 +152,7 @@ def reflectproxy_distrib(dataset, log10redgs, gbxidx):
 
     log10r = np.log10(radius)
     for t in range(len(radius)): # for each timestep
-      hist = log10r_histogram(log10redgs, log10r[t], wghts[t])
+      hist = log10r_histogram(log10redges, log10r[t], wghts[t])
       refproxy.append(hist)
   
   refproxy = np.asarray(refproxy) # array dims [time, nbins]
