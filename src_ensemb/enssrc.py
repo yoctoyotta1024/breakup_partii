@@ -96,7 +96,7 @@ def write_ensemble_domaindists(ensembdataset, ensembsetupfile,
 def write_domaindistribs_to_zarr(ensembdataset, distname,
                                  meandist, stddist, units,
                                  dims=["time", "rcens"],
-                                 chunks=(1250000, 1),
+                                 chunks=(12500, 100),
                                  dtype='<f8', 
                                  sf=1.0):
   
@@ -167,8 +167,10 @@ def write_ensemble_domainnumconc_distrib(ensembdataset,
  
   distname = "numconc"
   units = "cm^-3"
+  chunks=(1250000//meandist.shape[1], meandist.shape[1])
   write_domaindistribs_to_zarr(ensembdataset, distname,
-                               meandist, stddist, units)
+                               meandist, stddist, units,
+                               chunks=chunks)
   
 def write_ensemble_domainwatermass_distrib(ensembdataset,
                                            ensembsetupfile,
@@ -189,8 +191,10 @@ def write_ensemble_domainwatermass_distrib(ensembdataset,
 
   distname = "watermass"
   units = "g m^-3"
+  chunks=(1250000//meandist.shape[1], meandist.shape[1])
   write_domaindistribs_to_zarr(ensembdataset, distname,
-                               meandist, stddist, units)
+                               meandist, stddist, units,
+                               chunks=chunks)
 
 def write_ensemble_domainreflectivity_distrib(ensembdataset,
                                               datasets,
