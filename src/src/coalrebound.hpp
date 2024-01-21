@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: coalre.hpp
+ * File: coalrebound.hpp
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
@@ -22,8 +22,8 @@
  * concept used in Collisions struct
  */
 
-#ifndef COALRE_HPP
-#define COALRE_HPP
+#ifndef COALREBOUND_HPP
+#define COALREBOUND_HPP
 
 #include <functional>
 #include <concepts>
@@ -153,4 +153,4 @@ Otherwise -> rebound. */
   }
 }
 
-#endif // COALRE_HPP
+#endif // COALREBOUND_HPP

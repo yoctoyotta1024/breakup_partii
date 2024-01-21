@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: main_coalbreakup.cpp
+ * File: main_coalbu.cpp
  * Project: src
  * Created Date: Thursday 11th January 2023
  * Author: Clara Bayley (CB)

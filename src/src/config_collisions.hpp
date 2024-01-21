@@ -25,7 +25,7 @@
 #include <concepts>
 
 #include "./coalbreakup.hpp"
-#include "./coalre.hpp"
+#include "./coalrebound.hpp"
 
 #include "initialise/config.hpp"
 #include "initialise/timesteps.hpp"
