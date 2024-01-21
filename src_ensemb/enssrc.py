@@ -94,16 +94,14 @@ def write_domaindistrib_to_zarr(ensembdataset, name, meandist, stddist):
 
 def write_redges_rcens(ensembdataset, redges, rcens):
   
-  zarrdataset = "/home/m/m300950/breakup_partii/plots/testzarr.zarr/" # TODO 
- 
   sf = 1e6 # scale_factor
   units='micro m'
 
-  arrayname = zarrdataset+"/redges"
+  arrayname = ensembdataset+"/h_redges"
   write_zarrarray(redges/sf, arrayname, redges.shape, ["redges"],
                   units=units, sf=sf)
 
-  arrayname = zarrdataset+"/rcens"
+  arrayname = ensembdataset+"/h_rcens"
   write_zarrarray(rcens/sf, arrayname, rcens.shape, ["rcens"],
                   units=units, sf=sf)
 
