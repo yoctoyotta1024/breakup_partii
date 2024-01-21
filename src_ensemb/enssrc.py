@@ -20,6 +20,7 @@ ensemble data in zarr format
 '''
 
 import numpy as np
+import zarr
 
 import enssrc_distcalcs as distcalcs
 
@@ -66,7 +67,37 @@ def write_domaindistrib_to_zarr(ensembdataset, name, meandist, stddist):
 
   print("TODO: write mean and std of "+name+" to zarr: "+ensembdataset)
   
+def write_zarrarray(array, zarrarrayname, shape, 
+               chunks=(1250000), dtype='<f8'):
+  
+  z1 = zarr.open(zarrarrayname, mode='w', shape=shape,
+                 chunks=chunks, dtype=dtype, order='C',
+                 compressor=None, fill_value=None, 
+                 filters=None, zarr_format=2)
+
+  z1[:] = array
+
+def write_zattrs_metadata(arraydims, units=" ", scale_factor=1.0):
+
+  metadata = '{\n"_ARRAY_DIMENSIONS": '+arraydims+',\n'+\
+    '"units": '+units+',\n'+\
+      '"scale_factor": '+str(scale_factor)+\
+        '\n}'
+  print(metadata)
+
 def write_redges_rcens(ensembdataset, redges, rcens):
+  
+  zarrdataset = "/home/m/m300950/breakup_partii/plots/testzarr.zarr/" # TODO 
+
+  sf = 1e6
+  arrayname = zarrdataset+"/redges"
+  write_zarrarray(redges/sf, arrayname, redges.shape)
+
+  arrayname = zarrdataset+"/rcens"
+  write_zarrarray(rcens/sf, arrayname, rcens.shape)
+
+  write_zattrs_metadata('["rcens"]', units="micro m", scale_factor=sf)
+  write_zattrs_metadata('["redges"]', units="micro m", scale_factor=sf)
 
   print("TODO: write redges rcens")
 
@@ -134,17 +165,6 @@ def write_ensemble_domainwatermass_distrib(ensembdataset,
   write_domaindistrib_to_zarr(ensembdataset, "dist_watermass",
                               meandist, stddist)
   
-  import matplotlib.pyplot as plt
-  redges, rcens = distcalcs.get_redges_rcens(log10redgs)
-  plt.step(redges[:-1], meandist.T[:,::30], where='pre')
-  plt.step(redges[:-1], (meandist+stddist).T[:,::30],
-           where='pre', linestyle="--")
-  plt.step(redges[:-1], (meandist-stddist).T[:,::30],
-           where='pre', linestyle="--")
-  plt.yscale("log")
-  plt.xscale("log")
-  plt.savefig("histt_test.png")
-
 def write_ensemble_domainreflectivity_distrib(ensembdataset,
                                               datasets,
                                               log10redgs):
