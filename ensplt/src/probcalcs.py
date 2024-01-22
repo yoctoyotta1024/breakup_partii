@@ -67,6 +67,29 @@ def hydrodyanmic_kernel(rr1, rr2, terminalv, eff=1.0):
 
   return hydro_kernel
 
+def surfe(radius):
+  ''' surface tension energy [J] given radius [microns] '''
+
+  sigma = 7.28e-2 # [N/m^2]
+  diam = radius*2e-6 # [m]
+
+  return np.pi * sigma * diam**2
+
+def surfe_large(rr1, rr2):
+
+  return surfe(np.where(rr1 > rr2, rr1, rr2))
+
+def surfe_small(rr1, rr2):
+
+  return surfe(np.where(rr1 < rr2, rr1, rr2))
+
+def surfe_coal(rr1, rr2):
+  
+  rcoal = ()
+
+  return surfe(rcoal)
+
+
 def coalescence_efficiency(rr1, rr2, cke):
   ''' coalescence efficency from TSCoalBuReFlag given a 
   collision occurs according to parameterisation from
@@ -74,7 +97,7 @@ def coalescence_efficiency(rr1, rr2, cke):
   Schlottke et al. 2010 section 4a equation 11 '''
 
   beta = -1.15
-  surf_c = coal_surfenergy(rr1, rr2)
+  surf_c = surfe_coal(rr1, rr2)
   weber = cke / surf_c
 
   return np.exp(beta*weber)
@@ -129,9 +152,9 @@ def coalbure_outcome_effciencies(rr1, rr2, relprob):
   cke = collision_kinetic_energy(rr1, rr2)
   coaleff = coalescence_efficiency(rr1, rr2, cke)
 
-  coal = np.where(cke < surfe_large, coaleff, 0.0)
-  bu = np.where(cke > surfe_small, 1.0-coal, 0.0)
-  re = np.where(cke < surfe_small, 1.0-coaleff, 0.0)
+  coal = np.where(cke < surfe_large(rr1, rr2), coaleff, 0.0)
+  bu = np.where(cke > surfe_small(rr1, rr2), 1.0-coal, 0.0)
+  re = np.where(cke < surfe_small(rr1, rr2), 1.0-coaleff, 0.0)
 
   return coal, bu, re 
 
