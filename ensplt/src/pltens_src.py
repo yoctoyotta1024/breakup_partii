@@ -78,7 +78,10 @@ def get_massmomstds(datapath, gridfile):
 def plot_all_on_axs(path2build, plotfunc, args,
                     fig, axs, datalabs, labels,
                     colors, savename=""):
-  
+  ''' load dataset, label and color for each datalab
+  in datalabs then use plotfunc to plot each dataset
+  on figure axis/axes '''
+
   handles, handlelabs = [], []
   for datalab in datalabs:
 
@@ -100,7 +103,33 @@ def plot_all_on_axs(path2build, plotfunc, args,
 
   if savename != "":
     savefig(fig, savename, show=False)
+
+def plot_all_on_fig(path2build, plotfunc, args,
+                    fig, axs, datalabs, labels,
+                    colors, savename=""):
+  ''' load dataset, label and color for each datalab
+  in datalabs then use plotfunc to plot each dataset
+  on axis/axes in seperate columns of figure '''
     
+  if axs.shape[1] != len(datalabs):
+    raise ValueError("number of columns to figure"+\
+                     " must equal number of datasets")
+
+  handles, handlelabs = [], []
+  for d, datalab in enumerate(datalabs):
+    axs_d = axs[:,d]
+
+    ### ----- load data to plot ----- ###
+    # path and file names for plotting results
+    datapath = path2build+"/bin/"+datalab+"/ensemb/"
+
+    ### ----- plot data ----- ###
+    plotfunc(axs_d, datapath, *args)
+    axs_d[0].set_title(labels[datalab], color=colors[datalab])
+
+  if savename != "":
+    savefig(fig, savename, show=False)
+
 def plot_gbxmassmoments(axs, datapath, color, gridfile):
   ''' plot mass moments 0th gridbox in domain '''
 
@@ -254,3 +283,7 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
     ax.set_ylim([1e-14, 2e-8])
   
   return line
+
+def plot_collisionprob(axs_d, datapath, t2plts):
+
+  print("TODO: plot collision probability")

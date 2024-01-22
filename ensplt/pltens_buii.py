@@ -35,7 +35,7 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalbu", "coalre", "coalbure"]
+datalabs = ["coalre", "coalbu", "coalbure"]
 labels = {
   "coalbure": "Coal+Bu+Re", 
   "coalbu": "Coal+Bu",
@@ -124,8 +124,19 @@ if what2plot == "dists":
   plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
 
 if what2plot == "probs":
+  ### --- plot domain collision probabilities --- ###
+  def plot_all_prob(datalabs, plotfunc, trange, savename=""):
 
+    fig, axs = plt.subplots(nrows=5, ncols=3, figsize=(16,12))
+    print(axs.shape)
+    t2plts = np.linspace(trange[0], trange[1], axs.shape[0]) # [s]
+    args = [t2plts]
+    src.plot_all_on_fig(path2build, plotfunc, args, fig, axs,
+                        datalabs, labels, colors,
+                        savename=savename) 
+  
   trange = [0, 300] #[s]
 
   savename = savefigpath + "prob_collisions.png"
-  plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+  plotfunc = src.plot_collisionprob
+  plot_all_prob(datalabs, plotfunc, trange, savename=savename)
