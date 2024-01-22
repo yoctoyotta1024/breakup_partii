@@ -36,7 +36,8 @@ from pySD import editconfigfile
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # labels for model compilations
-labels = ["coalbure", "coalbu", "coalre"]
+# labels = ["coalbure", "coalbu", "coalre"]
+labels = ["coalbu"]
 
 # name of executables and data output
 executables = {
@@ -46,7 +47,8 @@ executables = {
 }
 
 # initSDs run numbers to use
-runs = list(range(0,15,1))
+# runs = list(range(0,15,1))
+runs = [13]
 runnums = {
   "coalbure" : runs,
   "coalbu" : runs,
