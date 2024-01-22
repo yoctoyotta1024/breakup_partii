@@ -89,3 +89,16 @@ def plot_all_reflectivity(datalabs, savename=""):
   
 savename = savefigpath + "reflectivity.png"
 plot_all_reflectivity(datalabs, savename=savename)
+
+
+### --- plot domain droplet distibutions --- ###
+def plot_all_numconc(datalabs, savename=""):
+  fig, axs = plt.subplots(figsize=(6,8))
+  plotfunc = src.plot_domainnumconc_dist
+  src.plot_all_on_axs(path2build, gridfile,
+                      fig, axs, plotfunc, datalabs,
+                      labels, colors,
+                      savename=savename) 
+  
+savename = savefigpath + "dist_numconc.png"
+plot_all_numconc(datalabs, savename=savename)
