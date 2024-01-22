@@ -105,7 +105,7 @@ def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
                       datalabs, labels, colors,
                       savename=savename) 
 
-trange = [0, 30] #[s]
+trange = [0, 300] #[s]
 
 plotfunc = src.plot_domainnumconc_dist
 savename = savefigpath + "dist_numconc.png"

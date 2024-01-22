@@ -201,13 +201,12 @@ def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
             color=color, linewidth=0.8, linestyle="--") 
 
     ax.set_title(tlab)
-    
+    ax.set_ylabel(ylab)
     if logy:
       ax.set_yscale("log")
-      ax.set_ylabel(ylab)
 
-    ax.set_xscale("log")
     ax.set_xlabel("radius /\u03BCm")
+    ax.set_xscale("log")
 
   return line[0]
 
@@ -234,10 +233,10 @@ def plot_domainwatermass_dist(axs, datapath, color, t2plts):
 
   ylab = "mass concentration /g m$^{-3}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                                color=color, ylab=ylab, logy=False)
+                                color=color, ylab=ylab, logy=True)
   
-  # for ax in axs:
-  #   ax.set_ylim([1e-10, 175])
+  for ax in axs:
+    ax.set_ylim([1e-13, 2.5])
   
   return line
 
@@ -249,9 +248,9 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
 
   ylab = "reflectivity proxy /m$^{6}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                                color=color, ylab=ylab, logy=False)
+                                color=color, ylab=ylab, logy=True)
   
-  # for ax in axs:
-  #   ax.set_ylim([1e-10, 175])
+  for ax in axs:
+    ax.set_ylim([1e-14, 2e-8])
   
   return line
