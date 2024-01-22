@@ -28,15 +28,15 @@ def watermass(diam):
 
   return 4.0/3 * np.pi * rho * radius**3 #[kg]
 
-def simmel_terminalvelocity(radius):
+def simmel_terminalv(radius):
   ''' returns terminal velocity [m/s] of droplets
   given array of their radii [microns] according to
   simmel et al. 2002 '''
 
   diam = 2.0*radius # [microns]
 
-  alpha = np.full(diam.size, 9.17)
-  beta = np.full(diam.size, 0.0)
+  alpha = np.full(diam.shape, 9.17)
+  beta = np.full(diam.shape, 0.0)
 
   alpha = np.where(diam < 3477.84, 17.32, alpha)
   beta = np.where(diam < 3477.84, 1.0/6, beta)
@@ -73,11 +73,9 @@ def collision_probability(rcens, numconc):
   to Simmel et al. 2002'''
 
   rr1, rr2 = np.meshgrid(rcens, rcens)
-
-  simmel_terminalvelocity(rr1[0])
-
-  # prob = np.outer(numconc, numconc)
-
+  
+  prob = hydrodyanmic_kernel(rr1, rr2, simmel_terminalv, eff=1.0)
+  
   # normalise relative to max value  and remove data where rr2 > rr1
   prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) 
 
