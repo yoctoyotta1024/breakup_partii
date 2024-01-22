@@ -34,7 +34,7 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalre", "coalbu", "coalbure"]
+datalabs = ["coalbu", "coalre", "coalbure"]
 labels = {
   "coalbure": "Coal+Bu+Re", 
   "coalbu": "Coal+Bu",
@@ -95,15 +95,26 @@ else:
 
 
 ### --- plot domain droplet distibutions --- ###
-def plot_all_numconc(datalabs, savename=""):
-  fig, axs = plt.subplots(nrows=4, ncols=6, figsize=(16,12))
-  axs = axs.flatten()
-  plotfunc = src.plot_domainnumconc_dist
-  t2plts = np.linspace(0, 900, len(axs)) # [s]
+def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
+
+  fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(16,12))
+  axs = axs.flatten()  
+  t2plts = np.linspace(trange[0], trange[1], len(axs)) # [s]
   args = [t2plts]
   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
                       datalabs, labels, colors,
                       savename=savename) 
 
+trange = [0, 30] #[s]
+
+plotfunc = src.plot_domainnumconc_dist
 savename = savefigpath + "dist_numconc.png"
-plot_all_numconc(datalabs, savename=savename)
+plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+
+plotfunc = src.plot_domainwatermass_dist
+savename = savefigpath + "dist_watermass.png"
+plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+
+plotfunc = src.plot_domainreflectivity_dist
+savename = savefigpath + "dist_reflectivity.png"
+plot_all_distrib(datalabs, plotfunc, trange, savename=savename)

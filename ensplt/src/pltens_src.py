@@ -226,3 +226,32 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
   
   return line
 
+def plot_domainwatermass_dist(axs, datapath, color, t2plts):
+  ''' plots seperate distribution for each time in
+  t2plts [s] on each axis in axs '''
+
+  time, redges, mean, std = get_time_dist(datapath, "watermass")
+
+  ylab = "mass concentration /g m$^{-3}$"
+  line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
+                                color=color, ylab=ylab, logy=False)
+  
+  # for ax in axs:
+  #   ax.set_ylim([1e-10, 175])
+  
+  return line
+
+def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
+  ''' plots seperate distribution for each time in
+  t2plts [s] on each axis in axs '''
+
+  time, redges, mean, std = get_time_dist(datapath, "refproxy")
+
+  ylab = "reflectivity proxy /m$^{6}$"
+  line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
+                                color=color, ylab=ylab, logy=False)
+  
+  # for ax in axs:
+  #   ax.set_ylim([1e-10, 175])
+  
+  return line
