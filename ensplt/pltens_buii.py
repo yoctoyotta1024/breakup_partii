@@ -97,18 +97,18 @@ if what2plot == "massmoms":
   plot_all_reflectivity(datalabs, savename=savename)
 
 
-### --- plot domain droplet distibutions --- ###
-def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
-
-  fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16,12))
-  axs = axs.flatten()  
-  t2plts = np.linspace(trange[0], trange[1], len(axs)) # [s]
-  args = [t2plts]
-  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                      datalabs, labels, colors,
-                      savename=savename) 
-
 if what2plot == "dists":
+  ### --- plot domain droplet distibutions --- ###
+  def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
+
+    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16,12))
+    axs = axs.flatten()  
+    t2plts = np.linspace(trange[0], trange[1], len(axs)) # [s]
+    args = [t2plts]
+    src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                        datalabs, labels, colors,
+                        savename=savename) 
+
   trange = [0, 300] #[s]
 
   plotfunc = src.plot_domainnumconc_dist
@@ -121,4 +121,11 @@ if what2plot == "dists":
 
   plotfunc = src.plot_domainreflectivity_dist
   savename = savefigpath + "dist_reflectivity.png"
+  plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+
+if what2plot == "probs":
+
+  trange = [0, 300] #[s]
+
+  savename = savefigpath + "prob_collisions.png"
   plot_all_distrib(datalabs, plotfunc, trange, savename=savename)

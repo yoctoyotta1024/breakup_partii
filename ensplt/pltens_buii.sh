@@ -27,6 +27,10 @@ what2plot=${1}
 ### ---------------------------------------------------- ###
 
 ### ----------------------- plots ------------------------ ###
-### run 1-D rainshaft quick plotting script
-${python} pltens_buii.py ${path2CLEO} ${path2build} ${savefigpath} ${what2plot}
+if [ "${what2plot}" != "massmoms" ] && [ "${what2plot}" != "dists" ] && [ "${what2plot}" != "probs" ];
+then
+  echo "please specify 'massmoms', 'dists' or 'probs' for plotting"
+else
+  ${python} pltens_buii.py ${path2CLEO} ${path2build} ${savefigpath} ${what2plot}
+fi
 ### ---------------------------------------------------- ###
