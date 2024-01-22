@@ -20,15 +20,65 @@ given radii and droplet distributions
 
 import numpy as np
 
+def watermass(diam):
+  ''' mass as if water droplet given diameter [microns]'''
+
+  radius = diam / 2e6 # convert diameter [microns] to radius [m]
+  rho = 998.203 # density [kg/m^3]
+
+  return 4.0/3 * np.pi * rho * radius**3 #[kg]
+
+def simmel_terminalvelocity(radius):
+  ''' returns terminal velocity [m/s] of droplets
+  given array of their radii [microns] according to
+  simmel et al. 2002 '''
+
+  diam = 2.0*radius # [microns]
+
+  alpha = np.full(diam.size, 9.17)
+  beta = np.full(diam.size, 0.0)
+
+  alpha = np.where(diam < 3477.84, 17.32, alpha)
+  beta = np.where(diam < 3477.84, 1.0/6, beta)
+
+  alpha = np.where(diam < 1511.64, 49.62, alpha)
+  beta = np.where(diam < 1511.64, 1.0/3, beta)
+
+  alpha = np.where(diam < 134.43, 4579.5, alpha)
+  beta = np.where(diam < 134.43, 2.0/3, beta)
+
+  mass = watermass(diam) * 1000 # [grams]
+  terminalv = alpha * mass**beta
+
+  return terminalv # [m/s]
+
+def hydrodyanmic_kernel(rr1, rr2, terminalv, eff=1.0):
+  ''' returns kernel K(drop1, drop2) (proportional to probability)
+  for a pair of droplets colliding according to the hydrodynamic,
+  i.e. gravitational, collision kernel.
+  Probability is given by prob_jk = K(drop1, drop2) * delta_t/delta_vol,
+  (see Shima 2009 eqn 3) where the kernel,
+  K(drop1, drop2) := eff * pi * (r1 + r2)^2 * |v1−v2|,
+  given the efficiency factor eff = eff(drop1, drop2) '''
+  
+  sumrsqrd = (rr1 + rr2)*(rr1 + rr2)
+  vdiff = terminalv(rr1) - terminalv(rr2)
+  hydro_kernel = np.pi * eff * sumrsqrd * vdiff
+
+  return hydro_kernel
+
 def collision_probability(rcens, numconc):
   ''' calculate probability of collision using
   Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
   rr1, rr2 = np.meshgrid(rcens, rcens)
-  
-  prob = np.outer(numconc, numconc)
 
-  prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) #normalise and remove data where rr2 > rr1
+  simmel_terminalvelocity(rr1[0])
+
+  # prob = np.outer(numconc, numconc)
+
+  # normalise relative to max value  and remove data where rr2 > rr1
+  prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) 
 
   return rr1, rr2, prob    

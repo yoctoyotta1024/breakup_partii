@@ -27,7 +27,7 @@ from pathlib import Path
 sys.path.append(str(Path.home())+"/CLEO/")  # path2CLEO for imports from pySD package
 from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 from pySD.sdmout_src import massmoms
-from probcalcs import *
+from .probcalcs import *
 
 def savefig(fig, savename, show=True):
   
