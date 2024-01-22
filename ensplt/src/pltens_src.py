@@ -298,7 +298,7 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
   
   return line
 
-def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
+def plot_collisions_overtime(axs, datapath, t2plts, probcalc, levels):
   ''' plot probability for each time in t2plts given probcalc function'''
 
   time, rcens, numconc = get_time_dist(datapath, "numconc",
@@ -314,10 +314,10 @@ def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
     tlab = "t = {:.1f}mins".format(t2plt)
 
     rr1, rr2, prob = probcalc(rcens, numconc[idx, :])
-    line = ax.contourf(rr1, rr2, prob, where='pre')
-
-    ax.set_xlim([np.amin(rr1), np.amax(rr2)])
-    ax.set_ylim([np.amin(rr2), 1e3])
+    ax.contourf(rr1, rr2, prob, levels=levels, extend="both")
+    
+    ax.set_xlim([np.amin(rcens), np.amax(rcens)])
+    ax.set_ylim([np.amin(rcens), 1e3])
 
     fill_r2_greaterthan_r1(ax)
 

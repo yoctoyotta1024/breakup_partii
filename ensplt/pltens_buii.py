@@ -125,12 +125,12 @@ if what2plot == "dists":
 
 if what2plot == "probs":
   ### --- plot domain collision probabilities --- ###
-  def plot_all_prob(datalabs, probcalc, trange, savename=""):
+  def plot_all_prob(datalabs, probcalc, trange, levels, savename=""):
 
     fig, axs = plt.subplots(nrows=9, ncols=3, figsize=(12,18))
     plotfunc = src.plot_collisions_overtime
     t2plts = np.linspace(trange[0], trange[1], axs.shape[0]) # [s]
-    args = [t2plts, probcalc]
+    args = [t2plts, probcalc, levels]
     src.plot_all_on_fig(path2build, plotfunc, args, fig, axs,
                         datalabs, labels, colors,
                         savename=savename) 
@@ -138,5 +138,6 @@ if what2plot == "probs":
   trange = [0, 300] #[s]
 
   savename = savefigpath + "prob_collisions.png"
-  probcalc = src.collision_probability
-  plot_all_prob(datalabs, probcalc, trange, savename=savename)
+  probcalc = src.relative_collision_probability
+  levels = np.linspace(-16, -5, 50)
+  plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)

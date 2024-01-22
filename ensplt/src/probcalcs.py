@@ -67,16 +67,22 @@ def hydrodyanmic_kernel(rr1, rr2, terminalv, eff=1.0):
 
   return hydro_kernel
 
-def collision_probability(rcens, numconc):
+def relative_collision_probability(rcens, numconc):
   ''' calculate probability of collision using
   Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
   rr1, rr2 = np.meshgrid(rcens, rcens)
+  kernel = hydrodyanmic_kernel(rr1, rr2, simmel_terminalv, eff=1.0)
+  numdens = np.outer(numconc, numconc).T
   
-  prob = hydrodyanmic_kernel(rr1, rr2, simmel_terminalv, eff=1.0)
-  
-  # normalise relative to max value  and remove data where rr2 > rr1
-  prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) 
+  relprob = kernel / np.nanmax(kernel) * numdens # proportional to probability
 
-  return rr1, rr2, prob    
+  # remove data where rr2 > rr1
+  relprob = np.where(rr1 <= rr2, np.nan, relprob)
+   
+  # log10(prob)
+  relprob = np.where(relprob == 0.0, np.nan, relprob)
+  relprob = np.log10(relprob)
+
+  return rr1, rr2, relprob
