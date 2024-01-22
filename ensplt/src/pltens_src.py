@@ -27,6 +27,7 @@ from pathlib import Path
 sys.path.append(str(Path.home())+"/CLEO/")  # path2CLEO for imports from pySD package
 from pySD.sdmout_src import *             # pyzarr, pysetuptxt & pygbxsdat
 from pySD.sdmout_src import massmoms
+from probcalcs import *
 
 def savefig(fig, savename, show=True):
   
@@ -316,7 +317,7 @@ def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
     line = ax.contourf(rr1, rr2, prob, where='pre')
 
     ax.set_xlim([np.amin(rr1), np.amax(rr2)])
-    ax.set_ylim([np.amin(rr1), 1e3])
+    ax.set_ylim([np.amin(rr2), 1e3])
 
     fill_r2_greaterthan_r1(ax)
 
@@ -328,7 +329,7 @@ def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
 def fill_r2_greaterthan_r1(ax):
   ''' shade over in grey area of plot where
   yaxis radii >= xaxis radii'''
-  
+
   xlims = ax.get_xlim()
   ylims = ax.get_ylim()
 
@@ -336,15 +337,3 @@ def fill_r2_greaterthan_r1(ax):
 
   ax.fill_between(r1, np.full(r1.shape, ylims[1]), r1,
                   step="post", color="grey")
-
-def collision_probability(rcens, numconc):
-  ''' calculate probability of collision using
-  Long's hydrodynamic kernel according
-  to Simmel et al. 2002'''
-
-  rr1, rr2 = np.meshgrid(rcens, rcens)
-  print("now calc prob")  
-  prob = np.outer(numconc, numconc)
-  prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) #normalise and remove data where rr2 > rr1
-
-  return rr1, rr2, prob    
