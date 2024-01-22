@@ -99,7 +99,7 @@ def plot_all_numconc(datalabs, savename=""):
   fig, axs = plt.subplots(nrows=4, ncols=6, figsize=(16,12))
   axs = axs.flatten()
   plotfunc = src.plot_domainnumconc_dist
-  t2plts = np.linspace(0, 1800, len(axs)) # [s]
+  t2plts = np.linspace(0, 900, len(axs)) # [s]
   args = [t2plts]
   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
                       datalabs, labels, colors,

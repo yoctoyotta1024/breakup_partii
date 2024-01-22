@@ -167,17 +167,21 @@ def plot_gbxreflectivity(ax, datapath, color, gridfile):
 
   return line[0]
 
-def plot_domainnumconc_dist(axs, datapath, color, t2plts):
-  ''' plots seperate distribution for each time in
-  t2plts [s] on each axis in axs '''
+def get_time_dist(datapath, distname):
 
-  print("\n ----- WIP ------")
   dataset = datapath+"/sol_ensemb.zarr"
+
   ds = pyzarr.get_rawdataset(dataset)
+  
   time = pyzarr.get_time(dataset)
-  mean = ds["h_numconc"]
-  std = ds["h_numconcstd"]
   redges = ds["h_redges"]
+  mean = ds["h_"+distname]
+  std = ds["h_"+distname+"std"]
+
+  return time, redges, mean, std
+
+def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
+                           color="k", ylab=None, logy=False):
 
   if len(axs) != len(t2plts):
     raise ValueError("number of times to plot != number of axes")
@@ -188,21 +192,37 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
     t2plt = time.mins[idx] # [min]
     tlab = "t = {:.1f}mins".format(t2plt)
 
-    line = ax.step(redges[:-1], mean[idx, :], where='pre', color=color)
+    line = ax.step(redges[:-1], mean[idx, :], where='pre',
+                   color=color, linewidth=0.8)
 
     ax.step(redges[:-1], (mean-std)[idx, :], where='pre',
-            color=color, linestyle="--")
+            color=color, linewidth=0.8, linestyle="--")
     ax.step(redges[:-1], (mean+std)[idx, :], where='pre',
-            color=color, linestyle="--") 
+            color=color, linewidth=0.8, linestyle="--") 
 
     ax.set_title(tlab)
     
-    ax.set_yscale("log")
-    ax.set_ylabel("number concentration /cm$^{-3}$")
-    ax.set_ylim([0, 150])
-    
+    if logy:
+      ax.set_yscale("log")
+      ax.set_ylabel(ylab)
+
     ax.set_xscale("log")
     ax.set_xlabel("radius /\u03BCm")
 
   return line[0]
+
+def plot_domainnumconc_dist(axs, datapath, color, t2plts):
+  ''' plots seperate distribution for each time in
+  t2plts [s] on each axis in axs '''
+
+  time, redges, mean, std = get_time_dist(datapath, "numconc")
+
+  ylab = "number concentration /cm$^{-3}$"
+  line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
+                                color=color, ylab=ylab, logy=True)
+  
+  for ax in axs:
+    ax.set_ylim([1e-10, 175])
+  
+  return line
 
