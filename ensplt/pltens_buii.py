@@ -101,15 +101,16 @@ if what2plot == "dists":
   ### --- plot domain droplet distibutions --- ###
   def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
 
-    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16,12))
+    fig, axs = plt.subplots(nrows=4, ncols=2, figsize=(16,12))
     axs = axs.flatten()  
-    t2plts = np.linspace(trange[0], trange[1], len(axs)) # [s]
+    t2plts = np.arange(trange[0], trange[1]+trange[2], trange[2]) # [s]
+    print("t2plts: ", t2plts)
     args = [t2plts]
     src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
                         datalabs, labels, colors,
                         savename=savename) 
 
-  trange = [0, 300] #[s]
+  trange = [0, 70, 10] #[s]
 
   plotfunc = src.plot_domainnumconc_dist
   savename = savefigpath + "dist_numconc.png"
@@ -127,25 +128,25 @@ if what2plot == "probs":
   ### --- plot domain collision probabilities --- ###
   def plot_all_prob(datalabs, probcalc, trange, levels, savename=""):
 
-    fig, axs = plt.subplots(nrows=9, ncols=3, figsize=(12,18))
+    fig, axs = plt.subplots(nrows=7, ncols=3, figsize=(12,18))
     plotfunc = src.plot_collisions_overtime
-    t2plts = np.linspace(trange[0], trange[1], axs.shape[0]) # [s]
+    t2plts = np.arange(trange[0], trange[1]+trange[2], trange[2]) # [s]
     args = [t2plts, probcalc, levels]
     src.plot_all_on_fig(path2build, plotfunc, args, fig, axs,
                         datalabs, labels, colors,
                         savename=savename) 
   
-  trange = [0, 300] #[s]
+  trange = [0, 60, 10] #[s]
 
   savename = savefigpath + "prob_colls.png"
   probcalc = src.log10_collprob
   levels = np.linspace(-10, 5, 50)
   plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
 
-  # savename = savefigpath + "prob_collcoal.png"
-  # probcalc = src.relative_collcoal_probability
-  # levels = np.linspace(-20, -5, 50)
-  # plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
+  savename = savefigpath + "prob_collcoal.png"
+  probcalc = src.relative_collcoal_probability
+  levels = np.linspace(-20, -5, 50)
+  plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
 
   # savename = savefigpath + "prob_collbreakup.png"
   # probcalc = src.relative_collbreakup_probability

@@ -229,8 +229,8 @@ def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
   for n in range(len(t2plts)):
     ax = axs[n]
     idx = np.argmin(abs(time.secs-t2plts[n])) # index of time to plot
-    t2plt = time.mins[idx] # [min]
-    tlab = "t = {:.1f}mins".format(t2plt)
+    t2plt = time.secs[idx] # [min]
+    tlab = "t = {:.1f}secs".format(t2plt)
 
     line = ax.step(redges[:-1], mean[idx, :], where='pre',
                    color=color, linewidth=0.8)
@@ -310,8 +310,8 @@ def plot_collisions_overtime(axs, datapath, datalab, t2plts, probcalc, levels):
   for n in range(len(t2plts)):
     ax = axs[n]
     idx = np.argmin(abs(time.secs-t2plts[n])) # index of time to plot
-    t2plt = time.mins[idx] # [min]
-    tlab = "t = {:.1f}mins".format(t2plt)
+    t2plt = time.secs[idx] # [min]
+    tlab = "t = {:.1f}secs".format(t2plt)
 
     rr1, rr2, prob = probcalc(datalab, rcens, numconc[idx, :])
     ax.contourf(rr1, rr2, prob, levels=levels, extend="both")
