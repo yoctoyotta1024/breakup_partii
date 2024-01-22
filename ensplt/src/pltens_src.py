@@ -75,6 +75,28 @@ def get_massmomstds(datapath, gridfile):
 
   return massmoms.MassMoms(dataset, ntime, ndims, lab="_std")
 
+def get_time_dist(datapath, distname, std=False, rcens=False):
+
+  dataset = datapath+"/sol_ensemb.zarr"
+
+  ds = pyzarr.get_rawdataset(dataset)
+  
+  time = pyzarr.get_time(dataset)
+  mean = ds["h_"+distname]
+
+  if rcens:
+    rbins = ds["h_rcens"]
+  else:
+    rbins = ds["h_redges"]
+  
+  if std:
+    std = ds["h_"+distname+"std"]
+    return time, rbins, mean, std
+  
+  else:
+    return time, rbins, mean
+
+
 def plot_all_on_axs(path2build, plotfunc, args,
                     fig, axs, datalabs, labels,
                     colors, savename=""):
@@ -125,7 +147,8 @@ def plot_all_on_fig(path2build, plotfunc, args,
 
     ### ----- plot data ----- ###
     plotfunc(axs_d, datapath, *args)
-    axs_d[0].set_title(labels[datalab], color=colors[datalab])
+    title = labels[datalab]+"\n"+axs_d[0].get_title()
+    axs_d[0].set_title(title, color=colors[datalab])
 
   if savename != "":
     savefig(fig, savename, show=False)
@@ -196,19 +219,6 @@ def plot_gbxreflectivity(ax, datapath, color, gridfile):
 
   return line[0]
 
-def get_time_dist(datapath, distname):
-
-  dataset = datapath+"/sol_ensemb.zarr"
-
-  ds = pyzarr.get_rawdataset(dataset)
-  
-  time = pyzarr.get_time(dataset)
-  redges = ds["h_redges"]
-  mean = ds["h_"+distname]
-  std = ds["h_"+distname+"std"]
-
-  return time, redges, mean, std
-
 def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
                            color="k", ylab=None, logy=False):
 
@@ -243,7 +253,8 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
-  time, redges, mean, std = get_time_dist(datapath, "numconc")
+  time, redges, mean, std = get_time_dist(datapath, "numconc",
+                                          std=True, rcens=False)
 
   ylab = "number concentration /cm$^{-3}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
@@ -258,7 +269,8 @@ def plot_domainwatermass_dist(axs, datapath, color, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
-  time, redges, mean, std = get_time_dist(datapath, "watermass")
+  time, redges, mean, std = get_time_dist(datapath, "watermass",
+                                          std=True, rcens=False)
 
   ylab = "mass concentration /g m$^{-3}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
@@ -273,7 +285,8 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
-  time, redges, mean, std = get_time_dist(datapath, "refproxy")
+  time, redges, mean, std = get_time_dist(datapath, "refproxy",
+                                          std=True, rcens=False)
 
   ylab = "reflectivity proxy /m$^{6}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
@@ -284,6 +297,34 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
   
   return line
 
-def plot_collisionprob(axs_d, datapath, t2plts):
+def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
+  ''' plot probability for each time in t2plts given probcalc function'''
 
-  print("TODO: plot collision probability")
+  time, rcens, numconc = get_time_dist(datapath, "numconc",
+                                        std=False, rcens=True)
+
+  if len(axs) != len(t2plts):
+    raise ValueError("number of times to plot != number of axes")
+  
+  for n in range(len(t2plts)):
+    ax = axs[n]
+    idx = np.argmin(abs(time.secs-t2plts[n])) # index of time to plot
+    t2plt = time.mins[idx] # [min]
+    tlab = "t = {:.1f}mins".format(t2plt)
+
+    rr1, rr2, prob = probcalc(rcens, numconc[idx, :])
+    line = ax.contourf(rr1, rr2, prob, where='pre')
+
+    ax.set_aspect("equal")               
+    ax.set_title(tlab)
+
+def collision_probability(rcens, numconc):
+  ''' calculate probability of collision using
+  Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  print("now calc prob")  
+  rr1, rr2 = np.meshgrid(rcens, rcens)
+  prob = np.outer(numconc, numconc)
+
+  return rr1, rr2, prob    
