@@ -333,7 +333,7 @@ def fill_r2_greaterthan_r1(ax):
   xlims = ax.get_xlim()
   ylims = ax.get_ylim()
 
-  r1 = np.logspace(np.log10(xlims[0]), np.log10(xlims[1]), 100)
+  r1 = np.logspace(np.log10(xlims[0]), np.log10(xlims[1]), 500)
 
   ax.fill_between(r1, np.full(r1.shape, ylims[1]), r1,
                   step="post", color="grey")
