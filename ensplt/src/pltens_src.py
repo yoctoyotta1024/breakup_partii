@@ -167,7 +167,9 @@ def plot_gbxreflectivity(ax, datapath, color, gridfile):
 
   return line[0]
 
-def plot_domainnumconc_dist(axs, datapath, gridfile, color="k"):
+def plot_domainnumconc_dist(axs, datapath, color, t2plts):
+  ''' plots seperate distribution for each time in
+  t2plts [s] on each axis in axs '''
 
   ds = pyzarr.get_rawdataset(datapath)
   time = pyzarr.get_time(datapath)
@@ -176,7 +178,23 @@ def plot_domainnumconc_dist(axs, datapath, gridfile, color="k"):
   redges = ds["h_redges"]
 
   axs = axs.flatten()
-  n2plt = len(axs)
+  if len(axs) != len(t2plts):
+    raise ValueError("number of times to plot != number of axes")
+  
+  for n in range(len(t2plts)):
+    ax = axs[n]
+    idx = np.argmin(abs(time.secs-t2plts[n])) # index of time to plot
+    t2plt = time.mins[idx] # [min]
+    tlab = "t = {:.3g}mins".format(t2plt)
 
-  for n in range(n2plt):
+    line = ax.step(redges[:-1], mean[idx, :], where='pre', color=color)
+
+    ax.step(redges[:-1], (mean-std)[idx, :], where='pre',
+            color=color, linestyle="--")
+    ax.step(redges[:-1], (mean+std)[idx, :], where='pre',
+            color=color, linestyle="--") 
+
+    ax.set_title(tlab)
+    
+  return line[0]
 
