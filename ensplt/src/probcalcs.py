@@ -24,9 +24,9 @@ def watermass(diam):
   ''' mass as if water droplet given diameter [microns]'''
 
   radius = diam / 2e6 # convert diameter [microns] to radius [m]
-  rho = 998.203 # density [kg/m^3]
+  rho_l = 998.203 # density [kg/m^3]
 
-  return 4.0/3 * np.pi * rho * radius**3 #[kg]
+  return 4.0/3 * np.pi * rho_l * radius**3 #[kg]
 
 def simmel_terminalv(radius):
   ''' returns terminal velocity [m/s] of droplets
@@ -68,7 +68,8 @@ def hydrodyanmic_kernel(rr1, rr2, terminalv, eff=1.0):
   return hydro_kernel
 
 def surfe(radius):
-  ''' surface tension energy [J] given radius [microns] '''
+  ''' surface tension energy [J]
+  given radius [microns] '''
 
   sigma = 7.28e-2 # [N/m^2]
   diam = radius*2e-6 # [m]
@@ -76,19 +77,40 @@ def surfe(radius):
   return np.pi * sigma * diam**2
 
 def surfe_large(rr1, rr2):
+  ''' surface tension energy [J] of larger
+  droplet in pair given radii [microns] '''
 
   return surfe(np.where(rr1 > rr2, rr1, rr2))
 
 def surfe_small(rr1, rr2):
+  ''' surface tension energy [J] of smaller
+  droplet in pair given radii [microns] '''
 
   return surfe(np.where(rr1 < rr2, rr1, rr2))
 
 def surfe_coal(rr1, rr2):
-  
-  rcoal = ()
+  ''' surface tension energy [J] of coalalesced
+  droplet in pair given radii [microns] '''
+    
+  rcoal = (rr1**3 + rr2**3)**(1.0/3.0)
 
   return surfe(rcoal)
 
+def collision_kinetic_energy(rr1, rr2):
+  ''' collision kinetic energy [J] using
+  Simmel et al. 2002 terminal velocity formula 
+  and radii [microns] '''
+
+  rho_l = 998.203 # density [kg/m^3]
+
+  dd1, dd2 = rr1*2e-6, rr2*2e-6 # convert to diameter [m]
+  dratio = dd1**3 * dd2**3 / (dd1**3 + dd2**3)
+  v1 = simmel_terminalv(rr1) # [m/s]
+  v2 = simmel_terminalv(rr2) # [m/s]
+
+  cke = np.pi * rho_l / 12.0 * dratio * (v1-v2)**2
+  
+  return cke
 
 def coalescence_efficiency(rr1, rr2, cke):
   ''' coalescence efficency from TSCoalBuReFlag given a 
@@ -190,29 +212,44 @@ def relative_outcome_probability_coalre(rr1, rr2, relprob):
   
   return outcome_probabilities(relprob, coal, bu, re)
  
-def relative_collcoal_probability(datalab, rcens, numconc):
+def log10_collcoal_prob(datalab, rcens, numconc):
   ''' calculate probability of collision-coalescence
   using Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
   rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+  relprob_coal = outcome["coal"]
 
-  return rr1, rr2, outcome["coal"]
+  # log10(relprob)
+  relprob_coal = np.where(relprob_coal == 0.0, np.nan, relprob_coal)
+  relprob_coal = np.log10(relprob_coal)
+ 
+  return rr1, rr2, relprob_coal
 
-def relative_collbreakup_probability(datalab, rcens, numconc):
+def log10_collbreakup_prob(datalab, rcens, numconc):
   ''' calculate probability of collision-coalescence
   using Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
   rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+  relprob_bu = outcome["bu"]
 
-  return rr1, rr2, outcome["bu"]
+  # log10(relprob)
+  relprob_bu = np.where(relprob_bu == 0.0, np.nan, relprob_bu)
+  relprob_bu = np.log10(relprob_bu)
+ 
+  return rr1, rr2, relprob_bu
 
-def relative_collrebound_probability(datalab, rcens, numconc):
+def log10_collrebound_prob(datalab, rcens, numconc):
   ''' calculate probability of collision-coalescence
   using Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
   rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+  relprob_re = outcome["re"]
 
-  return rr1, rr2, outcome["re"]
+  # log10(relprob)
+  relprob_re = np.where(relprob_re == 0.0, np.nan, relprob_re)
+  relprob_re = np.log10(relprob_re)
+ 
+  return rr1, rr2, relprob_re
