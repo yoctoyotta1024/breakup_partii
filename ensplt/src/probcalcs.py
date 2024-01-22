@@ -67,6 +67,18 @@ def hydrodyanmic_kernel(rr1, rr2, terminalv, eff=1.0):
 
   return hydro_kernel
 
+def coalescence_efficiency(rr1, rr2, cke):
+  ''' coalescence efficency from TSCoalBuReFlag given a 
+  collision occurs according to parameterisation from
+  Straub et al. 2010 section 3, equation 5 and
+  Schlottke et al. 2010 section 4a equation 11 '''
+
+  beta = -1.15
+  surf_c = coal_surfenergy(rr1, rr2)
+  weber = cke / surf_c
+
+  return np.exp(beta*weber)
+
 def relative_collision_probability(rcens, numconc):
   ''' calculate probability of collision using
   Long's hydrodynamic kernel according
@@ -102,52 +114,59 @@ def relative_outcome_probability(datalab, rcens, numconc):
   to Simmel et al. 2002'''
 
   rr1, rr2, relprob = relative_collision_probability(rcens, numconc)
-  
+
   if datalab == "coalbure":
-    outcome = relative_outcome_probability_coalbure(relprob)
+    outcome = relative_outcome_probability_coalbure(rr1, rr2, relprob)
   elif datalab == "coalbu":
-    outcome = relative_outcome_probability_coalbu(relprob)
+    outcome = relative_outcome_probability_coalbu(rr1, rr2, relprob)
   elif datalab == "coalre":
-    outcome = relative_outcome_probability_coalre(relprob)
+    outcome = relative_outcome_probability_coalre(rr1, rr2, relprob)
   
   return rr1, rr2, outcome
 
-def relative_outcome_probability_coalbure(relprob):
+def coalbure_outcome_effciencies(rr1, rr2, relprob):
   
-  print("TODO: coalbure")
+  cke = collision_kinetic_energy(rr1, rr2)
+  coaleff = coalescence_efficiency(rr1, rr2, cke)
+
+  coal = np.where(cke < surfe_large, coaleff, 0.0)
+  bu = np.where(cke > surfe_small, 1.0-coal, 0.0)
+  re = np.where(cke < surfe_small, 1.0-coaleff, 0.0)
+
+  return coal, bu, re 
+
+def outcome_probabilities(relprob, coal, bu, re):
+
+  outcome = {
+    "coal" : coal*relprob,
+    "bu" : bu*relprob,
+    "re" : re*relprob,
+  }
+    
+  return outcome
+
+def relative_outcome_probability_coalbure(rr1, rr2, relprob):
+
+  coal, bu, re = coalbure_outcome_effciencies(rr1, rr2, relprob)
+
+  return outcome_probabilities(relprob, coal, bu, re)
+
+def relative_outcome_probability_coalbu(rr1, rr2, relprob):
+
+  coal, bu, not_re = coalbure_outcome_effciencies(rr1, rr2, relprob)
+  coal = coal + not_re
+  re = np.full(relprob.shape, 0.0)
+
+  return outcome_probabilities(relprob, coal, bu, re)
+
+def relative_outcome_probability_coalre(rr1, rr2, relprob):
+
+  coal, not_bu, re = coalbure_outcome_effciencies(rr1, rr2, relprob)
+  re = re + not_bu
+  bu = np.full(relprob.shape, 0.0)
+  
+  return outcome_probabilities(relprob, coal, bu, re)
  
-  outcome = {
-    "coal" : np.full(relprob.shape, 0.0), # TODO 
-    "bu" : np.full(relprob.shape, 0.0), # TODO 
-    "re" : np.full(relprob.shape, 0.0), # TODO 
-  }
-
-  return outcome
-
-def relative_outcome_probability_coalbu(relprob):
-  
-  print("TODO: coalbu")
-  
-  outcome = {
-    "coal" : np.full(relprob.shape, 1.0) * relprob, # TODO 
-    "bu" : np.full(relprob.shape, 1.0) * relprob, # TODO 
-    "re" : np.full(relprob.shape, 0.0),
-  }
-
-  return outcome
-
-def relative_outcome_probability_coalre(relprob):
-
-  print("TODO: coalre")
-
-  outcome = {
-    "coal" : np.full(relprob.shape, 1.0) * relprob, # TODO 
-    "bu" : np.full(relprob.shape, 0.0),
-    "re" : np.full(relprob.shape, 1.0) * relprob, # TODO 
-  }
-
-  return outcome
-
 def relative_collcoal_probability(datalab, rcens, numconc):
   ''' calculate probability of collision-coalescence
   using Long's hydrodynamic kernel according

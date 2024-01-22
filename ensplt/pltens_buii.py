@@ -148,12 +148,12 @@ if what2plot == "probs":
   levels = np.linspace(-20, -5, 50)
   plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
 
-  # savename = savefigpath + "prob_collbreakup.png"
-  # probcalc = src.relative_collbreakup_probability
-  # levels = np.linspace(-16, -5, 50)
-  # plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
+  savename = savefigpath + "prob_collbreakup.png"
+  probcalc = src.relative_collbreakup_probability
+  levels = np.linspace(-16, -5, 50)
+  plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
 
-  # savename = savefigpath + "prob_collrebound.png"
-  # probcalc = src.relative_collrebound_probability
-  # levels = np.linspace(-16, -5, 50)
-  # plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
+  savename = savefigpath + "prob_collrebound.png"
+  probcalc = src.relative_collrebound_probability
+  levels = np.linspace(-16, -5, 50)
+  plot_all_prob(datalabs, probcalc, trange, levels, savename=savename)
