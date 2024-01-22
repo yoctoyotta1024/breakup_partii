@@ -315,18 +315,36 @@ def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
     rr1, rr2, prob = probcalc(rcens, numconc[idx, :])
     line = ax.contourf(rr1, rr2, prob, where='pre')
 
+    ax.set_xlim([np.amin(rr1), np.amax(rr2)])
+    ax.set_ylim([np.amin(rr1), 1e3])
+
+    fill_r2_greaterthan_r1(ax)
+
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_aspect("equal")               
     ax.set_title(tlab)
+
+def fill_r2_greaterthan_r1(ax):
+  ''' shade over in grey area of plot where
+  yaxis radii >= xaxis radii'''
+  
+  xlims = ax.get_xlim()
+  ylims = ax.get_ylim()
+
+  r1 = np.logspace(np.log10(xlims[0]), np.log10(xlims[1]), 100)
+
+  ax.fill_between(r1, np.full(r1.shape, ylims[1]), r1,
+                  step="post", color="grey")
 
 def collision_probability(rcens, numconc):
   ''' calculate probability of collision using
   Long's hydrodynamic kernel according
   to Simmel et al. 2002'''
 
-  print("now calc prob")  
   rr1, rr2 = np.meshgrid(rcens, rcens)
+  print("now calc prob")  
   prob = np.outer(numconc, numconc)
+  prob = np.where(rr1 <= rr2, np.nan, prob) / np.nanmax(prob) #normalise and remove data where rr2 > rr1
 
   return rr1, rr2, prob    
