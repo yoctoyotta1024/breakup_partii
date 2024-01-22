@@ -171,13 +171,14 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
-  ds = pyzarr.get_rawdataset(datapath)
-  time = pyzarr.get_time(datapath)
+  print("\n ----- WIP ------")
+  dataset = datapath+"/sol_ensemb.zarr"
+  ds = pyzarr.get_rawdataset(dataset)
+  time = pyzarr.get_time(dataset)
   mean = ds["h_numconc"]
   std = ds["h_numconcstd"]
   redges = ds["h_redges"]
 
-  axs = axs.flatten()
   if len(axs) != len(t2plts):
     raise ValueError("number of times to plot != number of axes")
   
@@ -185,7 +186,7 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
     ax = axs[n]
     idx = np.argmin(abs(time.secs-t2plts[n])) # index of time to plot
     t2plt = time.mins[idx] # [min]
-    tlab = "t = {:.3g}mins".format(t2plt)
+    tlab = "t = {:.1f}mins".format(t2plt)
 
     line = ax.step(redges[:-1], mean[idx, :], where='pre', color=color)
 
@@ -196,5 +197,12 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
 
     ax.set_title(tlab)
     
+    ax.set_yscale("log")
+    ax.set_ylabel("number concentration /cm$^{-3}$")
+    ax.set_ylim([0, 150])
+    
+    ax.set_xscale("log")
+    ax.set_xlabel("radius /\u03BCm")
+
   return line[0]
 

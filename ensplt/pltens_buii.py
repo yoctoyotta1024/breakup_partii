@@ -56,53 +56,54 @@ if path2CLEO == savefigpath:
 else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
-### ----- plot domain mass moments ----- ###
-def plot_all_massmoments(datalabs, savename=""):
-  fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
-  fig.suptitle("Total Mass Moments Over Domain")
-  plotfunc = src.plot_gbxmassmoments
-  args = [gridfile]
-  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                      datalabs, labels, colors,
-                      savename=savename) 
+# ### ----- plot domain mass moments ----- ###
+# def plot_all_massmoments(datalabs, savename=""):
+#   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+#   fig.suptitle("Total Mass Moments Over Domain")
+#   plotfunc = src.plot_gbxmassmoments
+#   args = [gridfile]
+#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+#                       datalabs, labels, colors,
+#                       savename=savename) 
   
-savename = savefigpath + "massmoments.png"
-plot_all_massmoments(datalabs, savename=savename)
+# savename = savefigpath + "massmoments.png"
+# plot_all_massmoments(datalabs, savename=savename)
 
-### ----- plot domain number concentration ----- ###
-def plot_all_numconc(datalabs, savename=""):
-  fig, axs = plt.subplots(figsize=(6,8))
-  plotfunc = src.plot_gbxnumconc
-  args = [gridfile]
-  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                      datalabs, labels, colors,
-                      savename=savename) 
+# ### ----- plot domain number concentration ----- ###
+# def plot_all_numconc(datalabs, savename=""):
+#   fig, axs = plt.subplots(figsize=(6,8))
+#   plotfunc = src.plot_gbxnumconc
+#   args = [gridfile]
+#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+#                       datalabs, labels, colors,
+#                       savename=savename) 
 
-savename = savefigpath + "numconc.png"
-plot_all_numconc(datalabs, savename=savename)
+# savename = savefigpath + "numconc.png"
+# plot_all_numconc(datalabs, savename=savename)
 
-### ----- plot domain reflectivity ----- ###
-def plot_all_reflectivity(datalabs, savename=""):
-  fig, axs = plt.subplots(figsize=(6,8))
-  plotfunc = src.plot_gbxreflectivity
-  args = [gridfile]
-  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                      datalabs, labels, colors,
-                      savename=savename) 
+# ### ----- plot domain reflectivity ----- ###
+# def plot_all_reflectivity(datalabs, savename=""):
+#   fig, axs = plt.subplots(figsize=(6,8))
+#   plotfunc = src.plot_gbxreflectivity
+#   args = [gridfile]
+#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+#                       datalabs, labels, colors,
+#                       savename=savename) 
   
-savename = savefigpath + "reflectivity.png"
-plot_all_reflectivity(datalabs, savename=savename)
+# savename = savefigpath + "reflectivity.png"
+# plot_all_reflectivity(datalabs, savename=savename)
 
 
 ### --- plot domain droplet distibutions --- ###
 def plot_all_numconc(datalabs, savename=""):
-  fig, axs = plt.subplots(nrows=5, ncols=5, figsize=(6,8))
+  fig, axs = plt.subplots(nrows=4, ncols=6, figsize=(16,12))
+  axs = axs.flatten()
   plotfunc = src.plot_domainnumconc_dist
-  t2plts = np.linspace(0, 1800, 25) #[s]
+  t2plts = np.linspace(0, 1800, len(axs)) # [s]
   args = [t2plts]
   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
                       datalabs, labels, colors,
                       savename=savename) 
-  
+
 savename = savefigpath + "dist_numconc.png"
 plot_all_numconc(datalabs, savename=savename)
