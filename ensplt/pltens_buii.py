@@ -97,7 +97,7 @@ else:
 ### --- plot domain droplet distibutions --- ###
 def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
 
-  fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(16,12))
+  fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16,12))
   axs = axs.flatten()  
   t2plts = np.linspace(trange[0], trange[1], len(axs)) # [s]
   args = [t2plts]
