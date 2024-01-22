@@ -22,9 +22,11 @@ path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
 savefigpath="/home/m/m300950/breakup_partii/plots/"
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
+
+what2plot=${1}
 ### ---------------------------------------------------- ###
 
 ### ----------------------- plots ------------------------ ###
 ### run 1-D rainshaft quick plotting script
-${python} pltens_buii.py ${path2CLEO} ${path2build} ${savefigpath}
+${python} pltens_buii.py ${path2CLEO} ${path2build} ${savefigpath} ${what2plot}
 ### ---------------------------------------------------- ###

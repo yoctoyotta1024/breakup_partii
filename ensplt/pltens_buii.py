@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 savefigpath = sys.argv[3]
+what2plot = sys.argv[4]
 
 import src.pltens_src as src
 
@@ -56,42 +57,44 @@ if path2CLEO == savefigpath:
 else:
   Path(savefigpath).mkdir(parents=True, exist_ok=True) 
   
-# ### ----- plot domain mass moments ----- ###
-# def plot_all_massmoments(datalabs, savename=""):
-#   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
-#   fig.suptitle("Total Mass Moments Over Domain")
-#   plotfunc = src.plot_gbxmassmoments
-#   args = [gridfile]
-#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-#                       datalabs, labels, colors,
-#                       savename=savename) 
-  
-# savename = savefigpath + "massmoments.png"
-# plot_all_massmoments(datalabs, savename=savename)
+if what2plot == "massmoms":
 
-# ### ----- plot domain number concentration ----- ###
-# def plot_all_numconc(datalabs, savename=""):
-#   fig, axs = plt.subplots(figsize=(6,8))
-#   plotfunc = src.plot_gbxnumconc
-#   args = [gridfile]
-#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-#                       datalabs, labels, colors,
-#                       savename=savename) 
+  ### ----- plot domain mass moments ----- ###
+  def plot_all_massmoments(datalabs, savename=""):
+    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+    fig.suptitle("Total Mass Moments Over Domain")
+    plotfunc = src.plot_gbxmassmoments
+    args = [gridfile]
+    src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                        datalabs, labels, colors,
+                        savename=savename) 
+    
+  savename = savefigpath + "massmoments.png"
+  plot_all_massmoments(datalabs, savename=savename)
 
-# savename = savefigpath + "numconc.png"
-# plot_all_numconc(datalabs, savename=savename)
+  ### ----- plot domain number concentration ----- ###
+  def plot_all_numconc(datalabs, savename=""):
+    fig, axs = plt.subplots(figsize=(6,8))
+    plotfunc = src.plot_gbxnumconc
+    args = [gridfile]
+    src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                        datalabs, labels, colors,
+                        savename=savename) 
 
-# ### ----- plot domain reflectivity ----- ###
-# def plot_all_reflectivity(datalabs, savename=""):
-#   fig, axs = plt.subplots(figsize=(6,8))
-#   plotfunc = src.plot_gbxreflectivity
-#   args = [gridfile]
-#   src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-#                       datalabs, labels, colors,
-#                       savename=savename) 
-  
-# savename = savefigpath + "reflectivity.png"
-# plot_all_reflectivity(datalabs, savename=savename)
+  savename = savefigpath + "numconc.png"
+  plot_all_numconc(datalabs, savename=savename)
+
+  ### ----- plot domain reflectivity ----- ###
+  def plot_all_reflectivity(datalabs, savename=""):
+    fig, axs = plt.subplots(figsize=(6,8))
+    plotfunc = src.plot_gbxreflectivity
+    args = [gridfile]
+    src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                        datalabs, labels, colors,
+                        savename=savename) 
+    
+  savename = savefigpath + "reflectivity.png"
+  plot_all_reflectivity(datalabs, savename=savename)
 
 
 ### --- plot domain droplet distibutions --- ###
@@ -105,16 +108,17 @@ def plot_all_distrib(datalabs, plotfunc, trange, savename=""):
                       datalabs, labels, colors,
                       savename=savename) 
 
-trange = [0, 300] #[s]
+if what2plot == "dists":
+  trange = [0, 300] #[s]
 
-plotfunc = src.plot_domainnumconc_dist
-savename = savefigpath + "dist_numconc.png"
-plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+  plotfunc = src.plot_domainnumconc_dist
+  savename = savefigpath + "dist_numconc.png"
+  plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
 
-plotfunc = src.plot_domainwatermass_dist
-savename = savefigpath + "dist_watermass.png"
-plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+  plotfunc = src.plot_domainwatermass_dist
+  savename = savefigpath + "dist_watermass.png"
+  plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
 
-plotfunc = src.plot_domainreflectivity_dist
-savename = savefigpath + "dist_reflectivity.png"
-plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
+  plotfunc = src.plot_domainreflectivity_dist
+  savename = savefigpath + "dist_reflectivity.png"
+  plot_all_distrib(datalabs, plotfunc, trange, savename=savename)
