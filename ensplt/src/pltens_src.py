@@ -315,6 +315,8 @@ def plot_collisions_overtime(axs, datapath, t2plts, probcalc):
     rr1, rr2, prob = probcalc(rcens, numconc[idx, :])
     line = ax.contourf(rr1, rr2, prob, where='pre')
 
+    ax.set_xscale("log")
+    ax.set_yscale("log")
     ax.set_aspect("equal")               
     ax.set_title(tlab)
 
