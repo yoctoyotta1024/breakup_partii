@@ -76,13 +76,101 @@ def relative_collision_probability(rcens, numconc):
   kernel = hydrodyanmic_kernel(rr1, rr2, simmel_terminalv, eff=1.0)
   numdens = np.outer(numconc, numconc).T
   
-  relprob = kernel / np.nanmax(kernel) * numdens # proportional to probability
+  relprob = kernel * numdens # proportional to probability
 
   # remove data where rr2 > rr1
   relprob = np.where(rr1 <= rr2, np.nan, relprob)
-   
-  # log10(prob)
+
+  return rr1, rr2, relprob
+
+def log10_collprob(datalab, rcens, numconc):
+  ''' calculate probability of collision using
+  Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  rr1, rr2, relprob = relative_collision_probability(rcens, numconc)
+  
+  # log10(relprob)
   relprob = np.where(relprob == 0.0, np.nan, relprob)
   relprob = np.log10(relprob)
 
   return rr1, rr2, relprob
+
+def relative_outcome_probability(datalab, rcens, numconc):
+  ''' calculate probability of collision-outcome
+  using Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  rr1, rr2, relprob = relative_collision_probability(rcens, numconc)
+  
+  if datalab == "coalbure":
+    outcome = relative_outcome_probability_coalbure(relprob)
+  elif datalab == "coalbu":
+    outcome = relative_outcome_probability_coalbu(relprob)
+  elif datalab == "coalre":
+    outcome = relative_outcome_probability_coalre(relprob)
+  
+  return rr1, rr2, outcome
+
+def relative_outcome_probability_coalbure(relprob):
+  
+  print("TODO: coalbure")
+ 
+  outcome = {
+    "coal" : np.full(relprob.shape, 0.0), # TODO 
+    "bu" : np.full(relprob.shape, 0.0), # TODO 
+    "re" : np.full(relprob.shape, 0.0), # TODO 
+  }
+
+  return outcome
+
+def relative_outcome_probability_coalbu(relprob):
+  
+  print("TODO: coalbu")
+  
+  outcome = {
+    "coal" : np.full(relprob.shape, 1.0) * relprob, # TODO 
+    "bu" : np.full(relprob.shape, 1.0) * relprob, # TODO 
+    "re" : np.full(relprob.shape, 0.0),
+  }
+
+  return outcome
+
+def relative_outcome_probability_coalre(relprob):
+
+  print("TODO: coalre")
+
+  outcome = {
+    "coal" : np.full(relprob.shape, 1.0) * relprob, # TODO 
+    "bu" : np.full(relprob.shape, 0.0),
+    "re" : np.full(relprob.shape, 1.0) * relprob, # TODO 
+  }
+
+  return outcome
+
+def relative_collcoal_probability(datalab, rcens, numconc):
+  ''' calculate probability of collision-coalescence
+  using Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+
+  return rr1, rr2, outcome["coal"]
+
+def relative_collbreakup_probability(datalab, rcens, numconc):
+  ''' calculate probability of collision-coalescence
+  using Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+
+  return rr1, rr2, outcome["bu"]
+
+def relative_collrebound_probability(datalab, rcens, numconc):
+  ''' calculate probability of collision-coalescence
+  using Long's hydrodynamic kernel according
+  to Simmel et al. 2002'''
+
+  rr1, rr2, outcome = relative_outcome_probability(datalab, rcens, numconc)
+
+  return rr1, rr2, outcome["re"]
