@@ -36,9 +36,9 @@ import src.pltens_src as src
 ### --- essential paths and filenames --- ###
 datalabs = ["coalre", "coalbu", "coalbure"]
 labels = {
-  "coalbure": "CoalBuRe", 
-  "coalbu": "CoalBu",
-  "coalre": "CoalRe",
+  "coalbure": "Coal+Bu+Re", 
+  "coalbu": "Coal+Bu",
+  "coalre": "Coal+Re",
 }
 colors = {
   "coalbure": "C0", 
@@ -61,8 +61,9 @@ def plot_all_massmoments(datalabs, savename=""):
   fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
   fig.suptitle("Total Mass Moments Over Domain")
   plotfunc = src.plot_gbxmassmoments
-  src.plot_all_on_axs(path2build, gridfile,
-                      fig, axs, plotfunc, datalabs, labels, colors,
+  args = [gridfile]
+  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                      datalabs, labels, colors,
                       savename=savename) 
   
 savename = savefigpath + "massmoments.png"
@@ -72,8 +73,9 @@ plot_all_massmoments(datalabs, savename=savename)
 def plot_all_numconc(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxnumconc
-  src.plot_all_on_axs(path2build, gridfile,
-                      fig, axs, plotfunc, datalabs, labels, colors,
+  args = [gridfile]
+  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                      datalabs, labels, colors,
                       savename=savename) 
 
 savename = savefigpath + "numconc.png"
@@ -83,8 +85,9 @@ plot_all_numconc(datalabs, savename=savename)
 def plot_all_reflectivity(datalabs, savename=""):
   fig, axs = plt.subplots(figsize=(6,8))
   plotfunc = src.plot_gbxreflectivity
-  src.plot_all_on_axs(path2build, gridfile,
-                      fig, axs, plotfunc, datalabs, labels, colors,
+  args = [gridfile]
+  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                      datalabs, labels, colors,
                       savename=savename) 
   
 savename = savefigpath + "reflectivity.png"
@@ -93,11 +96,12 @@ plot_all_reflectivity(datalabs, savename=savename)
 
 ### --- plot domain droplet distibutions --- ###
 def plot_all_numconc(datalabs, savename=""):
-  fig, axs = plt.subplots(figsize=(6,8))
+  fig, axs = plt.subplots(nrows=5, ncols=5, figsize=(6,8))
   plotfunc = src.plot_domainnumconc_dist
-  src.plot_all_on_axs(path2build, gridfile,
-                      fig, axs, plotfunc, datalabs,
-                      labels, colors,
+  t2plts = np.linspace(0, 1800, 25) #[s]
+  args = [t2plts]
+  src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
+                      datalabs, labels, colors,
                       savename=savename) 
   
 savename = savefigpath + "dist_numconc.png"

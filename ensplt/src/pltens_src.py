@@ -75,9 +75,9 @@ def get_massmomstds(datapath, gridfile):
 
   return massmoms.MassMoms(dataset, ntime, ndims, lab="_std")
 
-def plot_all_on_axs(path2build, gridfile,
-                    fig, axs, plotfunc, datalabs,
-                    labels, colors, savename=""):
+def plot_all_on_axs(path2build, plotfunc, args,
+                    fig, axs, datalabs, labels,
+                    colors, savename=""):
   
   handles, handlelabs = [], []
   for datalab in datalabs:
@@ -89,7 +89,7 @@ def plot_all_on_axs(path2build, gridfile,
     color = colors[datalab]
 
     ### ----- plot data ----- ###
-    line0 = plotfunc(axs, datapath, gridfile, color=color)
+    line0 = plotfunc(axs, datapath, color, *args)
     handles.append(line0)
     handlelabs.append(label)
   
@@ -101,7 +101,7 @@ def plot_all_on_axs(path2build, gridfile,
   if savename != "":
     savefig(fig, savename, show=False)
     
-def plot_gbxmassmoments(axs, datapath, gridfile, color="k"):
+def plot_gbxmassmoments(axs, datapath, color, gridfile):
   ''' plot mass moments 0th gridbox in domain '''
 
   zgbx=0
@@ -126,7 +126,7 @@ def plot_gbxmassmoments(axs, datapath, gridfile, color="k"):
 
   return line0[0]
 
-def plot_gbxnumconc(ax, datapath, gridfile, color="k"):
+def plot_gbxnumconc(ax, datapath, color, gridfile):
   ''' plot number concentration of 0th gridbox in domain '''
 
   zgbx=0
@@ -149,7 +149,7 @@ def plot_gbxnumconc(ax, datapath, gridfile, color="k"):
 
   return line[0]
 
-def plot_gbxreflectivity(ax, datapath, gridfile, color="k"):
+def plot_gbxreflectivity(ax, datapath, color, gridfile):
   ''' plot reflectivity proxy of 0th gridbox in domain '''
 
   zgbx=0
@@ -166,3 +166,17 @@ def plot_gbxreflectivity(ax, datapath, gridfile, color="k"):
   ax.set_xlabel("time /min")
 
   return line[0]
+
+def plot_domainnumconc_dist(axs, datapath, gridfile, color="k"):
+
+  ds = pyzarr.get_rawdataset(datapath)
+  time = pyzarr.get_time(datapath)
+  mean = ds["h_numconc"]
+  std = ds["h_numconcstd"]
+  redges = ds["h_redges"]
+
+  axs = axs.flatten()
+  n2plt = len(axs)
+
+  for n in range(n2plt):
+
