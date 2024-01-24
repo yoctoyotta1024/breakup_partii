@@ -40,7 +40,7 @@ labels = ["buonly"]
 
 # name of executables and data output
 executables = {
-  "coalonly": "buii_buonly",
+  "buonly": "buii_buonly",
   "coalbure" : "buii_coalbure",
   "coalbu" : "buii_coalbu",
   "coalre" : "buii_coalre",
@@ -50,6 +50,7 @@ executables = {
 # runs = list(range(0,15,1))
 runs = [13]
 runnums = {
+  "buonly" : runs,
   "coalbure" : runs,
   "coalbu" : runs,
   "coalre" : runs,

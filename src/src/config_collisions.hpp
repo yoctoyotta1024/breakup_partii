@@ -24,6 +24,7 @@
 
 #include <concepts>
 
+#include "./breakuponly.hpp"
 #include "./coalbreakup.hpp"
 #include "./coalrebound.hpp"
 

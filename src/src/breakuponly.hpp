@@ -98,7 +98,7 @@ probability of collision determined by 'collprob' */
 
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
-DoCoalBreakup<NFrags, Flag>::operator()(Superdrop &drop1,
+DoBreakupOnly<NFrags, Flag>::operator()(Superdrop &drop1,
                                         Superdrop &drop2,
                                         const double prob,
                                         const double phi) const
