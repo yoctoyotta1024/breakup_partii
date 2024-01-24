@@ -36,11 +36,11 @@ from pySD import editconfigfile
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # labels for model compilations
-# labels = ["coalbure", "coalbu", "coalre"]
-labels = ["coalbu"]
+labels = ["buonly"]
 
 # name of executables and data output
 executables = {
+  "coalonly": "buii_buonly",
   "coalbure" : "buii_coalbure",
   "coalbu" : "buii_coalbu",
   "coalre" : "buii_coalre",

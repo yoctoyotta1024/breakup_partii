@@ -36,6 +36,14 @@ if(NOT DEFINED compileops)
   set(compileops ${defaultcompileops})
 endif()
 
+# primary executable for CLEO sdm buonly
+set(buonly "buii_buonly")
+add_executable(${buonly} "main_buonly.cpp")
+target_link_libraries(${buonly} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
+target_link_libraries(${buonly} PUBLIC Kokkos::kokkos)
+target_include_directories(${buonly} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
+target_compile_options(${buonly} PRIVATE ${compileops})
+
 # primary executable for CLEO sdm coalbure
 set(coalbure "buii_coalbure")
 add_executable(${coalbure} "main_coalbure.cpp")
@@ -44,7 +52,7 @@ target_link_libraries(${coalbure} PUBLIC Kokkos::kokkos)
 target_include_directories(${coalbure} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalbure} PRIVATE ${compileops})
 
-# primary executable for CLEO sdm coalbure
+# primary executable for CLEO sdm coalbu
 set(coalbu "buii_coalbu")
 add_executable(${coalbu} "main_coalbu.cpp")
 target_link_libraries(${coalbu} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
@@ -52,7 +60,7 @@ target_link_libraries(${coalbu} PUBLIC Kokkos::kokkos)
 target_include_directories(${coalbu} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalbu} PRIVATE ${compileops})
 
-# primary executable for CLEO sdm coalbure
+# primary executable for CLEO sdm coalre
 set(coalre "buii_coalre")
 add_executable(${coalre} "main_coalre.cpp")
 target_link_libraries(${coalre} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
@@ -60,7 +68,7 @@ target_link_libraries(${coalre} PUBLIC Kokkos::kokkos)
 target_include_directories(${coalre} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalre} PRIVATE ${compileops})
 
-
+# primary executable for CLEO sdm coalonly
 set(coalonly "buii_coalonly")
 add_executable(${coalonly} "main_coalonly.cpp")
 target_link_libraries(${coalonly} PRIVATE coupldyn_fromfile cartesiandomain "${SDMLIBS}")
@@ -69,7 +77,7 @@ target_include_directories(${coalonly} PRIVATE "${CLEOLIBS_SOURCE_DIR}")
 target_compile_options(${coalonly} PRIVATE ${compileops})
 
 # set compiler properties for target(s)
-set_target_properties(${coalbure} ${coalonly} ${coalre} ${coalbu} PROPERTIES
+set_target_properties(${buonly} ${coalbure} ${coalonly} ${coalre} ${coalbu} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

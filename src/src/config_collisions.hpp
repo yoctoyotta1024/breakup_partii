@@ -106,4 +106,22 @@ struct ConfigCollisions_CoalOnly
   }
 };
 
+struct ConfigCollisions_BreakupOnly
+{
+  inline MicrophysicalProcess auto
+  operator()(const Config &config, const Timesteps &tsteps) const
+  {
+    const PairProbability auto collprob = LongHydroProb(1.0);
+    const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const MicrophysicalProcess auto colls = BreakupOnly(tsteps.get_collstep(),
+                                                        &step2realtime,
+                                                        collprob,
+                                                        nfrags,
+                                                        coalbure_flag);
+
+    return colls;
+  }
+};
+
 #endif // CONFIG_COLLISIONS_HPP 

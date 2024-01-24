@@ -41,8 +41,7 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # list of names of executables to compile
-# executables = ["buii_coalbure", "buii_coalbu", "buii_coalre"]
-executables = ["buii_coalbu"]
+executables = ["buii_buonly"]
 
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial conditions

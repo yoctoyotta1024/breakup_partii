@@ -1,6 +1,6 @@
 /*
  * ----- CLEO -----
- * File: main_coalre.cpp
+ * File: main_buonly.cpp
  * Project: src
  * Created Date: Thursday 11th January 2023
  * Author: Clara Bayley (CB)
@@ -24,5 +24,5 @@
 
 int main(int argc, char *argv[])
 {
-  return main_supplement(argc, argv, ConfigCollisions_CoalRebound{});
+  return main_supplement(argc, argv, ConfigCollisions_BreakupOnly{});
 }
