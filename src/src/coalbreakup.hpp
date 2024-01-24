@@ -144,22 +144,18 @@ DoCoalBreakup<NFrags, Flag>::
 depending on value of flag. If flag = 2 -> breakup.
 Otherwise -> coalescence. */
 {
-  bu.breakup_superdroplet_pair(drop1, drop2);
-  return 0;
-}
-// {
-//   const auto flag = coalbure_flag(phi, drop1, drop2);
+  const auto flag = coalbure_flag(phi, drop1, drop2);
 
-//   if (flag == 2) // breakup
-//   {
-//     bu.breakup_superdroplet_pair(drop1, drop2);
-//     return 0;
-//   }
-//   else // coalescence
-//   {
-//     auto is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
-//     return is_null;
-//   }
-// }
+  if (flag == 2) // breakup
+  {
+    bu.breakup_superdroplet_pair(drop1, drop2);
+    return 0;
+  }
+  else // coalescence
+  {
+    auto is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
+    return is_null;
+  }
+}
 
 #endif // COALBREAKUP_HPP
