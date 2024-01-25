@@ -220,14 +220,15 @@ def plot_gbxreflectivity(ax, datapath, color, lstyle, gridfile):
 
   line = ax.plot(time.mins, refproxy, color=color, linestyle=lstyle)
   ax.fill_between(time.mins, refproxy-std, refproxy+std,
-                  color=color, alpha=0.2, linestyle=lstyle)
+                  color=color, alpha=0.2, linestyle="dashdot")
   ax.set_ylabel("reflectivity proxy /10$^{25}$ g$^2$")
   ax.set_xlabel("time /min")
 
   return line[0]
 
 def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                           color="k", ylab=None, logy=False):
+                           color="k", lstyle="solid",
+                           ylab=None, logy=False):
 
   if len(axs) != len(t2plts):
     raise ValueError("number of times to plot != number of axes")
@@ -239,12 +240,12 @@ def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
     tlab = "t = {:.1f}secs".format(t2plt)
 
     line = ax.step(redges[:-1], mean[idx, :], where='pre',
-                   color=color, linewidth=0.8)
+                   color=color, linestyle=lstyle, linewidth=0.8)
 
     ax.step(redges[:-1], (mean-std)[idx, :], where='pre',
-            color=color, linewidth=0.8, linestyle="--")
+            color=color, linewidth=0.8, linestyle="dashdot")
     ax.step(redges[:-1], (mean+std)[idx, :], where='pre',
-            color=color, linewidth=0.8, linestyle="--") 
+            color=color, linewidth=0.8, linestyle="dashdot") 
 
     ax.set_title(tlab)
     ax.set_ylabel(ylab)
@@ -256,7 +257,7 @@ def plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
 
   return line[0]
 
-def plot_domainnumconc_dist(axs, datapath, color, t2plts):
+def plot_domainnumconc_dist(axs, datapath, color, lstyle, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
@@ -265,14 +266,15 @@ def plot_domainnumconc_dist(axs, datapath, color, t2plts):
 
   ylab = "number concentration /cm$^{-3}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                                color=color, ylab=ylab, logy=True)
+                                color=color, lstyle=lstyle,
+                                ylab=ylab, logy=True)
   
   for ax in axs:
     ax.set_ylim([1e-10, 175])
   
   return line
 
-def plot_domainwatermass_dist(axs, datapath, color, t2plts):
+def plot_domainwatermass_dist(axs, datapath, color, lstyle, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
@@ -281,14 +283,15 @@ def plot_domainwatermass_dist(axs, datapath, color, t2plts):
 
   ylab = "mass concentration /g m$^{-3}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                                color=color, ylab=ylab, logy=True)
+                                color=color, lstyle=lstyle,
+                                ylab=ylab, logy=True)
   
   for ax in axs:
     ax.set_ylim([1e-13, 2.5])
   
   return line
 
-def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
+def plot_domainreflectivity_dist(axs, datapath, color, lstyle, t2plts):
   ''' plots seperate distribution for each time in
   t2plts [s] on each axis in axs '''
 
@@ -297,14 +300,16 @@ def plot_domainreflectivity_dist(axs, datapath, color, t2plts):
 
   ylab = "reflectivity proxy /m$^{6}$"
   line = plot_distribs_overtime(axs, t2plts, time, redges, mean, std,
-                                color=color, ylab=ylab, logy=True)
+                                color=color, lstyle=lstyle,
+                                ylab=ylab, logy=True)
   
   for ax in axs:
     ax.set_ylim([1e-14, 2e-8])
   
   return line
 
-def plot_collisions_overtime(axs, datapath, datalab, t2plts, probcalc, levels):
+def plot_collisions_overtime(axs, datapath, datalab,
+                             t2plts, probcalc, levels):
   ''' plot probability for each time in t2plts given probcalc function'''
 
   time, rcens, numconc = get_time_dist(datapath, "numconc",
