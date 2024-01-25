@@ -34,7 +34,7 @@ import enssrc
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
-labels = ["coalbure", "coalbu", "coalre"]
+labels = ["coalbure", "coalbu", "coalre", "coalonly"]
 binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
@@ -45,6 +45,7 @@ runnums = {
   "coalbure" : runs,
   "coalbu" : runs,
   "coalre" : runs,
+  "coalonly" : runs,
 }
 
 # variables in datasets to create ensemble dataset for
