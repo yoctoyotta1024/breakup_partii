@@ -35,7 +35,7 @@ import enssrc
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
-labels = ["coalbure", "coalre", "coalonly"]
+labels = ["coalbure"]
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 
