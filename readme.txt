@@ -39,3 +39,8 @@ cd quickplt/
 cd ensplt/
 ./pltens_buii.sh
 
+Experiments:
+cc1 and cc2 = outdated
+cc3 = TSFlag with cke for nfrags
+cc4 = TSFlag with constant nfrags (varying constant)
+cc5 = SUFlag with constant nfrags (varying constant)
