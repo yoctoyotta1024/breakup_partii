@@ -35,19 +35,35 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalre", "coalbure"]
+nfrags = ["2p6", "128", "256", "2048"]
+datalabs_1 = [lab+"/coalbure" for lab in nfrags]
+datalabs = ["2p6/coalre"] + datalabs_1
+datalabs = ["bin_nfrags"+lab for lab in datalabs]
+
+print("datalabs: ", datalabs)
+
 labels = {
-  "coalbure": "Coal+Bu+Re", 
-  "coalbu": "Coal+Bu",
-  "coalre": "Coal+Re",
-  "coalonly": "Coal",
+  "bin_nfrags2p6/coalre": "Coal+Re",
+  "bin_nfrags2p6/coalbure": "\u03A9 = 2.6", 
+  "bin_nfrags128/coalbure": "\u03A9 = 128",
+  "bin_nfrags256/coalbure": "\u03A9 = 256", 
+  "bin_nfrags2048/coalbure": "\u03A9 = 2048", 
 }
+
 colors = {
-  "coalbure": "C0", 
-  "coalbu": "C2",
-  "coalre": "C3",
-  "coalonly": "C1"
+  "bin_nfrags2p6/coalre": "black",
+  "bin_nfrags2p6/coalbure": "blue", 
+  "bin_nfrags128/coalbure": "green", 
+  "bin_nfrags256/coalbure": "orange", 
+  "bin_nfrags2048/coalbure": "red", 
 }
+
+linestyles = {}
+for datalab in datalabs:
+  if "coalbure" in datalab:
+    linestyles[datalab] = "solid"
+  else:
+    linestyles[datalab] = "dashed"
 
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
@@ -68,7 +84,7 @@ if what2plot == "massmoms":
     plotfunc = src.plot_gbxmassmoments
     args = [gridfile]
     src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                        datalabs, labels, colors,
+                        datalabs, labels, colors, linestyles,
                         savename=savename) 
     
   savename = savefigpath + "massmoments.png"
@@ -80,7 +96,7 @@ if what2plot == "massmoms":
     plotfunc = src.plot_gbxnumconc
     args = [gridfile]
     src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                        datalabs, labels, colors,
+                        datalabs, labels, colors, linestyles,
                         savename=savename) 
 
   savename = savefigpath + "numconc.png"
@@ -92,7 +108,7 @@ if what2plot == "massmoms":
     plotfunc = src.plot_gbxreflectivity
     args = [gridfile]
     src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                        datalabs, labels, colors,
+                        datalabs, labels, colors, linestyles,
                         savename=savename) 
     
   savename = savefigpath + "reflectivity.png"
@@ -109,7 +125,7 @@ if what2plot == "dists":
     print("t2plts: ", t2plts)
     args = [t2plts]
     src.plot_all_on_axs(path2build, plotfunc, args, fig, axs,
-                        datalabs, labels, colors,
+                        datalabs, labels, colors, linestyles,
                         savename=savename) 
 
   trange = [0, 70, 10] #[s]
@@ -135,7 +151,7 @@ if what2plot == "probs":
     t2plts = np.arange(trange[0], trange[1]+trange[2], trange[2]) # [s]
     args = [t2plts, probcalc, levels]
     src.plot_all_on_fig(path2build, plotfunc, args, fig, axs,
-                        datalabs, labels, colors,
+                        datalabs, labels, colors, 
                         savename=savename) 
   
   trange = [0, 60, 10] #[s]
