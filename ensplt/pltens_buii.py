@@ -35,7 +35,7 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-nfrags = ["2p6", "128", "256", "2048"]
+nfrags = ["2p6", "4", "16", "32", "128", "256", "512", "2048"]
 datalabs_1 = [lab+"/coalbure" for lab in nfrags]
 datalabs = ["2p6/coalre"] + datalabs_1
 datalabs = ["bin_nfrags"+lab for lab in datalabs]
@@ -43,19 +43,27 @@ datalabs = ["bin_nfrags"+lab for lab in datalabs]
 print("datalabs: ", datalabs)
 
 labels = {
-  "bin_nfrags2p6/coalre": "Coal+Re",
+  "bin_nfrags2p6/coalre": "no breakup",
   "bin_nfrags2p6/coalbure": "\u03A9 = 2.6", 
+  "bin_nfrags4/coalbure": "\u03A9 = 4", 
+  "bin_nfrags16/coalbure": "\u03A9 = 16", 
+  "bin_nfrags32/coalbure": "\u03A9 = 32", 
   "bin_nfrags128/coalbure": "\u03A9 = 128",
   "bin_nfrags256/coalbure": "\u03A9 = 256", 
+  "bin_nfrags512/coalbure": "\u03A9 = 512", 
   "bin_nfrags2048/coalbure": "\u03A9 = 2048", 
 }
 
 colors = {
   "bin_nfrags2p6/coalre": "grey",
-  "bin_nfrags2p6/coalbure": "blue", 
-  "bin_nfrags128/coalbure": "green", 
+  "bin_nfrags2p6/coalbure": "purple", 
+  "bin_nfrags4/coalbure": "blue", 
+  "bin_nfrags16/coalbure": "deepskyblue", 
+  "bin_nfrags32/coalbure": "green",
+  "bin_nfrags128/coalbure": "olive", 
   "bin_nfrags256/coalbure": "orange", 
-  "bin_nfrags2048/coalbure": "red", 
+  "bin_nfrags512/coalbure": "red", 
+  "bin_nfrags2048/coalbure": "brown", 
 }
 
 linestyles = {}

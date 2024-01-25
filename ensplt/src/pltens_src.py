@@ -222,6 +222,7 @@ def plot_gbxreflectivity(ax, datapath, color, lstyle, gridfile):
   ax.fill_between(time.mins, refproxy-std, refproxy+std,
                   color=color, alpha=0.2, linestyle="dashdot")
   ax.set_ylabel("reflectivity proxy /10$^{25}$ g$^2$")
+  ax.set_yscale("log")
   ax.set_xlabel("time /min")
 
   return line[0]
