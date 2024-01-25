@@ -36,7 +36,7 @@ from pySD import editconfigfile
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # labels for model compilations
-labels = ["coalbure", "coalre", "coalonly"]
+labels = ["coalbure", "coalre"]
 
 # name of executables and data output
 executables = {

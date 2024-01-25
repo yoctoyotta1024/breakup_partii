@@ -35,7 +35,7 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-datalabs = ["coalonly", "coalre", "coalbure"]
+datalabs = ["coalre", "coalbure"]
 labels = {
   "coalbure": "Coal+Bu+Re", 
   "coalbu": "Coal+Bu",
