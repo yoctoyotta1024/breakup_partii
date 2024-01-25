@@ -200,7 +200,7 @@ def plot_gbxnumconc(ax, datapath, color, lstyle, gridfile):
   
   line = ax.plot(time.mins, numconc, color=color, linestyle=lstyle)
   ax.fill_between(time.mins, numconc-std, numconc+std,
-                  color=color, alpha=0.2, linestyle=lstyle)
+                  color=color, alpha=0.2, linestyle="dashdot")
 
   ax.set_ylabel("number concentration /cm$^{-3}$")
   ax.set_yscale("log")

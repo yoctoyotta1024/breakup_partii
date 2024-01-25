@@ -51,7 +51,7 @@ labels = {
 }
 
 colors = {
-  "bin_nfrags2p6/coalre": "black",
+  "bin_nfrags2p6/coalre": "grey",
   "bin_nfrags2p6/coalbure": "blue", 
   "bin_nfrags128/coalbure": "green", 
   "bin_nfrags256/coalbure": "orange", 
@@ -63,7 +63,7 @@ for datalab in datalabs:
   if "coalbure" in datalab:
     linestyles[datalab] = "solid"
   else:
-    linestyles[datalab] = "dashed"
+    linestyles[datalab] = "solid"
 
 constsfile    = path2CLEO+"/libs/cleoconstants.hpp"
 gridfile      = path2build+"/share/buii_dimlessGBxboundaries.dat"
