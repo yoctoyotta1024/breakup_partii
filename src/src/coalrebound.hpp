@@ -62,10 +62,10 @@ private:
   }
 
   KOKKOS_FUNCTION
-  bool if_coalesce(const unsigned long long gamma,
-                   const double phi,
-                   Superdrop &drop1,
-                   Superdrop &drop2) const;
+  bool coalesce_or_rebound(const unsigned long long gamma,
+                           const double phi,
+                           Superdrop &drop1,
+                           Superdrop &drop2) const;
   /* function enacts coalescence if flag = 1 -> coalescence.
   Otherwise -> rebound. */
 
@@ -124,7 +124,7 @@ that satistfies the PairEnactX concept */
   of superdroplets if gamma is not zero */
   if (gamma != 0)
   {
-    return if_coalesce(gamma, phi, drop1, drop2);
+    return coalesce_or_rebound(gamma, phi, drop1, drop2);
   }
 
   return 0;
@@ -133,16 +133,17 @@ that satistfies the PairEnactX concept */
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
 DoCoalRebound<NFrags, Flag>::
-    if_coalesce(const unsigned long long gamma,
+    coalesce_or_rebound(const unsigned long long gamma,
                                 const double phi,
                                 Superdrop &drop1,
                                 Superdrop &drop2) const
-/*  function enacts coalescence if flag = 1 -> coalescence.
-Otherwise -> rebound. */
+/*  function enacts rebound if flag = 0 , otherwise coalescence,
+so flag = 1 or 2 -> coalescence (ie. breakup flag (flag=2) 
+does coalescence instead of breakup) */
 {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
-  if (flag == 1) // coalescence
+  if (flag != 0) // coalescence 
   {
     const auto is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
     return is_null;
