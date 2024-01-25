@@ -80,12 +80,10 @@ struct ConfigCollisions_CoalRebound
   operator()(const Config &config, const Timesteps &tsteps) const
   {
     const PairProbability auto collprob = LongHydroProb(1.0);
-    const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
     const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
     const MicrophysicalProcess auto colls = CoalRebound(tsteps.get_collstep(),
                                                         &step2realtime,
                                                         collprob,
-                                                        nfrags,
                                                         coalbure_flag);
 
     return colls;

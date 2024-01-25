@@ -30,8 +30,6 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "superdrops/breakup.hpp"
-#include "superdrops/breakup_nfrags.hpp"
 #include "superdrops/coalbure_flag.hpp"
 #include "superdrops/coalescence.hpp"
 #include "superdrops/collisions.hpp"
@@ -39,13 +37,12 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/superdrop.hpp"
 
-template <NFragments NFrags, CoalBuReFlag Flag>
+template <CoalBuReFlag Flag>
 struct DoCoalRebound
 /* ie. DoCoalescenceBreakupRebound without Breakup */
 {
 private:
   DoCoalescence coal;
-  DoBreakup<NFrags> bu;
   Flag coalbure_flag;
 
   KOKKOS_FUNCTION
@@ -70,8 +67,8 @@ private:
   Otherwise -> rebound. */
 
 public:
-  DoCoalRebound(const NFrags nfrags, const Flag flag)
-      : bu(nfrags), coalbure_flag(flag) {}
+  DoCoalRebound(const Flag flag)
+      : coalbure_flag(flag) {}
 
   KOKKOS_INLINE_FUNCTION
   bool operator()(Superdrop &drop1, Superdrop &drop2,
@@ -83,13 +80,11 @@ public:
 };
 
 template <PairProbability Probability,
-          NFragments NFrags,
           CoalBuReFlag Flag>
 inline MicrophysicalProcess auto
 CoalRebound(const unsigned int interval,
          const std::function<double(unsigned int)> int2realtime,
          const Probability collprob,
-         const NFrags nfrags,
          const Flag coalbure_flag)
 /* constructs Microphysical Process for collision-
 coalscence, breakup or rebound of superdroplets with
@@ -98,18 +93,17 @@ of collision determined by 'collprob' */
 {
   const auto DELT = double{int2realtime(interval)};
 
-  const DoCoalRebound<NFrags, Flag>
-      coalrebound(nfrags, coalbure_flag);
-  const DoCollisions<Probability, DoCoalRebound<NFrags, Flag>>
+  const DoCoalRebound<Flag> coalrebound(coalbure_flag);
+  const DoCollisions<Probability, DoCoalRebound<Flag>>
       colls(DELT, collprob, coalrebound);
 
   return ConstTstepMicrophysics(interval, colls);
 }
 
-template <NFragments NFrags, CoalBuReFlag Flag>
+template <CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
-DoCoalRebound<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
-                                     const double prob, const double phi) const
+DoCoalRebound<Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
+                                const double prob, const double phi) const
 /* this operator is used as an "adaptor" for
 using DoCoalRebound for collision - coalescence/rebound,
 without breakup as a function in DoCollisions
@@ -130,13 +124,12 @@ that satistfies the PairEnactX concept */
   return 0;
 }
 
-template <NFragments NFrags, CoalBuReFlag Flag>
+template <CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool
-DoCoalRebound<NFrags, Flag>::
-    coalesce_or_rebound(const unsigned long long gamma,
-                                const double phi,
-                                Superdrop &drop1,
-                                Superdrop &drop2) const
+DoCoalRebound<Flag>::coalesce_or_rebound(const unsigned long long gamma,
+                                         const double phi,
+                                         Superdrop &drop1,
+                                         Superdrop &drop2) const
 /*  function enacts rebound if flag = 0 , otherwise coalescence,
 so flag = 1 or 2 -> coalescence (ie. breakup flag (flag=2) 
 does coalescence instead of breakup) */
