@@ -83,10 +83,11 @@ for lab in labels:
       }
     editconfigfile.edit_config_params(configfile, params)
 
-    ### ----- run executabel with new configfile ----- ### 
+    ### ----- compile and run executable with new configfile ----- ### 
     os.chdir(path2build)
     os.system('pwd')
-    executable = path2build+'/src/'+executables[lab]
+    exec = executables[lab]
+    os.system('make -j 64 '+exec)
+    executable = path2build+'/src/'+exec
     os.system(executable + ' ' + configfile)
-### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
