@@ -43,10 +43,10 @@ struct ConfigCollisions_CoalBuRe
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
   {
-    const double nfrags = 2.6;
+    const double bu_nfrags = 2.6;
 
     const PairProbability auto collprob = LongHydroProb(1.0);
-    const NFragments auto nfrags = ConstNFrags(nfrags);
+    const NFragments auto nfrags = ConstNFrags(bu_nfrags);
     const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
     const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
                                                      &step2realtime,
@@ -63,10 +63,10 @@ struct ConfigCollisions_CoalBreakup
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
   {
-    const double nfrags = 2.6;
+    const double bu_nfrags = 2.6;
 
     const PairProbability auto collprob = LongHydroProb(1.0);
-    const NFragments auto nfrags = ConstNFrags(nfrags);
+    const NFragments auto nfrags = ConstNFrags(bu_nfrags);
     const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
     const MicrophysicalProcess auto colls = CoalBreakup(tsteps.get_collstep(),
                                                         &step2realtime,

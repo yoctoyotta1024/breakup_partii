@@ -25,6 +25,7 @@ from pathlib import Path
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
+binpath = sys.argv[3]
 
 sys.path.append(path2CLEO)  # for imports from pySD package
 from pySD.sdmout_src.ensembzarr import write_ensemble
@@ -34,8 +35,7 @@ import enssrc
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 # label and path for each ensembles of datasets 
-labels = ["coalbure", "coalbu", "coalre"]
-binpath = path2build+"/bin/"      # path before directory called "label" containing zarr datasets
+labels = ["coalbure", "coalre", "coalonly"]
 ensembzarr = "sol_ensemb.zarr"      # name of ensemble dataset
 ensembsetuptxt = "setup_ensemb.txt" # name of ensemble dataset
 
@@ -45,6 +45,7 @@ runnums = {
   "coalbure" : runs,
   "coalbu" : runs,
   "coalre" : runs,
+  "coalonly" : runs,
 }
 
 # variables in datasets to create ensemble dataset for

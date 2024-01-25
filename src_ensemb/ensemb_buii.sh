@@ -18,12 +18,13 @@ module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=/work/mh1126/m300950/droplet_breakup_partii/build/
+path2build=/work/mh1126/m300950/droplet_breakup_partii/cc4_0dboxmodels/
+binpath=${path2build}/bin_nfrags${1}/ # path before directory called "label" containing zarr datasets
 
 python=/work/mh1126/m300950/condaenvs/superdropsenv/bin/python
 ### ---------------------------------------------------- ###
 
 ### ----------------------- plots ------------------------ ###
 ### run 1-D rainshaft quick plotting script
-${python} ensemb_buii.py ${path2CLEO} ${path2build}
+${python} ensemb_buii.py ${path2CLEO} ${path2build} ${binpath}
 ### ---------------------------------------------------- ###
