@@ -142,7 +142,9 @@ DoCoalBreakup<NFrags, Flag>::
                         Superdrop &drop2) const
 /* function enacts rebound or coalescence or breakup
 depending on value of flag. If flag = 2 -> breakup.
-Otherwise -> coalescence. */
+Otherwise -> coalescence.
+So if flag=0 or 1 -> coalescence (flag for rebound
+(flag=0) enacts coalescence instead) */
 {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
