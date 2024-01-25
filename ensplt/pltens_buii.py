@@ -59,7 +59,7 @@ colors = {
   "bin_nfrags2p6/coalre": "grey",
   "bin_nfrags2p6/coalbure": "fuchsia",
   "bin_nfrags4/coalbure": "purple",
-  "bin_nfrags8/coalbure": "steelblue", 
+  "bin_nfrags8/coalbure": "blue", 
   "bin_nfrags16/coalbure": "deepskyblue", 
   "bin_nfrags32/coalbure": "green",
   "bin_nfrags128/coalbure": "olive", 
