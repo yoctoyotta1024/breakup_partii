@@ -43,7 +43,7 @@ struct ConfigCollisions_CoalBuRe
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
   {
-    const double bu_nfrags = 32;
+    const double bu_nfrags = 128;
 
     const PairProbability auto collprob = LongHydroProb(1.0);
     const NFragments auto nfrags = ConstNFrags(bu_nfrags);
@@ -63,7 +63,7 @@ struct ConfigCollisions_CoalBreakup
   inline MicrophysicalProcess auto
   operator()(const Config &config, const Timesteps &tsteps) const
   {
-    const double bu_nfrags = 32;
+    const double bu_nfrags = 128;
 
     const PairProbability auto collprob = LongHydroProb(1.0);
     const NFragments auto nfrags = ConstNFrags(bu_nfrags);
