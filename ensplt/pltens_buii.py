@@ -89,7 +89,7 @@ if what2plot == "massmoms":
 
   ### ----- plot domain mass moments ----- ###
   def plot_all_massmoments(datalabs, savename=""):
-    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(8,12), sharex=True)
     fig.suptitle("Total Mass Moments Over Domain")
     plotfunc = src.plot_gbxmassmoments
     args = [gridfile]
