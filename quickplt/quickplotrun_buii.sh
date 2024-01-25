@@ -18,7 +18,7 @@ module load python3/2022.01-gcc-11.2.0
 source activate /work/mh1126/m300950/condaenvs/superdropsenv
 
 path2CLEO=${HOME}/CLEO/
-path2build=/work/mh1126/m300950/droplet_breakup_partii/cc4_0dboxmodels/
+path2build=/work/mh1126/m300950/droplet_breakup_partii/cc5_0dboxmodels/
 datapath=${path2build}/bin_nfrags${1}/${2}/runs/
 runnum=${3}
 
