@@ -35,7 +35,7 @@ import src.pltens_src as src
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
-nfrags = ["2p6", "4", "16", "32", "128", "256", "512", "2048"]
+nfrags = ["2p6", "4", "8", "16", "32", "128", "256", "512", "2048"]
 datalabs_1 = [lab+"/coalbure" for lab in nfrags]
 datalabs = ["2p6/coalre"] + datalabs_1
 datalabs = ["bin_nfrags"+lab for lab in datalabs]
@@ -45,7 +45,8 @@ print("datalabs: ", datalabs)
 labels = {
   "bin_nfrags2p6/coalre": "no breakup",
   "bin_nfrags2p6/coalbure": "\u03A9 = 2.6", 
-  "bin_nfrags4/coalbure": "\u03A9 = 4", 
+  "bin_nfrags4/coalbure": "\u03A9 = 4",
+  "bin_nfrags8/coalbure": "\u03A9 = 8",
   "bin_nfrags16/coalbure": "\u03A9 = 16", 
   "bin_nfrags32/coalbure": "\u03A9 = 32", 
   "bin_nfrags128/coalbure": "\u03A9 = 128",
@@ -56,8 +57,9 @@ labels = {
 
 colors = {
   "bin_nfrags2p6/coalre": "grey",
-  "bin_nfrags2p6/coalbure": "purple", 
-  "bin_nfrags4/coalbure": "blue", 
+  "bin_nfrags2p6/coalbure": "fuchsia",
+  "bin_nfrags4/coalbure": "purple",
+  "bin_nfrags8/coalbure": "blue",
   "bin_nfrags16/coalbure": "deepskyblue", 
   "bin_nfrags32/coalbure": "green",
   "bin_nfrags128/coalbure": "olive", 
@@ -87,7 +89,7 @@ if what2plot == "massmoms":
 
   ### ----- plot domain mass moments ----- ###
   def plot_all_massmoments(datalabs, savename=""):
-    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(8, 12), sharex=True)
     fig.suptitle("Total Mass Moments Over Domain")
     plotfunc = src.plot_gbxmassmoments
     args = [gridfile]
@@ -136,7 +138,7 @@ if what2plot == "dists":
                         datalabs, labels, colors, linestyles,
                         savename=savename) 
 
-  trange = [0, 70, 10] #[s]
+  trange = [0, 1400, 200] #[s]
 
   plotfunc = src.plot_domainnumconc_dist
   savename = savefigpath + "dist_numconc.png"
@@ -162,7 +164,7 @@ if what2plot == "probs":
                         datalabs, labels, colors, 
                         savename=savename) 
   
-  trange = [0, 60, 10] #[s]
+  trange = [0, 1200, 200] #[s]
   levels = np.linspace(-16, 5, 50)
 
   savename = savefigpath + "prob_colls.png"
