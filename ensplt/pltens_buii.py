@@ -63,7 +63,7 @@ if what2plot == "massmoms":
 
   ### ----- plot domain mass moments ----- ###
   def plot_all_massmoments(datalabs, savename=""):
-    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(6,8), sharex=True)
+    fig, axs = plt.subplots(nrows=5, ncols=1, figsize=(8, 12), sharex=True)
     fig.suptitle("Total Mass Moments Over Domain")
     plotfunc = src.plot_gbxmassmoments
     args = [gridfile]
@@ -112,7 +112,7 @@ if what2plot == "dists":
                         datalabs, labels, colors,
                         savename=savename) 
 
-  trange = [0, 70, 10] #[s]
+  trange = [0, 1400, 200] #[s]
 
   plotfunc = src.plot_domainnumconc_dist
   savename = savefigpath + "dist_numconc.png"
@@ -138,7 +138,7 @@ if what2plot == "probs":
                         datalabs, labels, colors,
                         savename=savename) 
   
-  trange = [0, 60, 10] #[s]
+  trange = [0, 1200, 200] #[s]
   levels = np.linspace(-16, 5, 50)
 
   savename = savefigpath + "prob_colls.png"
