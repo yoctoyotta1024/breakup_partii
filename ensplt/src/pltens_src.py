@@ -99,23 +99,24 @@ def get_time_dist(datapath, distname, std=False, rcens=False):
 
 
 def plot_all_on_axs(path2build, plotfunc, args,
-                    fig, axs, datalabs, labels,
-                    colors, savename=""):
+                    fig, axs, bin_datalabs, labels,
+                    colors, linestyles, savename=""):
   ''' load dataset, label and color for each datalab
   in datalabs then use plotfunc to plot each dataset
   on figure axis/axes '''
 
   handles, handlelabs = [], []
-  for datalab in datalabs:
+  for datalab in bin_datalabs:
 
     ### ----- load data to plot ----- ###
     # path and file names for plotting results
-    datapath = path2build+"/bin/"+datalab+"/ensemb/"
+    datapath = path2build+datalab+"/ensemb/"
     label = labels[datalab]
     color = colors[datalab]
+    lstyle = linestyles[datalab]
 
     ### ----- plot data ----- ###
-    line0 = plotfunc(axs, datapath, color, *args)
+    line0 = plotfunc(axs, datapath, color, lstyle, *args)
     handles.append(line0)
     handlelabs.append(label)
   
@@ -128,23 +129,23 @@ def plot_all_on_axs(path2build, plotfunc, args,
     savefig(fig, savename, show=False)
 
 def plot_all_on_fig(path2build, plotfunc, args,
-                    fig, axs, datalabs, labels,
+                    fig, axs, bin_datalabs, labels,
                     colors, savename=""):
   ''' load dataset, label and color for each datalab
   in datalabs then use plotfunc to plot each dataset
   on axis/axes in seperate columns of figure '''
     
-  if axs.shape[1] != len(datalabs):
+  if axs.shape[1] != len(bin_datalabs):
     raise ValueError("number of columns to figure"+\
                      " must equal number of datasets")
 
   handles, handlelabs = [], []
-  for d, datalab in enumerate(datalabs):
+  for d, datalab in enumerate(bin_datalabs):
     axs_d = axs[:,d]
 
     ### ----- load data to plot ----- ###
     # path and file names for plotting results
-    datapath = path2build+"/bin/"+datalab+"/ensemb/"
+    datapath = path2build+datalab+datalab+"/ensemb/"
 
     ### ----- plot data ----- ###
     plotfunc(axs_d, datapath, datalab, *args)
@@ -154,17 +155,22 @@ def plot_all_on_fig(path2build, plotfunc, args,
   if savename != "":
     savefig(fig, savename, show=False)
 
-def plot_gbxmassmoments(axs, datapath, color, gridfile):
+def plot_gbxmassmoments(axs, datapath, color, lstyle, gridfile):
   ''' plot mass moments 0th gridbox in domain '''
 
   zgbx=0
   time, massmoms = get_time_massmoms(datapath, gridfile)
 
-  line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx], color=color)
-  axs[1].plot(time.mins, massmoms.mom0[:,0,0,zgbx], color=color)
-  axs[2].plot(time.mins, massmoms.mom1[:,0,0,zgbx], color=color)
-  axs[3].plot(time.mins, massmoms.mom2[:,0,0,zgbx], color=color)
-  axs[4].plot(time.mins, massmoms.effmass[:,0,0,zgbx], color=color)
+  line0 = axs[0].plot(time.mins, massmoms.nsupers[:,0,0,zgbx],
+                      color=color, linestyle=lstyle)
+  axs[1].plot(time.mins, massmoms.mom0[:,0,0,zgbx],
+              color=color, linestyle=lstyle)
+  axs[2].plot(time.mins, massmoms.mom1[:,0,0,zgbx],
+              color=color, linestyle=lstyle)
+  axs[3].plot(time.mins, massmoms.mom2[:,0,0,zgbx],
+              color=color, linestyle=lstyle)
+  axs[4].plot(time.mins, massmoms.effmass[:,0,0,zgbx],
+              color=color, linestyle=lstyle)
 
   axs[0].set_ylabel("number of\nsuperdroplets")
   axs[1].set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
@@ -179,7 +185,7 @@ def plot_gbxmassmoments(axs, datapath, color, gridfile):
 
   return line0[0]
 
-def plot_gbxnumconc(ax, datapath, color, gridfile):
+def plot_gbxnumconc(ax, datapath, color, lstyle, gridfile):
   ''' plot number concentration of 0th gridbox in domain '''
 
   zgbx=0
@@ -192,9 +198,9 @@ def plot_gbxnumconc(ax, datapath, color, gridfile):
   massmomstds = get_massmomstds(datapath, gridfile)
   std = massmomstds.mom0[:,0,0,zgbx] / volcm3 # [cm^-3] 
   
-  line = ax.plot(time.mins, numconc, color=color)
+  line = ax.plot(time.mins, numconc, color=color, linestyle=lstyle)
   ax.fill_between(time.mins, numconc-std, numconc+std,
-                  color=color, alpha=0.2)
+                  color=color, alpha=0.2, linestyle=lstyle)
 
   ax.set_ylabel("number concentration /cm$^{-3}$")
   ax.set_yscale("log")
@@ -202,7 +208,7 @@ def plot_gbxnumconc(ax, datapath, color, gridfile):
 
   return line[0]
 
-def plot_gbxreflectivity(ax, datapath, color, gridfile):
+def plot_gbxreflectivity(ax, datapath, color, lstyle, gridfile):
   ''' plot reflectivity proxy of 0th gridbox in domain '''
 
   zgbx=0
@@ -212,9 +218,9 @@ def plot_gbxreflectivity(ax, datapath, color, gridfile):
   massmomstds = get_massmomstds(datapath, gridfile)
   std = massmomstds.mom2[:,0,0,zgbx] * 1e25 # 10^25 g^2
 
-  line = ax.plot(time.mins, refproxy, color=color)
+  line = ax.plot(time.mins, refproxy, color=color, linestyle=lstyle)
   ax.fill_between(time.mins, refproxy-std, refproxy+std,
-                  color=color, alpha=0.2)
+                  color=color, alpha=0.2, linestyle=lstyle)
   ax.set_ylabel("reflectivity proxy /10$^{25}$ g$^2$")
   ax.set_xlabel("time /min")
 
